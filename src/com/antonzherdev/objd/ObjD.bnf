@@ -1,0 +1,21 @@
+{
+  parserClass="com.antonzherdev.objd.parser.ObjDParser"
+  stubParserClass="com.antonzherdev.objd.parser.GeneratedParserUtilBase"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="ObjD"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.antonzherdev.objd.psi"
+  psiImplPackage="com.antonzherdev.objd.psi.impl"
+
+  elementTypeHolderClass="com.antonzherdev.objd.psi.ObjDTypes"
+  elementTypeClass="com.antonzherdev.objd.psi.ObjDElementType"
+  tokenTypeClass="com.antonzherdev.objd.psi.ObjDTokenType"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY
