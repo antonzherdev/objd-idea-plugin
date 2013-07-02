@@ -14,8 +14,9 @@
   tokenTypeClass="com.antonzherdev.objd.psi.ObjDTokenType"
 }
 
-simpleFile ::= item_*
+file ::= statement_*
 
-private item_ ::= (property|COMMENT|CRLF)
+private statement_ ::= (cls|imp|COMMENT|CRLF)
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+cls ::= (W_CLASS IDENT)
+imp ::= (W_IMPORT IDENT)

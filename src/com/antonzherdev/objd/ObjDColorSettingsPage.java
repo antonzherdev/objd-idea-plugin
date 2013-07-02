@@ -13,9 +13,7 @@ import javax.swing.*;
 
 public class ObjDColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Key", ObjDSyntaxHighlighter.KEY),
-            new AttributesDescriptor("Separator", ObjDSyntaxHighlighter.SEPARATOR),
-            new AttributesDescriptor("Value", ObjDSyntaxHighlighter.VALUE),
+            new AttributesDescriptor("Keyword", ObjDSyntaxHighlighter.KEYWORD),
     };
 
     @Nullable

@@ -7,7 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public class ObjDVisitor extends PsiElementVisitor {
 
-  public void visitProperty(@NotNull ObjDProperty o) {
+  public void visitCls(@NotNull ObjDCls o) {
+    visitPsiElement(o);
+  }
+
+  public void visitImp(@NotNull ObjDImp o) {
     visitPsiElement(o);
   }
 

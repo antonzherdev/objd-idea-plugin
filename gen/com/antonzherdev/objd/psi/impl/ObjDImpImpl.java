@@ -11,14 +11,14 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDPropertyImpl extends ASTWrapperPsiElement implements ObjDProperty {
+public class ObjDImpImpl extends ASTWrapperPsiElement implements ObjDImp {
 
-  public ObjDPropertyImpl(ASTNode node) {
+  public ObjDImpImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitProperty(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitImp(this);
     else super.accept(visitor);
   }
 

@@ -14,24 +14,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.Reader;
+import java.util.*;
+import java.util.List;
 
+import static com.antonzherdev.objd.psi.ObjDTypes.W_CLASS;
+import static com.antonzherdev.objd.psi.ObjDTypes.W_IMPORT;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
 public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
-    public static final TextAttributesKey SEPARATOR = createTextAttributesKey("SIMPLE_SEPARATOR", SyntaxHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey KEY = createTextAttributesKey("SIMPLE_KEY", SyntaxHighlighterColors.KEYWORD);
-    public static final TextAttributesKey VALUE = createTextAttributesKey("SIMPLE_VALUE", SyntaxHighlighterColors.STRING);
-    public static final TextAttributesKey COMMENT = createTextAttributesKey("SIMPLE_COMMENT", SyntaxHighlighterColors.LINE_COMMENT);
+    public static final TextAttributesKey KEYWORD = createTextAttributesKey("OBJD_KEYWORD", SyntaxHighlighterColors.KEYWORD);
+    public static final TextAttributesKey COMMENT = createTextAttributesKey("OBJD_COMMENT", SyntaxHighlighterColors.LINE_COMMENT);
 
-    static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("SIMPLE_BAD_CHARACTER",
+    static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("OBJD_BAD_CHARACTER",
             new TextAttributes(JBColor.RED, null, null, null, Font.BOLD));
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
-    private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
-    private static final TextAttributesKey[] KEY_KEYS = new TextAttributesKey[]{KEY};
-    private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{VALUE};
+    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
+    private static final List<IElementType> KEYWORDS = Arrays.asList(W_CLASS, W_IMPORT);
 
     @NotNull
     @Override
@@ -42,12 +43,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(ObjDTypes.SEPARATOR)) {
-            return SEPARATOR_KEYS;
-        } else if (tokenType.equals(ObjDTypes.KEY)) {
-            return KEY_KEYS;
-        } else if (tokenType.equals(ObjDTypes.VALUE)) {
-            return VALUE_KEYS;
+        if (KEYWORDS.contains(tokenType)) {
+            return KEYWORD_KEYS;
         } else if (tokenType.equals(ObjDTypes.COMMENT)) {
             return COMMENT_KEYS;
         } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
