@@ -7,5 +7,6 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA IU-129.713" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+  <component name="RegexUtilComponent" text="import TRColor&#10;import TRTypes&#10;import EGTypes&#10;import EGMap&#10;&#10;/*&#10; * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении&#10; */&#10;class TRCity(color : TRColor, tile : EGMapPoint, angle : int)" flags="40" regex="[^\00]*" mode="0" />
 </project>
 

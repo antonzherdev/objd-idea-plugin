@@ -11,14 +11,26 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDClsImpl extends ASTWrapperPsiElement implements ObjDCls {
+public class ObjDClassBodyImpl extends ASTWrapperPsiElement implements ObjDClassBody {
 
-  public ObjDClsImpl(ASTNode node) {
+  public ObjDClassBodyImpl(ASTNode node) {
     super(node);
   }
 
+  @Override
+  @NotNull
+  public List<ObjDDefStatement> getDefStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ObjDFieldStatement> getFieldStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDFieldStatement.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCls(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassBody(this);
     else super.accept(visitor);
   }
 
