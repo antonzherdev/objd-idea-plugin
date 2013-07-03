@@ -20,7 +20,8 @@ END_OF_LINE_COMMENT="//"[^\r\n]*
 MULTI_LINE_COMMENT="/*"[^\00]*"*/"
 STRING="\"".*"\""
 IDENT_CHAR= [a-zA-Z0-9_]
-
+INT_CONST = -?[0-9]+
+FLOAT_CONST = -?[0-9]+.[0-9]+
 %state WAITING_VALUE
 
 %%
@@ -29,6 +30,8 @@ IDENT_CHAR= [a-zA-Z0-9_]
     {END_OF_LINE_COMMENT} {return ObjDTypes.COMMENT; }
     {MULTI_LINE_COMMENT} {return ObjDTypes.COMMENT; }
     {STRING} {return ObjDTypes.STRING;}
+    {FLOAT_CONST} {return ObjDTypes.FLOAT;}
+    {INT_CONST} {return ObjDTypes.INT;}
 
     "class" {return ObjDTypes.W_CLASS; }
     "import" {return ObjDTypes.W_IMPORT; }
@@ -79,10 +82,14 @@ IDENT_CHAR= [a-zA-Z0-9_]
     "|" {return ObjDTypes.LINE;}
     "." {return ObjDTypes.DOT;}
     "++" {return ObjDTypes.PLUS_PLUS;}
+    "+=" {return ObjDTypes.PLUS_SET;}
     "+" {return ObjDTypes.PLUS;}
     "--" {return ObjDTypes.MINUS_MINUS;}
+    "-=" {return ObjDTypes.MINUS_SET;}
     "-" {return ObjDTypes.MINUS;}
+    "*=" {return ObjDTypes.MUL_SET;}
     "*" {return ObjDTypes.MUL;}
+    "/=" {return ObjDTypes.DIV_SET;}
     "/" {return ObjDTypes.DIV;}
     "?" {return ObjDTypes.WHAT;}
 
