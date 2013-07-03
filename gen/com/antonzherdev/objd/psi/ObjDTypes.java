@@ -66,6 +66,7 @@ public interface ObjDTypes {
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
+  IElementType W_SELF = new ObjDTokenType("W_SELF");
   IElementType W_SET = new ObjDTokenType("W_SET");
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
   IElementType W_STRUCT = new ObjDTokenType("W_STRUCT");
@@ -74,6 +75,7 @@ public interface ObjDTypes {
   IElementType W_TRUE = new ObjDTokenType("W_TRUE");
   IElementType W_VAL = new ObjDTokenType("W_VAL");
   IElementType W_VAR = new ObjDTokenType("W_VAR");
+  IElementType W_WEAK = new ObjDTokenType("W_WEAK");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

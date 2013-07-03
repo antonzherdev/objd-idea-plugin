@@ -23,14 +23,14 @@ import_statement ::= (W_IMPORT (IDENT | STRING | (LESS IDENT MORE)))
 class_statement ::= ((W_CLASS | W_TRAIT | W_STRUCT | W_ENUM) IDENT expr_call_generics? class_constructor_fields? class_extends? class_body?)
 
 private class_constructor_fields ::= (OPEN_BRACKET class_constructor_field (COMMA class_constructor_field)* CLOSE_BRACKET)
-private class_constructor_field ::= ((W_VAR | W_VAL)? IDENT COLON data_type (SET expr_)?)
+private class_constructor_field ::= (W_WEAK? (W_VAR | W_VAL)? IDENT COLON data_type (SET expr_)?)
 
 private class_extends ::= (W_EXTENDS IDENT data_type_generics?)
 
 class_body ::= (OPEN_BRACE (def_statement | field_statement | expr_)* CLOSE_BRACE)
 
 field_statement ::= (field_mods* (W_VAR | W_VAL)? IDENT (COLON data_type)? (SET expr_)?) field_description?
-private field_mods ::= (W_PRIVATE | W_STATIC)
+private field_mods ::= (W_PRIVATE | W_STATIC | W_WEAK)
 private field_description ::= (LINE field_description_statement*)
 private field_description_statement ::= (W_PRIVATE? (W_GET | W_SET) (SET expr_)?)
 
@@ -46,7 +46,7 @@ private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 private data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET
 private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
 
-private expr_ ::= ((expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT) (expr_op | index_op | post_op)?)
+private expr_ ::= ((expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?)
 private expr_minus ::= MINUS expr_
 private post_op ::= PLUS_PLUS | MINUS_MINUS
 private expr_brackets ::= OPEN_BRACKET expr_ CLOSE_BRACKET

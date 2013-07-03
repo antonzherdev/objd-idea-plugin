@@ -52,6 +52,8 @@ FLOAT_CONST = -?[0-9]+.[0-9]+
     "trait" {return ObjDTypes.W_TRAIT; }
     "struct" {return ObjDTypes.W_STRUCT; }
     "enum" {return ObjDTypes.W_ENUM; }
+    "weak" {return ObjDTypes.W_WEAK; }
+    "self" {return ObjDTypes.W_SELF; }
 
     "bool" {return ObjDTypes.TP_BOOL; }
     "float" {return ObjDTypes.TP_FLOAT; }
