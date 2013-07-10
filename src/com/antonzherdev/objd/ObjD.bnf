@@ -48,7 +48,7 @@ private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 private data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET
 private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
 
-private expr_ ::= ((expr_not | expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?)
+private expr_ ::= ((expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?)
 private expr_not ::= EXCLAMATION expr_
 private expr_minus ::= MINUS expr_
 private post_op ::= PLUS_PLUS | MINUS_MINUS
@@ -63,5 +63,7 @@ private expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE)
 private expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET
 private expr_val ::= (W_VAL | W_VAR) IDENT (COLON data_type)? (SET expr_)?
 private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET
-private expr_lambda ::= lambda_par (COMMA lambda_par)* ARROW expr_
+private expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_
+private lambda_pars ::= OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
+
 private lambda_par ::= IDENT (COLON data_type)?

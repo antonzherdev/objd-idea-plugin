@@ -857,7 +857,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (expr_not | expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?
+  // (expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?
   static boolean expr_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_")) return false;
     boolean result_ = false;
@@ -873,15 +873,15 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // expr_not | expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF
+  // expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF
   private static boolean expr__0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr__0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = expr_not(builder_, level_ + 1);
     if (!result_) result_ = expr_if(builder_, level_ + 1);
-    if (!result_) result_ = expr_braces(builder_, level_ + 1);
     if (!result_) result_ = expr_lambda(builder_, level_ + 1);
+    if (!result_) result_ = expr_braces(builder_, level_ + 1);
     if (!result_) result_ = expr_call(builder_, level_ + 1);
     if (!result_) result_ = expr_arr(builder_, level_ + 1);
     if (!result_) result_ = expr_val(builder_, level_ + 1);
@@ -1269,14 +1269,13 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // lambda_par (COMMA lambda_par)* ARROW expr_
+  // (lambda_par | lambda_pars) ARROW expr_
   static boolean expr_lambda(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_lambda")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, OPEN_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = lambda_par(builder_, level_ + 1);
-    result_ = result_ && expr_lambda_1(builder_, level_ + 1);
+    result_ = expr_lambda_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ARROW);
     result_ = result_ && expr_(builder_, level_ + 1);
     if (!result_) {
@@ -1288,29 +1287,13 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (COMMA lambda_par)*
-  private static boolean expr_lambda_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_lambda_1")) return false;
-    int offset_ = builder_.getCurrentOffset();
-    while (true) {
-      if (!expr_lambda_1_0(builder_, level_ + 1)) break;
-      int next_offset_ = builder_.getCurrentOffset();
-      if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "expr_lambda_1");
-        break;
-      }
-      offset_ = next_offset_;
-    }
-    return true;
-  }
-
-  // COMMA lambda_par
-  private static boolean expr_lambda_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_lambda_1_0")) return false;
+  // lambda_par | lambda_pars
+  private static boolean expr_lambda_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_lambda_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && lambda_par(builder_, level_ + 1);
+    result_ = lambda_par(builder_, level_ + 1);
+    if (!result_) result_ = lambda_pars(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -1851,6 +1834,58 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COLON);
     result_ = result_ && data_type(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
+  static boolean lambda_pars(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "lambda_pars")) return false;
+    if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, OPEN_BRACKET);
+    result_ = result_ && lambda_par(builder_, level_ + 1);
+    result_ = result_ && lambda_pars_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // (COMMA lambda_par)*
+  private static boolean lambda_pars_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "lambda_pars_2")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!lambda_pars_2_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "lambda_pars_2");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // COMMA lambda_par
+  private static boolean lambda_pars_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "lambda_pars_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, COMMA);
+    result_ = result_ && lambda_par(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
