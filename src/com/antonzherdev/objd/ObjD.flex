@@ -94,7 +94,8 @@ FLOAT_CONST = -?[0-9]+.[0-9]+
     "/=" {return ObjDTypes.DIV_SET;}
     "/" {return ObjDTypes.DIV;}
     "?" {return ObjDTypes.WHAT;}
-
+    "!=" {return ObjDTypes.NOT_EQ;}
+    "!" {return ObjDTypes.EXCLAMATION;}
 }
 
 {WHITE_SPACE}+ {return TokenType.WHITE_SPACE; }

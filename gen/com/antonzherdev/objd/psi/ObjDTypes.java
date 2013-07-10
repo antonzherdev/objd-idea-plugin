@@ -26,6 +26,7 @@ public interface ObjDTypes {
   IElementType DIV_SET = new ObjDTokenType("DIV_SET");
   IElementType DOT = new ObjDTokenType("DOT");
   IElementType EQ = new ObjDTokenType("EQ");
+  IElementType EXCLAMATION = new ObjDTokenType("EXCLAMATION");
   IElementType FLOAT = new ObjDTokenType("FLOAT");
   IElementType IDENT = new ObjDTokenType("IDENT");
   IElementType INT = new ObjDTokenType("INT");
@@ -39,6 +40,7 @@ public interface ObjDTypes {
   IElementType MOREEQ = new ObjDTokenType("MOREEQ");
   IElementType MUL = new ObjDTokenType("MUL");
   IElementType MUL_SET = new ObjDTokenType("MUL_SET");
+  IElementType NOT_EQ = new ObjDTokenType("NOT_EQ");
   IElementType OPEN_BRACE = new ObjDTokenType("OPEN_BRACE");
   IElementType OPEN_BRACKET = new ObjDTokenType("OPEN_BRACKET");
   IElementType OPEN_SQUARE_BRACKET = new ObjDTokenType("OPEN_SQUARE_BRACKET");

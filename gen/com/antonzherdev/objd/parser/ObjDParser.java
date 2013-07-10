@@ -816,7 +816,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?
+  // (expr_not | expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?
   static boolean expr_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_")) return false;
     boolean result_ = false;
@@ -832,12 +832,13 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF
+  // expr_not | expr_if | expr_braces | expr_lambda | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF
   private static boolean expr__0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr__0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_if(builder_, level_ + 1);
+    result_ = expr_not(builder_, level_ + 1);
+    if (!result_) result_ = expr_if(builder_, level_ + 1);
     if (!result_) result_ = expr_braces(builder_, level_ + 1);
     if (!result_) result_ = expr_lambda(builder_, level_ + 1);
     if (!result_) result_ = expr_call(builder_, level_ + 1);
@@ -1297,7 +1298,25 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (DOT | SET | PLUS | MINUS | MUL | DIV | AND | OR | EQ| MORE | LESS| MOREEQ| LESSEQ | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_
+  // EXCLAMATION expr_
+  static boolean expr_not(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_not")) return false;
+    if (!nextTokenIs(builder_, EXCLAMATION)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, EXCLAMATION);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // (DOT | SET | PLUS | MINUS | MUL | DIV | AND | OR | EQ| MORE | LESS| MOREEQ| LESSEQ | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET | NOT_EQ) expr_
   static boolean expr_op(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_op")) return false;
     boolean result_ = false;
@@ -1313,7 +1332,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // DOT | SET | PLUS | MINUS | MUL | DIV | AND | OR | EQ| MORE | LESS| MOREEQ| LESSEQ | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET
+  // DOT | SET | PLUS | MINUS | MUL | DIV | AND | OR | EQ| MORE | LESS| MOREEQ| LESSEQ | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET | NOT_EQ
   private static boolean expr_op_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_op_0")) return false;
     boolean result_ = false;
@@ -1335,6 +1354,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, MINUS_SET);
     if (!result_) result_ = consumeToken(builder_, MUL_SET);
     if (!result_) result_ = consumeToken(builder_, DIV_SET);
+    if (!result_) result_ = consumeToken(builder_, NOT_EQ);
     if (!result_) {
       marker_.rollbackTo();
     }

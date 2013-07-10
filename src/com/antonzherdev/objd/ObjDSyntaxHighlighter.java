@@ -47,7 +47,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final List<IElementType> DATATYPES = Arrays.asList(
             TP_BOOL, TP_FLOAT, TP_INT, TP_STRING, TP_UINT, TP_VOID);
     private static final List<IElementType> OPERATIONS = Arrays.asList(
-            DOT, SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS);
+            DOT, SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS, NOT_EQ,
+            EXCLAMATION);
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
