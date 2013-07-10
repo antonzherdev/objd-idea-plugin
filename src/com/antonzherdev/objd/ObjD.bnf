@@ -27,7 +27,9 @@ private class_constructor_field ::= (W_WEAK? (W_VAR | W_VAL)? IDENT COLON data_t
 
 private class_extends ::= (W_EXTENDS IDENT data_type_generics?)
 
-class_body ::= (OPEN_BRACE (def_statement | field_statement | expr_)* CLOSE_BRACE)
+class_body ::= (OPEN_BRACE enum_item* (def_statement | field_statement)* CLOSE_BRACE)
+
+private enum_item ::= IDENT expr_call_params?
 
 field_statement ::= (field_mods* (W_VAR | W_VAL)? IDENT (COLON data_type)? (SET expr_)?) field_description?
 private field_mods ::= (W_PRIVATE | W_STATIC | W_WEAK)
