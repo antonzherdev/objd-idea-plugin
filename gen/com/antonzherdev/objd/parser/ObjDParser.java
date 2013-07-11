@@ -35,6 +35,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == FIELD_STATEMENT) {
       result_ = field_statement(builder_, level_ + 1);
     }
+    else if (root_ == IMPORT_OD_FILE) {
+      result_ = import_od_file(builder_, level_ + 1);
+    }
     else if (root_ == IMPORT_STATEMENT) {
       result_ = import_statement(builder_, level_ + 1);
     }
@@ -1701,7 +1704,24 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_IMPORT (IDENT | STRING | (LESS IDENT MORE))
+  // IDENT
+  public static boolean import_od_file(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "import_od_file")) return false;
+    if (!nextTokenIs(builder_, IDENT)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, IDENT);
+    if (result_) {
+      marker_.done(IMPORT_OD_FILE);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // W_IMPORT (import_od_file | STRING | (LESS IDENT MORE))
   public static boolean import_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement")) return false;
     if (!nextTokenIs(builder_, W_IMPORT)) return false;
@@ -1718,12 +1738,12 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // IDENT | STRING | (LESS IDENT MORE)
+  // import_od_file | STRING | (LESS IDENT MORE)
   private static boolean import_statement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement_1")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, IDENT);
+    result_ = import_od_file(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, STRING);
     if (!result_) result_ = import_statement_1_2(builder_, level_ + 1);
     if (!result_) {

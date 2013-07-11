@@ -12,13 +12,17 @@
   elementTypeHolderClass="com.antonzherdev.objd.psi.ObjDTypes"
   elementTypeClass="com.antonzherdev.objd.psi.ObjDElementType"
   tokenTypeClass="com.antonzherdev.objd.psi.ObjDTokenType"
+
+  psiImplUtilClass="com.antonzherdev.objd.psi.impl.ObjDPsiImplUtil"
 }
 
 file ::= statement_*
 
 private statement_ ::= ((W_STUB? (class_statement | def_statement | field_statement))|import_statement |COMMENT)
 
-import_statement ::= (W_IMPORT (IDENT | STRING | (LESS IDENT MORE)))
+import_statement ::= (W_IMPORT (import_od_file | STRING | (LESS IDENT MORE)))
+import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
+                                     methods=[getName setName getNameIdentifier getReference]}
 
 class_statement ::= ((W_CLASS | W_TRAIT | W_STRUCT | W_ENUM) IDENT expr_call_generics? class_constructor_fields? class_extends? class_body?)
 

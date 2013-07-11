@@ -17,6 +17,12 @@ public class ObjDImportStatementImpl extends ASTWrapperPsiElement implements Obj
     super(node);
   }
 
+  @Override
+  @Nullable
+  public ObjDImportOdFile getImportOdFile() {
+    return findChildByClass(ObjDImportOdFile.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitImportStatement(this);
     else super.accept(visitor);

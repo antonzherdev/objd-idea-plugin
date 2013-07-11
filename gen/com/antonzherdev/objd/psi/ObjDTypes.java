@@ -12,6 +12,7 @@ public interface ObjDTypes {
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
+  IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
 
   IElementType AND = new ObjDTokenType("AND");
@@ -91,6 +92,9 @@ public interface ObjDTypes {
       }
       else if (type == FIELD_STATEMENT) {
         return new ObjDFieldStatementImpl(node);
+      }
+      else if (type == IMPORT_OD_FILE) {
+        return new ObjDImportOdFileImpl(node);
       }
       else if (type == IMPORT_STATEMENT) {
         return new ObjDImportStatementImpl(node);

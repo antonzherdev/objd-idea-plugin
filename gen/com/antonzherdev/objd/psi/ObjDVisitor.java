@@ -23,7 +23,15 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitImportOdFile(@NotNull ObjDImportOdFile o) {
+    visitNamedElement(o);
+  }
+
   public void visitImportStatement(@NotNull ObjDImportStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamedElement(@NotNull ObjDNamedElement o) {
     visitPsiElement(o);
   }
 
