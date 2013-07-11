@@ -22,13 +22,13 @@ STRING="\"".*"\""
 IDENT_CHAR= [a-zA-Z0-9_]
 INT_CONST = -?[0-9]+
 FLOAT_CONST = -?[0-9]+.[0-9]+
-%state WAITING_VALUE
+%state COMMENT_STATE
 
 %%
 
 <YYINITIAL> {
     {END_OF_LINE_COMMENT} {return ObjDTypes.COMMENT; }
-    {MULTI_LINE_COMMENT} {return ObjDTypes.COMMENT; }
+    "/*" { yybegin(COMMENT_STATE); return ObjDTypes.COMMENT; }
     {STRING} {return ObjDTypes.STRING;}
     {FLOAT_CONST} {return ObjDTypes.FLOAT;}
     {INT_CONST} {return ObjDTypes.INT;}
@@ -94,6 +94,11 @@ FLOAT_CONST = -?[0-9]+.[0-9]+
     "?" {return ObjDTypes.WHAT;}
     "!=" {return ObjDTypes.NOT_EQ;}
     "!" {return ObjDTypes.EXCLAMATION;}
+}
+
+<COMMENT_STATE> {
+    "*/" {yybegin(YYINITIAL); return ObjDTypes.COMMENT;}
+    .  {return ObjDTypes.COMMENT; }
 }
 
 {WHITE_SPACE}+ {return TokenType.WHITE_SPACE; }
