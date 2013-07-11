@@ -5,7 +5,6 @@ import com.antonzherdev.objd.psi.ObjDFile;
 import com.antonzherdev.objd.psi.ObjDImportOdFile;
 import com.antonzherdev.objd.psi.ObjDImportStatement;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.ArrayUtil;
@@ -22,7 +21,7 @@ public class ObjDImportReference extends PsiReferenceBase<ObjDImportOdFile> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        return ObjDUtil.findFile(getElement().getProject(), getElement().getName());
+        return ObjDUtil.findFile(getElement().getProject(), getElement().getName()).getOrNull();
     }
 
     @NotNull

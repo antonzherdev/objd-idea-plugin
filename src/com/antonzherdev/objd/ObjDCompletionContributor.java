@@ -1,7 +1,8 @@
 package com.antonzherdev.objd;
 
+import com.antonzherdev.chain.P;
+import com.antonzherdev.objd.psi.ObjDFile;
 import com.antonzherdev.objd.psi.ObjDImportOdFile;
-import com.antonzherdev.objd.psi.ObjDTypes;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
@@ -16,10 +17,15 @@ public class ObjDCompletionContributor extends CompletionContributor {
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
-                                               @NotNull CompletionResultSet resultSet) {
+                                               @NotNull final CompletionResultSet resultSet) {
                         PsiElement parent = parameters.getPosition().getParent();
                         if(parent instanceof ObjDImportOdFile) {
-                            resultSet.addElement(LookupElementBuilder.create("Hello"));
+                            ObjDUtil.getAllFiles(parent.getProject()).foreach(new P<ObjDFile>() {
+                                @Override
+                                public void p(ObjDFile objDFile) {
+                                    resultSet.addElement(LookupElementBuilder.create(objDFile.getName().substring(0, objDFile.getName().length() - 3)));
+                                }
+                            });
                         }
                     }
                 }
