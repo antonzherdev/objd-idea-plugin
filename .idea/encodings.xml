@@ -1,5 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/B.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Chain.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/ChainDelegate.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/ChainItem.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/CompareUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/F.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/F0.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/F2.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Fold.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Fold1.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/FuncUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/IChain.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/ISortBuilder.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/ITupleChain.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Lazy.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/MapIterable.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/MutableOption.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Option.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/P.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/P0.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/P2.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/SortBuilder.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/SortDirection.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Tuple.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/TupleChain.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/Yield.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/YieldDec.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/YieldResult.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/AppendChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/CrossChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/ExcludeChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/FilterChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/FlatChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/FlatMapChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/FullJoinChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/FullJoinDefChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/FullJoinItChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/GroupChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/InnerJoinChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/InnerJoinItChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/LeftJoinChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/LeftJoinDefChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/LeftMapChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/MapChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/MapFirstChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/MapLastChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/PrependChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/ReverseChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/RightJoinChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/RightJoinDefChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/RightJoinItChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/RightMapChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/Scan1ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/Scan2ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/ScanChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/SortChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/SortFuncChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/SourceChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/SourceMapChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/UnscanChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/Unzip1ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/Unzip2ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/WindowChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/Zip1ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/Zip2ChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/ZipChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/antonzherdev/chain/links/ZipWithIndexChainLink.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/com/antonzherdev/chain/ChainTest.java" charset="UTF-8" />
+  </component>
 </project>
 
