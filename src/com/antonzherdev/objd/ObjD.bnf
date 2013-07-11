@@ -34,9 +34,9 @@ private enum_item ::= IDENT expr_call_params?
 field_statement ::= (field_mods* (W_VAR | W_VAL)? IDENT (COLON data_type)? (SET expr_)?) field_description?
 private field_mods ::= (W_PRIVATE | W_STATIC | W_WEAK)
 private field_description ::= (LINE field_description_statement*)
-private field_description_statement ::= (W_PRIVATE? (W_GET | W_SET) (SET expr_)?)
+private field_description_statement ::= (W_PRIVATE? IDENT (SET expr_)?)
 
-def_statement ::= (def_mods* W_DEF (IDENT | W_SET | W_GET) expr_call_generics? def_parameters? (COLON data_type)? SET? expr_?)
+def_statement ::= (def_mods* W_DEF IDENT expr_call_generics? def_parameters? (COLON data_type)? SET? expr_?)
 private def_parameters ::= (OPEN_BRACKET def_parameter (COMMA def_parameter)* CLOSE_BRACKET)
 private def_parameter ::= (param_name? COLON data_type (SET expr_)?)
 private def_mods ::= (W_PRIVATE | W_STATIC)

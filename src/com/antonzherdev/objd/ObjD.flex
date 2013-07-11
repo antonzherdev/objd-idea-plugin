@@ -41,8 +41,6 @@ FLOAT_CONST = -?[0-9]+.[0-9]+
     "extends" {return ObjDTypes.W_EXTENDS; }
     "private" {return ObjDTypes.W_PRIVATE; }
     "static" {return ObjDTypes.W_STATIC; }
-    "get" {return ObjDTypes.W_GET; }
-    "set" {return ObjDTypes.W_SET; }
     "nil" {return ObjDTypes.W_NIL; }
     "true" {return ObjDTypes.W_TRUE; }
     "false" {return ObjDTypes.W_FALSE; }

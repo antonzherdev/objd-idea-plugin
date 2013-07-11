@@ -63,13 +63,11 @@ public interface ObjDTypes {
   IElementType W_ENUM = new ObjDTokenType("W_ENUM");
   IElementType W_EXTENDS = new ObjDTokenType("W_EXTENDS");
   IElementType W_FALSE = new ObjDTokenType("W_FALSE");
-  IElementType W_GET = new ObjDTokenType("W_GET");
   IElementType W_IF = new ObjDTokenType("W_IF");
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
   IElementType W_SELF = new ObjDTokenType("W_SELF");
-  IElementType W_SET = new ObjDTokenType("W_SET");
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
   IElementType W_STRUCT = new ObjDTokenType("W_STRUCT");
   IElementType W_STUB = new ObjDTokenType("W_STUB");

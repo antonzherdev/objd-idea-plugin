@@ -43,7 +43,7 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
     private static final List<IElementType> KEYWORDS = Arrays.asList(
             W_CLASS, W_IMPORT, W_VAL, W_VAR, W_DEF, W_EXTENDS, W_IF, W_ELSE, W_SELF, W_WEAK,
-            W_PRIVATE, W_STATIC, W_SET, W_GET, W_NIL, W_TRUE, W_FALSE, W_STUB, W_TRAIT, W_ENUM, W_STRUCT);
+            W_PRIVATE, W_STATIC, W_NIL, W_TRUE, W_FALSE, W_STUB, W_TRAIT, W_ENUM, W_STRUCT);
     private static final List<IElementType> DATATYPES = Arrays.asList(
             TP_BOOL, TP_FLOAT, TP_INT, TP_STRING, TP_UINT, TP_VOID);
     private static final List<IElementType> OPERATIONS = Arrays.asList(
