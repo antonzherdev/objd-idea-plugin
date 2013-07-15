@@ -52,6 +52,7 @@ FLOAT_CONST = -?[0-9]+.[0-9]+
     "enum" {return ObjDTypes.W_ENUM; }
     "weak" {return ObjDTypes.W_WEAK; }
     "self" {return ObjDTypes.W_SELF; }
+    "throw" {return ObjDTypes.W_THROW; }
 
     "bool" {return ObjDTypes.TP_BOOL; }
     "float" {return ObjDTypes.TP_FLOAT; }

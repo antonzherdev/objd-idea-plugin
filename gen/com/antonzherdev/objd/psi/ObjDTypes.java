@@ -71,6 +71,7 @@ public interface ObjDTypes {
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
   IElementType W_STRUCT = new ObjDTokenType("W_STRUCT");
   IElementType W_STUB = new ObjDTokenType("W_STUB");
+  IElementType W_THROW = new ObjDTokenType("W_THROW");
   IElementType W_TRAIT = new ObjDTokenType("W_TRAIT");
   IElementType W_TRUE = new ObjDTokenType("W_TRUE");
   IElementType W_VAL = new ObjDTokenType("W_VAL");
