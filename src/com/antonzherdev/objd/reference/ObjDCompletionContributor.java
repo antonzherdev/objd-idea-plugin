@@ -3,10 +3,7 @@ package com.antonzherdev.objd.reference;
 import com.antonzherdev.chain.P;
 import com.antonzherdev.objd.ObjDLanguage;
 import com.antonzherdev.objd.ObjDUtil;
-import com.antonzherdev.objd.psi.ObjDClassName;
-import com.antonzherdev.objd.psi.ObjDDataTypeRef;
-import com.antonzherdev.objd.psi.ObjDFile;
-import com.antonzherdev.objd.psi.ObjDImportOdFile;
+import com.antonzherdev.objd.psi.*;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
@@ -38,6 +35,21 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                     resultSet.addElement(LookupElementBuilder.create(className.getName()));
                                 }
                             });
+                        } else if(parent.getParent() instanceof ObjDFile) {
+                            resultSet.addElement(LookupElementBuilder.create("import "));
+                            resultSet.addElement(LookupElementBuilder.create("val "));
+                            resultSet.addElement(LookupElementBuilder.create("stub "));
+                            resultSet.addElement(LookupElementBuilder.create("class "));
+                            resultSet.addElement(LookupElementBuilder.create("struct "));
+                            resultSet.addElement(LookupElementBuilder.create("enum "));
+                            resultSet.addElement(LookupElementBuilder.create("trait "));
+                        } else if(parent instanceof ObjDClassBody || parent.getParent() instanceof ObjDClassBody) {
+                            resultSet.addElement(LookupElementBuilder.create("val "));
+                            resultSet.addElement(LookupElementBuilder.create("var "));
+                            resultSet.addElement(LookupElementBuilder.create("private "));
+                            resultSet.addElement(LookupElementBuilder.create("def "));
+                            resultSet.addElement(LookupElementBuilder.create("static "));
+                            resultSet.addElement(LookupElementBuilder.create("weak "));
                         }
                     }
                 }
