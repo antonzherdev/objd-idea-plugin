@@ -3,6 +3,8 @@ package com.antonzherdev.objd.reference;
 import com.antonzherdev.chain.P;
 import com.antonzherdev.objd.ObjDLanguage;
 import com.antonzherdev.objd.ObjDUtil;
+import com.antonzherdev.objd.psi.ObjDClassName;
+import com.antonzherdev.objd.psi.ObjDDataTypeRef;
 import com.antonzherdev.objd.psi.ObjDFile;
 import com.antonzherdev.objd.psi.ObjDImportOdFile;
 import com.intellij.codeInsight.completion.*;
@@ -25,7 +27,15 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             ObjDUtil.getAllFiles(parent.getProject()).foreach(new P<ObjDFile>() {
                                 @Override
                                 public void p(ObjDFile objDFile) {
-                                    resultSet.addElement(LookupElementBuilder.create(objDFile.getName().substring(0, objDFile.getName().length() - 3)));
+                                    String name = objDFile.getName();
+                                    resultSet.addElement(LookupElementBuilder.create(name.substring(0, name.length() - 3)));
+                                }
+                            });
+                        } else if(parent instanceof ObjDDataTypeRef) {
+                            ObjDUtil.availableClassesInFile(parent.getContainingFile()).foreach(new P<ObjDClassName>() {
+                                @Override
+                                public void p(ObjDClassName className) {
+                                    resultSet.addElement(LookupElementBuilder.create(className.getName()));
                                 }
                             });
                         }
