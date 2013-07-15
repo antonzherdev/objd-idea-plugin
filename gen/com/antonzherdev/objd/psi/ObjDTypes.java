@@ -33,7 +33,6 @@ public interface ObjDTypes {
   IElementType INT = new ObjDTokenType("INT");
   IElementType LESS = new ObjDTokenType("LESS");
   IElementType LESSEQ = new ObjDTokenType("LESSEQ");
-  IElementType LINE = new ObjDTokenType("LINE");
   IElementType MINUS = new ObjDTokenType("MINUS");
   IElementType MINUS_MINUS = new ObjDTokenType("MINUS_MINUS");
   IElementType MINUS_SET = new ObjDTokenType("MINUS_SET");

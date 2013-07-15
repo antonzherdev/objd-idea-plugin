@@ -79,7 +79,6 @@ FLOAT_CONST = -?[0-9]+.[0-9]+
     "=" {return ObjDTypes.SET;}
     "||" {return ObjDTypes.OR;}
     "&&" {return ObjDTypes.AND;}
-    "|" {return ObjDTypes.LINE;}
     "." {return ObjDTypes.DOT;}
     "++" {return ObjDTypes.PLUS_PLUS;}
     "+=" {return ObjDTypes.PLUS_SET;}
