@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDDefStatement extends PsiElement {
 
+  @NotNull
+  List<ObjDDataTypeRef> getDataTypeRefList();
+
 }

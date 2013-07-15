@@ -1,5 +1,6 @@
-package com.antonzherdev.objd;
+package com.antonzherdev.objd.reference;
 
+import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.ObjDElementFactory;
 import com.antonzherdev.objd.psi.ObjDFile;
 import com.antonzherdev.objd.psi.ObjDImportOdFile;
@@ -33,20 +34,7 @@ public class ObjDImportReference extends PsiReferenceBase<ObjDImportOdFile> {
     @SuppressWarnings("ConstantConditions")
     @Override
     public PsiElement handleElementRename(String newName) throws IncorrectOperationException {
-        PsiElement resolve = resolve();
-        if(resolve instanceof ObjDFile) {
-            ObjDImportStatement st;
-            try {
-                st = ObjDElementFactory.createImport(getElement().getProject(), newName);
-            } catch (Exception e) {
-                st = null;
-            }
-
-            if (st != null) {
-                getElement().getNameIdentifier().replace(st.getImportOdFile().getNameIdentifier());
-            }
-        }
-
+        getElement().setName(newName);
         return getElement();
     }
 }

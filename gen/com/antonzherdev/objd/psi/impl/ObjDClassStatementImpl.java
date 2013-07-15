@@ -23,6 +23,18 @@ public class ObjDClassStatementImpl extends ASTWrapperPsiElement implements ObjD
     return findChildByClass(ObjDClassBody.class);
   }
 
+  @Override
+  @NotNull
+  public ObjDClassName getClassName() {
+    return findNotNullChildByClass(ObjDClassName.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ObjDDataTypeRef> getDataTypeRefList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataTypeRef.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassStatement(this);
     else super.accept(visitor);

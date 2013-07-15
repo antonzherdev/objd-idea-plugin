@@ -9,7 +9,9 @@ import com.antonzherdev.objd.psi.impl.*;
 public interface ObjDTypes {
 
   IElementType CLASS_BODY = new ObjDElementType("CLASS_BODY");
+  IElementType CLASS_NAME = new ObjDElementType("CLASS_NAME");
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
+  IElementType DATA_TYPE_REF = new ObjDElementType("DATA_TYPE_REF");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
@@ -84,8 +86,14 @@ public interface ObjDTypes {
        if (type == CLASS_BODY) {
         return new ObjDClassBodyImpl(node);
       }
+      else if (type == CLASS_NAME) {
+        return new ObjDClassNameImpl(node);
+      }
       else if (type == CLASS_STATEMENT) {
         return new ObjDClassStatementImpl(node);
+      }
+      else if (type == DATA_TYPE_REF) {
+        return new ObjDDataTypeRefImpl(node);
       }
       else if (type == DEF_STATEMENT) {
         return new ObjDDefStatementImpl(node);

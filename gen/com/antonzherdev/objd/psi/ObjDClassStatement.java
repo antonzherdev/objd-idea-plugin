@@ -10,4 +10,10 @@ public interface ObjDClassStatement extends PsiElement {
   @Nullable
   ObjDClassBody getClassBody();
 
+  @NotNull
+  ObjDClassName getClassName();
+
+  @NotNull
+  List<ObjDDataTypeRef> getDataTypeRefList();
+
 }

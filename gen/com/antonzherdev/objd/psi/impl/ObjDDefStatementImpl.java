@@ -17,6 +17,12 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
     super(node);
   }
 
+  @Override
+  @NotNull
+  public List<ObjDDataTypeRef> getDataTypeRefList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataTypeRef.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefStatement(this);
     else super.accept(visitor);

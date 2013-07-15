@@ -24,7 +24,9 @@ import_statement ::= (W_IMPORT (import_od_file | STRING | (LESS IDENT MORE)))
 import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                                      methods=[getName setName getNameIdentifier getReference]}
 
-class_statement ::= ((W_CLASS | W_TRAIT | W_STRUCT | W_ENUM) IDENT expr_call_generics? class_constructor_fields? class_extends? class_body?)
+class_statement ::= ((W_CLASS | W_TRAIT | W_STRUCT | W_ENUM) class_name expr_call_generics? class_constructor_fields? class_extends? class_body?)
+class_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
+               methods=[getName setName getNameIdentifier]}
 
 private class_constructor_fields ::= (OPEN_BRACKET class_constructor_field (COMMA class_constructor_field)* CLOSE_BRACKET)
 private class_constructor_field ::= (W_WEAK? (W_VAR | W_VAL)? IDENT COLON data_type (SET expr_)?)
@@ -45,7 +47,9 @@ private def_mods ::= (W_PRIVATE | W_STATIC)
 private param_name ::= (IDENT | W_ELSE | W_DEF)
 
 private data_type ::= (data_type_simple| data_type_collection | data_type_tuple) WHAT? (ARROW data_type)?
-private data_type_simple ::= ((IDENT | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? (ARROW data_type)?)
+private data_type_simple ::= ((data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? (ARROW data_type)?)
+data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
+    methods=[getName setName getNameIdentifier getReference]}
 private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 private data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET
 private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET

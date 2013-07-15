@@ -8,24 +8,29 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDFieldStatementImpl extends ASTWrapperPsiElement implements ObjDFieldStatement {
+public class ObjDClassNameImpl extends ObjDNamedElementImpl implements ObjDClassName {
 
-  public ObjDFieldStatementImpl(ASTNode node) {
+  public ObjDClassNameImpl(ASTNode node) {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public List<ObjDDataTypeRef> getDataTypeRefList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataTypeRef.class);
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassName(this);
+    else super.accept(visitor);
   }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitFieldStatement(this);
-    else super.accept(visitor);
+  public String getName() {
+    return ObjDPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return ObjDPsiImplUtil.setName(this, newName);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return ObjDPsiImplUtil.getNameIdentifier(this);
   }
 
 }

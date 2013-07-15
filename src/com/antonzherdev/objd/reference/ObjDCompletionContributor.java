@@ -1,6 +1,8 @@
-package com.antonzherdev.objd;
+package com.antonzherdev.objd.reference;
 
 import com.antonzherdev.chain.P;
+import com.antonzherdev.objd.ObjDLanguage;
+import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.ObjDFile;
 import com.antonzherdev.objd.psi.ObjDImportOdFile;
 import com.intellij.codeInsight.completion.*;

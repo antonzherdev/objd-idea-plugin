@@ -5,16 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
-import com.intellij.psi.PsiReference;
 
-public interface ObjDImportOdFile extends ObjDNamedElement {
+public interface ObjDClassName extends ObjDNamedElement {
 
   String getName();
 
   PsiElement setName(String newName);
 
   PsiElement getNameIdentifier();
-
-  PsiReference getReference();
 
 }

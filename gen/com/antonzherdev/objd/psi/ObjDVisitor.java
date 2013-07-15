@@ -11,8 +11,16 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassName(@NotNull ObjDClassName o) {
+    visitNamedElement(o);
+  }
+
   public void visitClassStatement(@NotNull ObjDClassStatement o) {
     visitPsiElement(o);
+  }
+
+  public void visitDataTypeRef(@NotNull ObjDDataTypeRef o) {
+    visitNamedElement(o);
   }
 
   public void visitDefStatement(@NotNull ObjDDefStatement o) {
