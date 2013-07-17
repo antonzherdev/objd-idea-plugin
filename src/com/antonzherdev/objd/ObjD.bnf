@@ -51,7 +51,7 @@ private data_type_simple ::= ((data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP
 data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
 private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
-private data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET
+private data_type_collection ::= OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET
 private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
 
 private expr_ ::= ((expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?)
