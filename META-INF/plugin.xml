@@ -44,6 +44,7 @@
       <colorSettingsPage implementation="com.antonzherdev.objd.ObjDColorSettingsPage"/>
       <completion.contributor language="ObjD" implementationClass="com.antonzherdev.objd.reference.ObjDCompletionContributor"/>
       <lang.refactoringSupport language="ObjD" implementationClass="com.antonzherdev.objd.ObjDRefactoringSupportProvider"/>
+      <annotator language="ObjD" implementationClass="com.antonzherdev.objd.reference.ObjDAnnotator"/>
     <!-- Add your extensions here -->
   </extensions>
 </idea-plugin>
