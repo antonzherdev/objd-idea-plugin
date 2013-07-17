@@ -1072,7 +1072,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_BRACKET expr_ CLOSE_BRACKET
+  // OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET
   static boolean expr_brackets(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_brackets")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
@@ -1080,7 +1080,40 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_BRACKET);
     result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_brackets_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // (COMMA expr_)*
+  private static boolean expr_brackets_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_brackets_2")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!expr_brackets_2_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "expr_brackets_2");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // COMMA expr_
+  private static boolean expr_brackets_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_brackets_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, COMMA);
+    result_ = result_ && expr_(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
