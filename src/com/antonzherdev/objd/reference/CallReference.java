@@ -1,6 +1,7 @@
 package com.antonzherdev.objd.reference;
 
 import com.antonzherdev.chain.B;
+import com.antonzherdev.chain.Chain;
 import com.antonzherdev.chain.F;
 import com.antonzherdev.chain.IChain;
 import com.antonzherdev.objd.ObjDUtil;
@@ -43,7 +44,12 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         }
         return ObjDUtil.availableClassesInFile(element.getContainingFile())
                 .<PsiNamedElement>cast()
-                .append(classFields(element))
+                .append(ObjDUtil.getClass(element).map(new F<ObjDClassStatement,IChain<PsiNamedElement>>() {
+                    @Override
+                    public IChain<PsiNamedElement> f(ObjDClassStatement x) {
+                        return classFields(x);
+                    }
+                }).getOrElse(Chain.<PsiNamedElement>chain()))
                 .append(vars(element));
     }
 
@@ -87,28 +93,31 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         }
     }
 
-    private static IChain<PsiNamedElement> classFields(PsiElement element) {
-        return chain(ObjDUtil.getClass(element)).flatMap(new F<ObjDClassStatement,IChain<PsiNamedElement>>() {
+    private static IChain<PsiNamedElement> classFields(ObjDClassStatement stm) {
+        return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
             @Override
-            public IChain<PsiNamedElement> f(ObjDClassStatement stm) {
-                return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
-                    @Override
-                    public PsiNamedElement f(ObjDClassConstructorField x) {
-                        return x.getDefName();
-                    }
-                }).append(chain(stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
-                    @Override
-                    public PsiNamedElement f(ObjDDefStatement x) {
-                        return x.getDefName();
-                    }
-                })).append(chain(stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
-                    @Override
-                    public PsiNamedElement f(ObjDFieldStatement x) {
-                        return x.getDefName();
-                    }
-                }));
+            public PsiNamedElement f(ObjDClassConstructorField x) {
+                return x.getDefName();
             }
-        });
+        }).append(chain(stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
+            @Override
+            public PsiNamedElement f(ObjDDefStatement x) {
+                return x.getDefName();
+            }
+        })).append(chain(stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+            @Override
+            public PsiNamedElement f(ObjDFieldStatement x) {
+                return x.getDefName();
+            }
+        })).append(parentFields(stm.getClassExtends()));
+
+    }
+
+    private static IChain<PsiNamedElement> parentFields(ObjDClassExtends classExtends) {
+        if(classExtends == null) return chain();
+        PsiElement resolve = classExtends.getDataTypeRef().getReference().resolve();
+        if(resolve == null) return chain();
+        return classFields((ObjDClassStatement) resolve.getParent());
     }
 
 

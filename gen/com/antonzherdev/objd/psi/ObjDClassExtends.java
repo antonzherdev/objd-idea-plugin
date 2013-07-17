@@ -10,4 +10,7 @@ public interface ObjDClassExtends extends PsiElement {
   @NotNull
   List<ObjDDataType> getDataTypeList();
 
+  @NotNull
+  ObjDDataTypeRef getDataTypeRef();
+
 }

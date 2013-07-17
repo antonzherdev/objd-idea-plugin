@@ -305,13 +305,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_EXTENDS IDENT data_type_generics?
+  // W_EXTENDS data_type_ref data_type_generics?
   public static boolean class_extends(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_extends")) return false;
     if (!nextTokenIs(builder_, W_EXTENDS)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeTokens(builder_, 0, W_EXTENDS, IDENT);
+    result_ = consumeToken(builder_, W_EXTENDS);
+    result_ = result_ && data_type_ref(builder_, level_ + 1);
     result_ = result_ && class_extends_2(builder_, level_ + 1);
     if (result_) {
       marker_.done(CLASS_EXTENDS);
