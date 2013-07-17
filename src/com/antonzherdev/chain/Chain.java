@@ -347,7 +347,7 @@ public class Chain<X> implements IChain<X> {
         getYield(new Yield<X>() {
             @Override
             public YieldResult yield(X item) {
-                if(item == null) return YieldResult.Continue;
+                if (item == null) return YieldResult.Continue;
                 ret.set(item);
                 return YieldResult.Break;
             }
@@ -361,7 +361,7 @@ public class Chain<X> implements IChain<X> {
         getYield(new Yield<X>() {
             @Override
             public YieldResult yield(X item) {
-                if(f.f(item)) {
+                if (f.f(item)) {
                     ret.set(item);
                     return YieldResult.Break;
                 }
@@ -487,9 +487,10 @@ public class Chain<X> implements IChain<X> {
         final StringBuilder b = new StringBuilder();
         getYield(new Yield<X>() {
             boolean first = true;
+
             @Override
             public YieldResult yield(X item) {
-                if(first) {
+                if (first) {
                     first = false;
                 } else {
                     b.append(delimiter);
@@ -541,6 +542,17 @@ public class Chain<X> implements IChain<X> {
         });
         apply(yield);
         return Option.opt(yield.ret);
+    }
+
+    @Override
+    public void addAllTo(final Collection<? super X> collection) {
+        apply(new Yield<X>() {
+            @Override
+            public YieldResult yield(X item) {
+                collection.add(item);
+                return YieldResult.Continue;
+            }
+        });
     }
 
     private static class MaxYield<X> extends Yield<X> {

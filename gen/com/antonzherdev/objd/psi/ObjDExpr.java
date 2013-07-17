@@ -5,18 +5,21 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDClassBody extends PsiElement {
+public interface ObjDExpr extends PsiElement {
 
   @NotNull
-  List<ObjDDefName> getDefNameList();
-
-  @NotNull
-  List<ObjDDefStatement> getDefStatementList();
+  List<ObjDDataType> getDataTypeList();
 
   @NotNull
   List<ObjDExpr> getExprList();
 
-  @NotNull
-  List<ObjDFieldStatement> getFieldStatementList();
+  @Nullable
+  ObjDExprCall getExprCall();
+
+  @Nullable
+  ObjDExprOp getExprOp();
+
+  @Nullable
+  ObjDExprVal getExprVal();
 
 }

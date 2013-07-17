@@ -7,7 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDFieldStatement extends PsiElement {
 
+  @Nullable
+  ObjDDataType getDataType();
+
   @NotNull
-  List<ObjDDataTypeRef> getDataTypeRefList();
+  ObjDDefName getDefName();
+
+  @Nullable
+  ObjDExpr getExpr();
 
 }

@@ -11,28 +11,22 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDefStatement {
+public class ObjDDefParameterImpl extends ASTWrapperPsiElement implements ObjDDefParameter {
 
-  public ObjDDefStatementImpl(ASTNode node) {
+  public ObjDDefParameterImpl(ASTNode node) {
     super(node);
   }
 
   @Override
   @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
+  public ObjDDataType getDataType() {
+    return findNotNullChildByClass(ObjDDataType.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDDefName getDefName() {
-    return findNotNullChildByClass(ObjDDefName.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ObjDDefParameter> getDefParameterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefParameter.class);
+    return findChildByClass(ObjDDefName.class);
   }
 
   @Override
@@ -42,7 +36,7 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefStatement(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefParameter(this);
     else super.accept(visitor);
   }
 

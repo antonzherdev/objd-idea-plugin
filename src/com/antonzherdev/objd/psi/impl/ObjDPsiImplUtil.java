@@ -1,5 +1,6 @@
 package com.antonzherdev.objd.psi.impl;
 
+import com.antonzherdev.objd.reference.CallReference;
 import com.antonzherdev.objd.reference.DataTypeReference;
 import com.antonzherdev.objd.reference.ObjDImportReference;
 import com.antonzherdev.objd.psi.*;
@@ -35,5 +36,9 @@ public class ObjDPsiImplUtil {
 
     public static PsiReference getReference(ObjDDataTypeRef element) {
         return new DataTypeReference(element, TextRange.from(0, element.getTextLength()));
+    }
+
+    public static PsiReference getReference(ObjDCallName element) {
+        return new CallReference(element, TextRange.from(0, element.getTextLength()));
     }
 }

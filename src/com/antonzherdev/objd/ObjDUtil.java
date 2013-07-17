@@ -8,6 +8,7 @@ import com.antonzherdev.objd.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
@@ -71,5 +72,13 @@ public class ObjDUtil {
                         return astNode.getPsi(ObjDClassStatement.class).getClassName();
                     }
                 });
+    }
+
+    public static Option<ObjDClassStatement> getClass(PsiElement element) {
+        while(element != null) {
+            if(element instanceof ObjDClassStatement) return Option.some((ObjDClassStatement)element);
+            element = element.getParent();
+        }
+        return Option.none();
     }
 }

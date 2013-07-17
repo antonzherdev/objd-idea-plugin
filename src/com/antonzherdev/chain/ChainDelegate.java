@@ -161,6 +161,11 @@ public class ChainDelegate<X> implements IChain<X> {
     }
 
     @Override
+    public void addAllTo(Collection<? super X> collection) {
+        base.addAllTo(collection);
+    }
+
+    @Override
     public ITupleChain<X,Integer> zipWithIndex() {
         return base.zipWithIndex();
     }

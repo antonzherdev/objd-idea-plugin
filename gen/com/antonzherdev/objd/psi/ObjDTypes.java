@@ -8,11 +8,21 @@ import com.antonzherdev.objd.psi.impl.*;
 
 public interface ObjDTypes {
 
+  IElementType CALL_NAME = new ObjDElementType("CALL_NAME");
   IElementType CLASS_BODY = new ObjDElementType("CLASS_BODY");
+  IElementType CLASS_CONSTRUCTOR_FIELD = new ObjDElementType("CLASS_CONSTRUCTOR_FIELD");
+  IElementType CLASS_EXTENDS = new ObjDElementType("CLASS_EXTENDS");
   IElementType CLASS_NAME = new ObjDElementType("CLASS_NAME");
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
+  IElementType DATA_TYPE = new ObjDElementType("DATA_TYPE");
   IElementType DATA_TYPE_REF = new ObjDElementType("DATA_TYPE_REF");
+  IElementType DEF_NAME = new ObjDElementType("DEF_NAME");
+  IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
+  IElementType EXPR = new ObjDElementType("EXPR");
+  IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
+  IElementType EXPR_OP = new ObjDElementType("EXPR_OP");
+  IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
@@ -83,8 +93,17 @@ public interface ObjDTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == CLASS_BODY) {
+       if (type == CALL_NAME) {
+        return new ObjDCallNameImpl(node);
+      }
+      else if (type == CLASS_BODY) {
         return new ObjDClassBodyImpl(node);
+      }
+      else if (type == CLASS_CONSTRUCTOR_FIELD) {
+        return new ObjDClassConstructorFieldImpl(node);
+      }
+      else if (type == CLASS_EXTENDS) {
+        return new ObjDClassExtendsImpl(node);
       }
       else if (type == CLASS_NAME) {
         return new ObjDClassNameImpl(node);
@@ -92,11 +111,32 @@ public interface ObjDTypes {
       else if (type == CLASS_STATEMENT) {
         return new ObjDClassStatementImpl(node);
       }
+      else if (type == DATA_TYPE) {
+        return new ObjDDataTypeImpl(node);
+      }
       else if (type == DATA_TYPE_REF) {
         return new ObjDDataTypeRefImpl(node);
       }
+      else if (type == DEF_NAME) {
+        return new ObjDDefNameImpl(node);
+      }
+      else if (type == DEF_PARAMETER) {
+        return new ObjDDefParameterImpl(node);
+      }
       else if (type == DEF_STATEMENT) {
         return new ObjDDefStatementImpl(node);
+      }
+      else if (type == EXPR) {
+        return new ObjDExprImpl(node);
+      }
+      else if (type == EXPR_CALL) {
+        return new ObjDExprCallImpl(node);
+      }
+      else if (type == EXPR_OP) {
+        return new ObjDExprOpImpl(node);
+      }
+      else if (type == EXPR_VAL) {
+        return new ObjDExprValImpl(node);
       }
       else if (type == FIELD_STATEMENT) {
         return new ObjDFieldStatementImpl(node);

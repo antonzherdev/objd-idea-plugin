@@ -1,9 +1,8 @@
 package com.antonzherdev.chain;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.intellij.psi.PsiNamedElement;
+
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public interface IChain<X> extends Iterable<X> {
@@ -262,4 +261,6 @@ public interface IChain<X> extends Iterable<X> {
     Option<X> min();
 
     Option<X> max();
+
+    void addAllTo(Collection<? super X> collection);
 }

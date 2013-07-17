@@ -7,7 +7,19 @@ import com.intellij.psi.PsiElement;
 
 public class ObjDVisitor extends PsiElementVisitor {
 
+  public void visitCallName(@NotNull ObjDCallName o) {
+    visitNamedElement(o);
+  }
+
   public void visitClassBody(@NotNull ObjDClassBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassConstructorField(@NotNull ObjDClassConstructorField o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassExtends(@NotNull ObjDClassExtends o) {
     visitPsiElement(o);
   }
 
@@ -19,11 +31,39 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDataType(@NotNull ObjDDataType o) {
+    visitPsiElement(o);
+  }
+
   public void visitDataTypeRef(@NotNull ObjDDataTypeRef o) {
     visitNamedElement(o);
   }
 
+  public void visitDefName(@NotNull ObjDDefName o) {
+    visitNamedElement(o);
+  }
+
+  public void visitDefParameter(@NotNull ObjDDefParameter o) {
+    visitPsiElement(o);
+  }
+
   public void visitDefStatement(@NotNull ObjDDefStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExpr(@NotNull ObjDExpr o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExprCall(@NotNull ObjDExprCall o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExprOp(@NotNull ObjDExprOp o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExprVal(@NotNull ObjDExprVal o) {
     visitPsiElement(o);
   }
 

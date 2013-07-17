@@ -8,6 +8,7 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,15 +44,23 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(LookupElementBuilder.create("struct "));
                             resultSet.addElement(LookupElementBuilder.create("enum "));
                             resultSet.addElement(LookupElementBuilder.create("trait "));
-                        } else if(parent instanceof ObjDDefStatement) {
-                            resultSet.addElement(LookupElementBuilder.create("val "));
-                            resultSet.addElement(LookupElementBuilder.create("var "));
-                            resultSet.addElement(LookupElementBuilder.create("if"));
-                            resultSet.addElement(LookupElementBuilder.create("else "));
-                            resultSet.addElement(LookupElementBuilder.create("throw "));
-                            resultSet.addElement(LookupElementBuilder.create("true"));
-                            resultSet.addElement(LookupElementBuilder.create("false"));
-                            resultSet.addElement(LookupElementBuilder.create("self"));
+                        } else if(parent instanceof ObjDDefStatement || parent instanceof ObjDCallName) {
+                            if(!CallReference.isAfterDot(parameters.getPosition())) {
+                                resultSet.addElement(LookupElementBuilder.create("val "));
+                                resultSet.addElement(LookupElementBuilder.create("var "));
+                                resultSet.addElement(LookupElementBuilder.create("if"));
+                                resultSet.addElement(LookupElementBuilder.create("else "));
+                                resultSet.addElement(LookupElementBuilder.create("throw "));
+                                resultSet.addElement(LookupElementBuilder.create("true"));
+                                resultSet.addElement(LookupElementBuilder.create("false"));
+                                resultSet.addElement(LookupElementBuilder.create("self"));
+                                CallReference.getRefsChain(parameters.getPosition()).foreach(new P<PsiNamedElement>() {
+                                    @Override
+                                    public void p(PsiNamedElement x) {
+                                        resultSet.addElement(LookupElementBuilder.create(x.getName()));
+                                    }
+                                });
+                            }
                         } else if(parent instanceof ObjDClassBody || parent.getParent() instanceof ObjDClassBody) {
                             resultSet.addElement(LookupElementBuilder.create("val "));
                             resultSet.addElement(LookupElementBuilder.create("var "));

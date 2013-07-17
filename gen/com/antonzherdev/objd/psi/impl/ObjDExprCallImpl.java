@@ -11,10 +11,16 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDefStatement {
+public class ObjDExprCallImpl extends ASTWrapperPsiElement implements ObjDExprCall {
 
-  public ObjDDefStatementImpl(ASTNode node) {
+  public ObjDExprCallImpl(ASTNode node) {
     super(node);
+  }
+
+  @Override
+  @NotNull
+  public ObjDCallName getCallName() {
+    return findNotNullChildByClass(ObjDCallName.class);
   }
 
   @Override
@@ -25,24 +31,18 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
 
   @Override
   @NotNull
-  public ObjDDefName getDefName() {
-    return findNotNullChildByClass(ObjDDefName.class);
+  public List<ObjDDefName> getDefNameList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefName.class);
   }
 
   @Override
   @NotNull
-  public List<ObjDDefParameter> getDefParameterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefParameter.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExpr getExpr() {
-    return findChildByClass(ObjDExpr.class);
+  public List<ObjDExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefStatement(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCall(this);
     else super.accept(visitor);
   }
 

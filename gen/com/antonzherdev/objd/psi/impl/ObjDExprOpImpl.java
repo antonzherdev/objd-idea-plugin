@@ -11,32 +11,20 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDFieldStatementImpl extends ASTWrapperPsiElement implements ObjDFieldStatement {
+public class ObjDExprOpImpl extends ASTWrapperPsiElement implements ObjDExprOp {
 
-  public ObjDFieldStatementImpl(ASTNode node) {
+  public ObjDExprOpImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public ObjDDataType getDataType() {
-    return findChildByClass(ObjDDataType.class);
-  }
-
-  @Override
   @NotNull
-  public ObjDDefName getDefName() {
-    return findNotNullChildByClass(ObjDDefName.class);
-  }
-
-  @Override
-  @Nullable
   public ObjDExpr getExpr() {
-    return findChildByClass(ObjDExpr.class);
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitFieldStatement(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprOp(this);
     else super.accept(visitor);
   }
 
