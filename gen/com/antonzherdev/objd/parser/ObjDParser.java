@@ -1875,7 +1875,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET
+  // OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET expr_arr? expr_op?
   static boolean index_op(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "index_op")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
@@ -1884,6 +1884,8 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
     result_ = result_ && expr_(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
+    result_ = result_ && index_op_3(builder_, level_ + 1);
+    result_ = result_ && index_op_4(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -1891,6 +1893,20 @@ public class ObjDParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  // expr_arr?
+  private static boolean index_op_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "index_op_3")) return false;
+    expr_arr(builder_, level_ + 1);
+    return true;
+  }
+
+  // expr_op?
+  private static boolean index_op_4(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "index_op_4")) return false;
+    expr_op(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
