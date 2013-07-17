@@ -20,6 +20,7 @@ public interface ObjDTypes {
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
   IElementType EXPR = new ObjDElementType("EXPR");
+  IElementType EXPR_BRACES = new ObjDElementType("EXPR_BRACES");
   IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
   IElementType EXPR_OP = new ObjDElementType("EXPR_OP");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
@@ -128,6 +129,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR) {
         return new ObjDExprImpl(node);
+      }
+      else if (type == EXPR_BRACES) {
+        return new ObjDExprBracesImpl(node);
       }
       else if (type == EXPR_CALL) {
         return new ObjDExprCallImpl(node);

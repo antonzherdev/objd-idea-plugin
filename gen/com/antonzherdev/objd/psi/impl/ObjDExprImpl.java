@@ -31,6 +31,12 @@ public class ObjDExprImpl extends ASTWrapperPsiElement implements ObjDExpr {
 
   @Override
   @Nullable
+  public ObjDExprBraces getExprBraces() {
+    return findChildByClass(ObjDExprBraces.class);
+  }
+
+  @Override
+  @Nullable
   public ObjDExprCall getExprCall() {
     return findChildByClass(ObjDExprCall.class);
   }

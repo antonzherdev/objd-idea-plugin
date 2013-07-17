@@ -71,7 +71,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(create("static "));
                             resultSet.addElement(create("weak "));
                         } else if(parent instanceof ObjDDefName && (parent.getParent().getPrevSibling() instanceof ObjDClassStatement
-                                || parent.getParent().getPrevSibling().getPrevSibling() instanceof ObjDClassStatement ))
+                                || (parent.getParent().getPrevSibling() != null && parent.getParent().getPrevSibling().getPrevSibling() instanceof ObjDClassStatement) ))
                         {
                             resultSet.addElement(create("extends "));
                         }

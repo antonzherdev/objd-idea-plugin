@@ -59,6 +59,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR) {
       result_ = expr_(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_BRACES) {
+      result_ = expr_braces(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_CALL) {
       result_ = expr_call(builder_, level_ + 1);
     }
@@ -814,14 +817,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_BRACKET def_parameter (COMMA def_parameter)* CLOSE_BRACKET
+  // OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET
   static boolean def_parameters(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "def_parameters")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_BRACKET);
-    result_ = result_ && def_parameter(builder_, level_ + 1);
+    result_ = result_ && def_parameters_1(builder_, level_ + 1);
     result_ = result_ && def_parameters_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
     if (!result_) {
@@ -831,6 +834,13 @@ public class ObjDParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  // def_parameter?
+  private static boolean def_parameters_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "def_parameters_1")) return false;
+    def_parameter(builder_, level_ + 1);
+    return true;
   }
 
   // (COMMA def_parameter)*
@@ -1117,7 +1127,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // OPEN_BRACE expr_* CLOSE_BRACE
-  static boolean expr_braces(PsiBuilder builder_, int level_) {
+  public static boolean expr_braces(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_braces")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACE)) return false;
     boolean result_ = false;
@@ -1125,11 +1135,11 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, OPEN_BRACE);
     result_ = result_ && expr_braces_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACE);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(EXPR_BRACES);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
     return result_;
   }

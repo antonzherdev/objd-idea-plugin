@@ -55,6 +55,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExprBraces(@NotNull ObjDExprBraces o) {
+    visitPsiElement(o);
+  }
+
   public void visitExprCall(@NotNull ObjDExprCall o) {
     visitPsiElement(o);
   }

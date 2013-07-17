@@ -14,6 +14,9 @@ public interface ObjDExpr extends PsiElement {
   List<ObjDExpr> getExprList();
 
   @Nullable
+  ObjDExprBraces getExprBraces();
+
+  @Nullable
   ObjDExprCall getExprCall();
 
   @Nullable

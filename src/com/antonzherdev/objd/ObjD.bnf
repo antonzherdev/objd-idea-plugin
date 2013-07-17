@@ -44,7 +44,7 @@ field_statement ::= (field_mods* (W_VAR | W_VAL)? def_name (COLON data_type)? (S
 private field_mods ::= (W_PRIVATE | W_STATIC | W_WEAK)
 
 def_statement ::= (def_mods* W_DEF def_name expr_call_generics? def_parameters? (COLON data_type)? SET? expr_?)
-private def_parameters ::= (OPEN_BRACKET def_parameter (COMMA def_parameter)* CLOSE_BRACKET)
+private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET)
 def_parameter ::= (def_name? COLON data_type (SET expr_)?)
 private def_mods ::= (W_PRIVATE | W_STATIC)
 
@@ -70,7 +70,7 @@ call_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl"
 private expr_call_generics ::= LESS data_type (COMMA data_type)* MORE
 private expr_call_params ::= OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOSE_BRACKET
 private expr_call_param ::= (def_name SET)? expr_
-private expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE)
+expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE)
 private expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET
 expr_val ::= (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
 private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET
