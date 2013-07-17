@@ -43,6 +43,15 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(LookupElementBuilder.create("struct "));
                             resultSet.addElement(LookupElementBuilder.create("enum "));
                             resultSet.addElement(LookupElementBuilder.create("trait "));
+                        } else if(parent instanceof ObjDDefStatement) {
+                            resultSet.addElement(LookupElementBuilder.create("val "));
+                            resultSet.addElement(LookupElementBuilder.create("var "));
+                            resultSet.addElement(LookupElementBuilder.create("if"));
+                            resultSet.addElement(LookupElementBuilder.create("else "));
+                            resultSet.addElement(LookupElementBuilder.create("throw "));
+                            resultSet.addElement(LookupElementBuilder.create("true"));
+                            resultSet.addElement(LookupElementBuilder.create("false"));
+                            resultSet.addElement(LookupElementBuilder.create("self"));
                         } else if(parent instanceof ObjDClassBody || parent.getParent() instanceof ObjDClassBody) {
                             resultSet.addElement(LookupElementBuilder.create("val "));
                             resultSet.addElement(LookupElementBuilder.create("var "));
