@@ -65,6 +65,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_CALL) {
       result_ = expr_call(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_LAMBDA) {
+      result_ = expr_lambda(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_OP) {
       result_ = expr_op(builder_, level_ + 1);
     }
@@ -79,6 +82,9 @@ public class ObjDParser implements PsiParser {
     }
     else if (root_ == IMPORT_STATEMENT) {
       result_ = import_statement(builder_, level_ + 1);
+    }
+    else if (root_ == LAMBDA_PAR) {
+      result_ = lambda_par(builder_, level_ + 1);
     }
     else {
       Marker marker_ = builder_.mark();
@@ -1442,20 +1448,21 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // (lambda_par | lambda_pars) ARROW expr_
-  static boolean expr_lambda(PsiBuilder builder_, int level_) {
+  public static boolean expr_lambda(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_lambda")) return false;
-    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, OPEN_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr lambda>");
     result_ = expr_lambda_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ARROW);
     result_ = result_ && expr_(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(EXPR_LAMBDA);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -1910,20 +1917,21 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IDENT (COLON data_type)?
-  static boolean lambda_par(PsiBuilder builder_, int level_) {
+  // def_name (COLON data_type)?
+  public static boolean lambda_par(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "lambda_par")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, IDENT);
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<lambda par>");
+    result_ = def_name(builder_, level_ + 1);
     result_ = result_ && lambda_par_1(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(LAMBDA_PAR);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 

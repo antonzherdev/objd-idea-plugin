@@ -22,11 +22,13 @@ public interface ObjDTypes {
   IElementType EXPR = new ObjDElementType("EXPR");
   IElementType EXPR_BRACES = new ObjDElementType("EXPR_BRACES");
   IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
+  IElementType EXPR_LAMBDA = new ObjDElementType("EXPR_LAMBDA");
   IElementType EXPR_OP = new ObjDElementType("EXPR_OP");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
+  IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
@@ -136,6 +138,9 @@ public interface ObjDTypes {
       else if (type == EXPR_CALL) {
         return new ObjDExprCallImpl(node);
       }
+      else if (type == EXPR_LAMBDA) {
+        return new ObjDExprLambdaImpl(node);
+      }
       else if (type == EXPR_OP) {
         return new ObjDExprOpImpl(node);
       }
@@ -150,6 +155,9 @@ public interface ObjDTypes {
       }
       else if (type == IMPORT_STATEMENT) {
         return new ObjDImportStatementImpl(node);
+      }
+      else if (type == LAMBDA_PAR) {
+        return new ObjDLambdaParImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

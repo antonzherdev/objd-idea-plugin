@@ -19,12 +19,6 @@ public class ObjDExprImpl extends ASTWrapperPsiElement implements ObjDExpr {
 
   @Override
   @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
-  }
-
-  @Override
-  @NotNull
   public List<ObjDExpr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
   }
@@ -39,6 +33,12 @@ public class ObjDExprImpl extends ASTWrapperPsiElement implements ObjDExpr {
   @Nullable
   public ObjDExprCall getExprCall() {
     return findChildByClass(ObjDExprCall.class);
+  }
+
+  @Override
+  @Nullable
+  public ObjDExprLambda getExprLambda() {
+    return findChildByClass(ObjDExprLambda.class);
   }
 
   @Override

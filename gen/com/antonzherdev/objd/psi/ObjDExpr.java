@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ObjDExpr extends PsiElement {
 
   @NotNull
-  List<ObjDDataType> getDataTypeList();
-
-  @NotNull
   List<ObjDExpr> getExprList();
 
   @Nullable
@@ -18,6 +15,9 @@ public interface ObjDExpr extends PsiElement {
 
   @Nullable
   ObjDExprCall getExprCall();
+
+  @Nullable
+  ObjDExprLambda getExprLambda();
 
   @Nullable
   ObjDExprOp getExprOp();

@@ -74,7 +74,7 @@ expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE)
 private expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET
 expr_val ::= (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
 private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET expr_arr? expr_op?
-private expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_
+expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_
 private lambda_pars ::= OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
 
-private lambda_par ::= IDENT (COLON data_type)?
+lambda_par ::= def_name (COLON data_type)?

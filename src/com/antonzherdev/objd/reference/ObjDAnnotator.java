@@ -13,7 +13,7 @@ public class ObjDAnnotator  implements Annotator {
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof ObjDCallName && !CallReference.isAfterDot(element)) {
-            if(element.getReference().resolve() == null) {
+            if(!((ObjDCallName) element).getName().equals("_") && element.getReference().resolve() == null) {
                 addAnotation("Unresolved reference", element, holder);
             }
         } else if(element instanceof ObjDDataTypeRef) {

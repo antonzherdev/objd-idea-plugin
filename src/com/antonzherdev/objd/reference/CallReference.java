@@ -72,11 +72,18 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         if(element instanceof ObjDExpr) {
             ObjDExprVal v = ((ObjDExpr) element).getExprVal();
             if(v != null) items.add(v.getDefName());
-        }
-        else if(element instanceof ObjDDefStatement) {
+        } else if(element instanceof ObjDDefStatement) {
             chain(((ObjDDefStatement) element).getDefParameterList()).map(new F<ObjDDefParameter,ObjDDefName>() {
                 @Override
                 public ObjDDefName f(ObjDDefParameter x) {
+                    return x.getDefName();
+                }
+            }).addAllTo(items);
+            return;
+        } else if(element instanceof ObjDExprLambda) {
+            chain(((ObjDExprLambda) element).getLambdaParList()).map(new F<ObjDLambdaPar,ObjDDefName>() {
+                @Override
+                public ObjDDefName f(ObjDLambdaPar x) {
                     return x.getDefName();
                 }
             }).addAllTo(items);

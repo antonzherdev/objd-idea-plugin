@@ -63,6 +63,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExprLambda(@NotNull ObjDExprLambda o) {
+    visitPsiElement(o);
+  }
+
   public void visitExprOp(@NotNull ObjDExprOp o) {
     visitPsiElement(o);
   }
@@ -80,6 +84,10 @@ public class ObjDVisitor extends PsiElementVisitor {
   }
 
   public void visitImportStatement(@NotNull ObjDImportStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLambdaPar(@NotNull ObjDLambdaPar o) {
     visitPsiElement(o);
   }
 
