@@ -1,9 +1,5 @@
 package com.antonzherdev.chain;
 
-import com.antonzherdev.chain.F;
-import com.antonzherdev.chain.F2;
-import com.antonzherdev.chain.Option;
-import com.antonzherdev.chain.Tuple;
 import com.antonzherdev.chain.links.*;
 
 import java.util.ArrayList;
@@ -20,7 +16,7 @@ public class TupleChain<A, B> extends ChainDelegate<Tuple<A, B>> implements ITup
     @Override
     public Map<A, B> getMap() {
         MapYield<A, B> yield = new MapYield<A, B>();
-        base.first.getYield(yield).apply();
+        base.getYield(yield).apply();
         return yield.getRet();
     }
 
@@ -28,7 +24,7 @@ public class TupleChain<A, B> extends ChainDelegate<Tuple<A, B>> implements ITup
     public Tuple<List<A>, List<B>> unzip() {
         final List<A> a = new ArrayList<A>();
         final List<B> b = new ArrayList<B>();
-        base.first.getYield(new Yield<Tuple<A, B>>() {
+        base.getYield(new Yield<Tuple<A, B>>() {
             @Override
             public YieldResult yield(Tuple<A, B> item) {
                 a.add(item._1);
@@ -130,8 +126,7 @@ public class TupleChain<A, B> extends ChainDelegate<Tuple<A, B>> implements ITup
     }
 
     public <C, D> ITupleChain<C, D> link(ChainLink<Tuple<A, B>, Tuple<C, D>> lnk) {
-        base.link(lnk);
-        return (ITupleChain<C, D>) this;
+        return new TupleChain<C, D>((Chain<Tuple<C,D>>) base.link(lnk));
     }
 
     private static class MapYield<A, B> extends Yield<Tuple<A, B>> {

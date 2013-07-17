@@ -7,11 +7,16 @@ import java.util.*;
 
 @SuppressWarnings({"Convert2Diamond", "unchecked"})
 public class Chain<X> implements IChain<X> {
-    Chain() {
+    private final ChainLink<?, X> link;
+    private final Chain<?> previous;
+
+    Chain(ChainLink<?, X> link, Chain<?> previous) {
+        this.link = link;
+        this.previous = previous;
     }
 
     public static <A> IChain<A> chain(Iterable<? extends A> source) {
-        return new Chain<Void>().link(new SourceChainLink<A>(source));
+        return new Chain<A>(new SourceChainLink<A>(source), null);
     }
 
     public static <A, B> ITupleChain<A, B> tupleChain(Iterable<Tuple<A, B>> source) {
@@ -19,36 +24,32 @@ public class Chain<X> implements IChain<X> {
     }
 
     public static <A> IChain<A> unionChain(Iterable<? extends A> source, Iterable<? extends A> append) {
-        return new Chain<Void>().link(new SourceChainLink<A>(source)).append(append);
+        return new Chain<A>(new SourceChainLink<A>(source), null).append(append);
     }
 
     public static <A> IChain<A> chain(A... source) {
-        return new Chain<Void>().link(new SourceChainLink<A>(Arrays.asList(source)));
+        return new Chain<A>(new SourceChainLink<A>(Arrays.asList(source)), null);
     }
 
     public static <A, B> ITupleChain<A, B> tupleChain(Tuple<A, B>... source) {
-        Chain<Void> chain = new Chain<Void>();
-        chain.link(new SourceChainLink<Tuple<A, B>>(Arrays.asList(source)));
-        return new TupleChain<A, B>((Chain)chain);
+        Chain<Tuple<A, B>> chain = new Chain<Tuple<A, B>>(new SourceChainLink<Tuple<A, B>>(Arrays.asList(source)), null);
+        return new TupleChain<A, B>(chain);
     }
 
     public static <A, B> ITupleChain<A, B> chain(Map<A, B> source) {
-        Chain<Void> chain = new Chain<Void>();
-        return chain.tupleLink(new SourceMapChainLink(source));
+        Chain<Tuple<A, B>> chain = new Chain<Tuple<A, B>>(new SourceMapChainLink(source), null);
+        return new TupleChain<A, B>(chain);
     }
 
     @SuppressWarnings("UnusedParameters")
     public static <A> IChain<A> chain(Class<A> cls, Iterable<? extends A> source) {
-        return new Chain<Void>().link(new SourceChainLink<A>(source));
+        return new Chain<A>(new SourceChainLink<A>(source), null);
     }
 
     @SuppressWarnings("UnusedParameters")
     public static <A, A1 extends A> IChain<A> chain(Class<A> cls, A1... source) {
-        return new Chain<Void>().link(new SourceChainLink<A>(Arrays.asList(source)));
+        return new Chain<A>(new SourceChainLink<A>(Arrays.asList(source)), null);
     }
-
-    ChainItem<Object, ?> first;
-    ChainItem<?, X> last;
 
     @Override
     public <C> IChain<C> map(F<? super X, C> f) {
@@ -203,34 +204,25 @@ public class Chain<X> implements IChain<X> {
     }
 
     public <C> IChain<C> link(ChainLink<X, C> lnk) {
-        if(first == null) {
-            first = new ChainItem(lnk);
-            last = (ChainItem<?, X>) first;
-        } else {
-            last.next = new ChainItem(lnk);
-            last = (ChainItem<?, X>) last.next;
-        }
-        return (IChain<C>) this;
+        return new Chain<C>(lnk, link == null ? null : this);
     }
 
     private <K, V> ITupleChain<K,V> tupleLink(ChainLink<X, Tuple<K, V>> lnk) {
-        if(first == null) {
-            first = new ChainItem(lnk);
-            last = (ChainItem<?, X>) first;
-        } else {
-            last.next = new ChainItem(lnk);
-            last = (ChainItem<?, X>) last.next;
-        }
-        return new TupleChain<K,V>((Chain) this);
+        return new TupleChain<K,V>((Chain<Tuple<K,V>>) link(lnk));
+    }
+
+    Yield<?> getYield(Yield<?> yield) {
+        Yield<?> y = link.buildYield((Yield<X>) yield);
+        return previous == null ? y : previous.getYield(y);
     }
 
     private <R extends Collection<X>> R apply(ApplyYield<X, R> yield) {
-        first.getYield(yield).apply();
+        getYield(yield).apply();
         return yield.getRet();
     }
 
     private void apply(Yield<X> yield) {
-        first.getYield(yield).apply();
+        getYield(yield).apply();
     }
 
     @Override
@@ -329,7 +321,7 @@ public class Chain<X> implements IChain<X> {
     @Override
     public Option<X> first() {
         final MutableOption<X> ret = new MutableOption<X>();
-        first.getYield(new Yield<X>() {
+        getYield(new Yield<X>() {
             @Override
             public YieldResult yield(X item) {
                 ret.set(item);
@@ -352,7 +344,7 @@ public class Chain<X> implements IChain<X> {
     @Override
     public Option<X> firstNotNull() {
         final MutableOption<X> ret = new MutableOption<X>();
-        first.getYield(new Yield<X>() {
+        getYield(new Yield<X>() {
             @Override
             public YieldResult yield(X item) {
                 if(item == null) return YieldResult.Continue;
@@ -366,7 +358,7 @@ public class Chain<X> implements IChain<X> {
     @Override
     public Option<X> find(final F<? super X, Boolean> f) {
         final MutableOption<X> ret = new MutableOption<X>();
-        first.getYield(new Yield<X>() {
+        getYield(new Yield<X>() {
             @Override
             public YieldResult yield(X item) {
                 if(f.f(item)) {
@@ -382,13 +374,13 @@ public class Chain<X> implements IChain<X> {
     @Override
     public <R> R fold(R start, F2<R, X, R> f) {
         FoldYield<X, R> yield = new FoldYield<X, R>(start, f);
-        first.getYield(yield).apply();
+        getYield(yield).apply();
         return yield.value;
     }
 
     @Override
     public void foreach(final Yield<X> p) {
-        first.getYield(p).apply();
+        getYield(p).apply();
     }
 
     @Override
@@ -493,7 +485,7 @@ public class Chain<X> implements IChain<X> {
     @Override
     public String getString(final String delimiter) {
         final StringBuilder b = new StringBuilder();
-        first.getYield(new Yield<X>() {
+        getYield(new Yield<X>() {
             boolean first = true;
             @Override
             public YieldResult yield(X item) {

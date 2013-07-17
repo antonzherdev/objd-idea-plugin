@@ -1,7 +1,5 @@
 package com.antonzherdev.chain;
 
-import com.antonzherdev.chain.*;
-
 import java.util.*;
 
 @SuppressWarnings("unchecked")
