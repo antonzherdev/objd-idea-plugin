@@ -44,7 +44,7 @@ def_statement ::= (def_mods* W_DEF IDENT expr_call_generics? def_parameters? (CO
 private def_parameters ::= (OPEN_BRACKET def_parameter (COMMA def_parameter)* CLOSE_BRACKET)
 private def_parameter ::= (param_name? COLON data_type (SET expr_)?)
 private def_mods ::= (W_PRIVATE | W_STATIC)
-private param_name ::= (IDENT | W_ELSE | W_DEF)
+private param_name ::= (IDENT | W_ELSE | W_DEF | W_SELF)
 
 private data_type ::= (data_type_simple| data_type_collection | data_type_tuple) WHAT? (ARROW data_type)?
 private data_type_simple ::= ((data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? (ARROW data_type)?)

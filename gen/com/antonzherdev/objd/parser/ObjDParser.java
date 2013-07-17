@@ -1893,7 +1893,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IDENT | W_ELSE | W_DEF
+  // IDENT | W_ELSE | W_DEF | W_SELF
   static boolean param_name(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "param_name")) return false;
     boolean result_ = false;
@@ -1901,6 +1901,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, IDENT);
     if (!result_) result_ = consumeToken(builder_, W_ELSE);
     if (!result_) result_ = consumeToken(builder_, W_DEF);
+    if (!result_) result_ = consumeToken(builder_, W_SELF);
     if (!result_) {
       marker_.rollbackTo();
     }
