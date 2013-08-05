@@ -10,20 +10,20 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprBracesImpl extends ObjDExprImpl implements ObjDExprBraces {
+public class ObjDExprNotImpl extends ObjDExprImpl implements ObjDExprNot {
 
-  public ObjDExprBracesImpl(ASTNode node) {
+  public ObjDExprNotImpl(ASTNode node) {
     super(node);
   }
 
   @Override
   @NotNull
-  public List<ObjDExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
+  public ObjDExpr getExpr() {
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprBraces(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprNot(this);
     else super.accept(visitor);
   }
 

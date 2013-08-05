@@ -20,15 +20,29 @@ public interface ObjDTypes {
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
   IElementType EXPR = new ObjDElementType("EXPR");
+  IElementType EXPR_ARR = new ObjDElementType("EXPR_ARR");
+  IElementType EXPR_BOOL = new ObjDElementType("EXPR_BOOL");
   IElementType EXPR_BRACES = new ObjDElementType("EXPR_BRACES");
+  IElementType EXPR_BRACKETS = new ObjDElementType("EXPR_BRACKETS");
   IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
+  IElementType EXPR_COMP = new ObjDElementType("EXPR_COMP");
+  IElementType EXPR_DOT = new ObjDElementType("EXPR_DOT");
+  IElementType EXPR_IF = new ObjDElementType("EXPR_IF");
+  IElementType EXPR_INDEX = new ObjDElementType("EXPR_INDEX");
   IElementType EXPR_LAMBDA = new ObjDElementType("EXPR_LAMBDA");
-  IElementType EXPR_OP = new ObjDElementType("EXPR_OP");
+  IElementType EXPR_MD = new ObjDElementType("EXPR_MD");
+  IElementType EXPR_MINUS = new ObjDElementType("EXPR_MINUS");
+  IElementType EXPR_NOT = new ObjDElementType("EXPR_NOT");
+  IElementType EXPR_PM = new ObjDElementType("EXPR_PM");
+  IElementType EXPR_SELF = new ObjDElementType("EXPR_SELF");
+  IElementType EXPR_SET = new ObjDElementType("EXPR_SET");
+  IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
+  IElementType TERM = new ObjDElementType("TERM");
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
@@ -132,17 +146,56 @@ public interface ObjDTypes {
       else if (type == EXPR) {
         return new ObjDExprImpl(node);
       }
+      else if (type == EXPR_ARR) {
+        return new ObjDExprArrImpl(node);
+      }
+      else if (type == EXPR_BOOL) {
+        return new ObjDExprBoolImpl(node);
+      }
       else if (type == EXPR_BRACES) {
         return new ObjDExprBracesImpl(node);
+      }
+      else if (type == EXPR_BRACKETS) {
+        return new ObjDExprBracketsImpl(node);
       }
       else if (type == EXPR_CALL) {
         return new ObjDExprCallImpl(node);
       }
+      else if (type == EXPR_COMP) {
+        return new ObjDExprCompImpl(node);
+      }
+      else if (type == EXPR_DOT) {
+        return new ObjDExprDotImpl(node);
+      }
+      else if (type == EXPR_IF) {
+        return new ObjDExprIfImpl(node);
+      }
+      else if (type == EXPR_INDEX) {
+        return new ObjDExprIndexImpl(node);
+      }
       else if (type == EXPR_LAMBDA) {
         return new ObjDExprLambdaImpl(node);
       }
-      else if (type == EXPR_OP) {
-        return new ObjDExprOpImpl(node);
+      else if (type == EXPR_MD) {
+        return new ObjDExprMdImpl(node);
+      }
+      else if (type == EXPR_MINUS) {
+        return new ObjDExprMinusImpl(node);
+      }
+      else if (type == EXPR_NOT) {
+        return new ObjDExprNotImpl(node);
+      }
+      else if (type == EXPR_PM) {
+        return new ObjDExprPmImpl(node);
+      }
+      else if (type == EXPR_SELF) {
+        return new ObjDExprSelfImpl(node);
+      }
+      else if (type == EXPR_SET) {
+        return new ObjDExprSetImpl(node);
+      }
+      else if (type == EXPR_THROW) {
+        return new ObjDExprThrowImpl(node);
       }
       else if (type == EXPR_VAL) {
         return new ObjDExprValImpl(node);
@@ -158,6 +211,9 @@ public interface ObjDTypes {
       }
       else if (type == LAMBDA_PAR) {
         return new ObjDLambdaParImpl(node);
+      }
+      else if (type == TERM) {
+        return new ObjDTermImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

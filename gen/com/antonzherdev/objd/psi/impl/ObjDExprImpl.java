@@ -17,42 +17,6 @@ public class ObjDExprImpl extends ASTWrapperPsiElement implements ObjDExpr {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public List<ObjDExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprBraces getExprBraces() {
-    return findChildByClass(ObjDExprBraces.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprCall getExprCall() {
-    return findChildByClass(ObjDExprCall.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprLambda getExprLambda() {
-    return findChildByClass(ObjDExprLambda.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprOp getExprOp() {
-    return findChildByClass(ObjDExprOp.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprVal getExprVal() {
-    return findChildByClass(ObjDExprVal.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExpr(this);
     else super.accept(visitor);

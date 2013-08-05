@@ -56,25 +56,36 @@ private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 private data_type_collection ::= OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET
 private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
 
-expr_ ::= ((expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_val | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | W_SELF) (expr_op | index_op | post_op)?)
-private expr_throw ::= W_THROW expr_
-private expr_not ::= EXCLAMATION expr_
-private expr_minus ::= MINUS expr_
+expr_ ::= (expr_val | expr_set) {extends = expr_}
+term_ ::= expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self
+    {extends = expr_}
+expr_self ::= W_SELF {extends = expr_}
+expr_throw ::= W_THROW expr_  {extends = expr_}
+expr_not ::= EXCLAMATION expr_  {extends = expr_}
+expr_minus ::= MINUS expr_  {extends = expr_}
+expr_brackets ::= OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET  {extends = expr_}
+expr_if ::= (W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?)  {extends = expr_}
 private post_op ::= PLUS_PLUS | MINUS_MINUS
-private expr_brackets ::= OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET
-private expr_if ::= (W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?)
-expr_op ::= ((DOT | SET | PLUS | MINUS | MUL | DIV | AND | OR | EQ| MORE | LESS| MOREEQ| LESSEQ | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET | NOT_EQ) expr_)
-expr_call ::= call_name expr_call_generics? expr_call_params?
+
+expr_set ::= expr_bool ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)? post_op? {extends = expr_}
+expr_bool ::= expr_comp ((AND | OR) expr_bool)? {extends = expr_}
+expr_comp ::= expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}
+expr_pm ::= expr_md ((PLUS | MINUS) expr_pm)? {extends = expr_}
+expr_md ::= expr_dot ((MUL | DIV) expr_md)? {extends = expr_}
+expr_dot ::= expr_index (DOT expr_dot)? {extends = expr_  methods=[left="/expr_[0]" right="/expr_[1]"]}
+expr_index ::=term_ index_op? {extends = expr_}
+private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET expr_arr?
+
+expr_call ::= call_name expr_call_generics? expr_call_params? {extends = expr_}
 call_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
 private expr_call_generics ::= LESS data_type (COMMA data_type)* MORE
 private expr_call_params ::= OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOSE_BRACKET
 private expr_call_param ::= (def_name SET)? expr_
-expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE)
-private expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET
-expr_val ::= (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
-private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET expr_arr? expr_op?
-expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_
+expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE) {extends = expr_}
+expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET  {extends = expr_}
+expr_val ::= (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)? {extends = expr_}
+expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_ {extends = expr_}
 private lambda_pars ::= OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
 
 lambda_par ::= def_name (COLON data_type)?

@@ -10,28 +10,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprCallImpl extends ObjDExprImpl implements ObjDExprCall {
+public class ObjDExprBoolImpl extends ObjDExprImpl implements ObjDExprBool {
 
-  public ObjDExprCallImpl(ASTNode node) {
+  public ObjDExprBoolImpl(ASTNode node) {
     super(node);
-  }
-
-  @Override
-  @NotNull
-  public ObjDCallName getCallName() {
-    return findNotNullChildByClass(ObjDCallName.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ObjDDefName> getDefNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefName.class);
   }
 
   @Override
@@ -41,7 +23,7 @@ public class ObjDExprCallImpl extends ObjDExprImpl implements ObjDExprCall {
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCall(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprBool(this);
     else super.accept(visitor);
   }
 

@@ -55,24 +55,76 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExprArr(@NotNull ObjDExprArr o) {
+    visitExpr(o);
+  }
+
+  public void visitExprBool(@NotNull ObjDExprBool o) {
+    visitExpr(o);
+  }
+
   public void visitExprBraces(@NotNull ObjDExprBraces o) {
-    visitPsiElement(o);
+    visitExpr(o);
+  }
+
+  public void visitExprBrackets(@NotNull ObjDExprBrackets o) {
+    visitExpr(o);
   }
 
   public void visitExprCall(@NotNull ObjDExprCall o) {
-    visitPsiElement(o);
+    visitExpr(o);
+  }
+
+  public void visitExprComp(@NotNull ObjDExprComp o) {
+    visitExpr(o);
+  }
+
+  public void visitExprDot(@NotNull ObjDExprDot o) {
+    visitExpr(o);
+  }
+
+  public void visitExprIf(@NotNull ObjDExprIf o) {
+    visitExpr(o);
+  }
+
+  public void visitExprIndex(@NotNull ObjDExprIndex o) {
+    visitExpr(o);
   }
 
   public void visitExprLambda(@NotNull ObjDExprLambda o) {
-    visitPsiElement(o);
+    visitExpr(o);
   }
 
-  public void visitExprOp(@NotNull ObjDExprOp o) {
-    visitPsiElement(o);
+  public void visitExprMd(@NotNull ObjDExprMd o) {
+    visitExpr(o);
+  }
+
+  public void visitExprMinus(@NotNull ObjDExprMinus o) {
+    visitExpr(o);
+  }
+
+  public void visitExprNot(@NotNull ObjDExprNot o) {
+    visitExpr(o);
+  }
+
+  public void visitExprPm(@NotNull ObjDExprPm o) {
+    visitExpr(o);
+  }
+
+  public void visitExprSelf(@NotNull ObjDExprSelf o) {
+    visitExpr(o);
+  }
+
+  public void visitExprSet(@NotNull ObjDExprSet o) {
+    visitExpr(o);
+  }
+
+  public void visitExprThrow(@NotNull ObjDExprThrow o) {
+    visitExpr(o);
   }
 
   public void visitExprVal(@NotNull ObjDExprVal o) {
-    visitPsiElement(o);
+    visitExpr(o);
   }
 
   public void visitFieldStatement(@NotNull ObjDFieldStatement o) {
@@ -89,6 +141,10 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitLambdaPar(@NotNull ObjDLambdaPar o) {
     visitPsiElement(o);
+  }
+
+  public void visitTerm(@NotNull ObjDTerm o) {
+    visitExpr(o);
   }
 
   public void visitNamedElement(@NotNull ObjDNamedElement o) {

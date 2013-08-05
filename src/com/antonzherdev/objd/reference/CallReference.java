@@ -54,12 +54,11 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     }
 
     public static boolean isAfterDot(PsiElement element) {
-        PsiElement parent = element.getParent().getParent().getParent();
-        return isDot(parent) || isDot(parent.getParent());
-    }
-
-    private static boolean isDot(PsiElement parent) {
-        return parent.getFirstChild().getNode().getElementType().equals(ObjDTypes.DOT);
+        if(element.getParent().getParent() instanceof ObjDExprDot) {
+            ObjDExprDot dot = (ObjDExprDot) element.getParent().getParent();
+            return dot.getRight() == element.getParent();
+        }
+        return false;
     }
 
     private static List<PsiNamedElement> vars(PsiElement element) {
@@ -69,8 +68,8 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     }
 
     private static void vars(ArrayList<PsiNamedElement> items, PsiElement element) {
-        if(element instanceof ObjDExpr) {
-            ObjDExprVal v = ((ObjDExpr) element).getExprVal();
+        if(element instanceof ObjDExprVal) {
+            ObjDExprVal v = (ObjDExprVal) element;
             if(v != null) items.add(v.getDefName());
         } else if(element instanceof ObjDDefStatement) {
             chain(((ObjDDefStatement) element).getDefParameterList()).map(new F<ObjDDefParameter,ObjDDefName>() {

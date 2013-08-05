@@ -8,23 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprOpImpl extends ASTWrapperPsiElement implements ObjDExprOp {
+public class ObjDExprSelfImpl extends ObjDExprImpl implements ObjDExprSelf {
 
-  public ObjDExprOpImpl(ASTNode node) {
+  public ObjDExprSelfImpl(ASTNode node) {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public ObjDExpr getExpr() {
-    return findNotNullChildByClass(ObjDExpr.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprOp(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprSelf(this);
     else super.accept(visitor);
   }
 

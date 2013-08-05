@@ -21,7 +21,7 @@ MULTI_LINE_COMMENT="/*"[^\00]*"*/"
 STRING="\"".*"\""
 IDENT_CHAR= [a-zA-Z0-9_]
 INT_CONST = -?[0-9]+
-FLOAT_CONST = -?[0-9]+.[0-9]+
+FLOAT_CONST = -?[0-9]+[.][0-9]+
 %state COMMENT_STATE
 
 %%

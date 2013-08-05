@@ -5,6 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDExpr extends PsiElement {
+public interface ObjDExprBrackets extends ObjDExpr {
+
+  @NotNull
+  List<ObjDExpr> getExprList();
 
 }
