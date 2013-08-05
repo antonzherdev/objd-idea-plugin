@@ -5,7 +5,6 @@ import com.antonzherdev.objd.ObjDLanguage;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
@@ -47,7 +46,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(create("enum "));
                             resultSet.addElement(create("trait "));
                         } else if(parent instanceof ObjDDefStatement || parent instanceof ObjDCallName) {
-                            if(!CallReference.isAfterDot(parameters.getPosition())) {
+                            if(!ObjDUtil.isAfterDot(parent)) {
                                 resultSet.addElement(create("val "));
                                 resultSet.addElement(create("var "));
                                 resultSet.addElement(create("if"));
@@ -56,13 +55,13 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                 resultSet.addElement(create("true"));
                                 resultSet.addElement(create("false"));
                                 resultSet.addElement(create("self"));
-                                CallReference.getRefsChain(parameters.getPosition()).foreach(new P<PsiNamedElement>() {
-                                    @Override
-                                    public void p(PsiNamedElement x) {
-                                        resultSet.addElement(create(x.getName()));
-                                    }
-                                });
                             }
+                            CallReference.getRefsChain(parent).foreach(new P<PsiNamedElement>() {
+                                @Override
+                                public void p(PsiNamedElement x) {
+                                    resultSet.addElement(create(x.getName()));
+                                }
+                            });
                         } else if(parent instanceof ObjDClassBody || parent.getParent() instanceof ObjDClassBody) {
                             resultSet.addElement(create("val "));
                             resultSet.addElement(create("var "));

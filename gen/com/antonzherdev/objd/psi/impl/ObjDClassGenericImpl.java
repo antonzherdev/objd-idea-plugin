@@ -8,22 +8,23 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprDotImpl extends ObjDExprImpl implements ObjDExprDot {
+public class ObjDClassGenericImpl extends ASTWrapperPsiElement implements ObjDClassGeneric {
 
-  public ObjDExprDotImpl(ASTNode node) {
+  public ObjDClassGenericImpl(ASTNode node) {
     super(node);
   }
 
   @Override
   @NotNull
-  public List<ObjDExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
+  public ObjDClassName getClassName() {
+    return findNotNullChildByClass(ObjDClassName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprDot(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassGeneric(this);
     else super.accept(visitor);
   }
 

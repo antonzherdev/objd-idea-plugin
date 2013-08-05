@@ -4,6 +4,7 @@ package com.antonzherdev.chain;
 import java.io.Serializable;
 import java.util.Iterator;
 
+@SuppressWarnings("UnusedDeclaration")
 public abstract class Option<T> implements Serializable, Iterable<T> {
     private static final long serialVersionUID = 1854340604207495407L;
 
@@ -35,6 +36,13 @@ public abstract class Option<T> implements Serializable, Iterable<T> {
         return some ? some(v) : Option.<R>none();
     }
 
+    public static <R> Option<R> fromList(Iterable<R> list) {
+        Iterator<R> i = list.iterator();
+        if(i.hasNext()) return some(i.next());
+        return none();
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,6 +101,12 @@ public abstract class Option<T> implements Serializable, Iterable<T> {
         return isEmpty() ? alt.f() : this;
     }
 
+    @SuppressWarnings("unchecked")
+    public IChain<T> chain() {
+        if(isEmpty()) return Chain.empty();
+        else return Chain.chain(get());
+    }
+
     public static final class Some<T> extends Option<T> {
         private static final long serialVersionUID = 3007374559858805953L;
         private final T value;
@@ -110,6 +124,12 @@ public abstract class Option<T> implements Serializable, Iterable<T> {
         public boolean isEmpty() {
             return false;
         }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public IChain<T> chain() {
+            return Chain.chain(value);
+        }
     }
 
     public static final class None extends Option<Object> {
@@ -123,6 +143,11 @@ public abstract class Option<T> implements Serializable, Iterable<T> {
         @Override
         public boolean isEmpty() {
             return true;
+        }
+
+        @Override
+        public IChain<Object> chain() {
+            return Chain.empty();
         }
     }
 

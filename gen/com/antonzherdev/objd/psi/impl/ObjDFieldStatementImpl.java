@@ -35,9 +35,19 @@ public class ObjDFieldStatementImpl extends ASTWrapperPsiElement implements ObjD
     return findChildByClass(ObjDExpr.class);
   }
 
+  @Override
+  @NotNull
+  public ObjDMods getMods() {
+    return findNotNullChildByClass(ObjDMods.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitFieldStatement(this);
     else super.accept(visitor);
+  }
+
+  public boolean isStatic() {
+    return ObjDPsiImplUtil.isStatic(this);
   }
 
 }

@@ -23,6 +23,14 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassGeneric(@NotNull ObjDClassGeneric o) {
+    visitPsiElement(o);
+  }
+
+  public void visitClassGenerics(@NotNull ObjDClassGenerics o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassName(@NotNull ObjDClassName o) {
     visitNamedElement(o);
   }
@@ -140,6 +148,10 @@ public class ObjDVisitor extends PsiElementVisitor {
   }
 
   public void visitLambdaPar(@NotNull ObjDLambdaPar o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMods(@NotNull ObjDMods o) {
     visitPsiElement(o);
   }
 

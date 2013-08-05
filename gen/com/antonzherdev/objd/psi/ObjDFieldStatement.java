@@ -16,4 +16,9 @@ public interface ObjDFieldStatement extends PsiElement {
   @Nullable
   ObjDExpr getExpr();
 
+  @NotNull
+  ObjDMods getMods();
+
+  boolean isStatic();
+
 }

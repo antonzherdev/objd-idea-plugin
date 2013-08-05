@@ -7,8 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDDefStatement extends PsiElement {
 
-  @NotNull
-  List<ObjDDataType> getDataTypeList();
+  @Nullable
+  ObjDClassGenerics getClassGenerics();
+
+  @Nullable
+  ObjDDataType getDataType();
 
   @NotNull
   ObjDDefName getDefName();
@@ -18,5 +21,10 @@ public interface ObjDDefStatement extends PsiElement {
 
   @Nullable
   ObjDExpr getExpr();
+
+  @NotNull
+  ObjDMods getMods();
+
+  boolean isStatic();
 
 }

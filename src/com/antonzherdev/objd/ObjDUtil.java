@@ -5,18 +5,22 @@ import com.antonzherdev.chain.F;
 import com.antonzherdev.chain.IChain;
 import com.antonzherdev.chain.Option;
 import com.antonzherdev.objd.psi.*;
+import com.antonzherdev.objd.tp.ObjDTp;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.indexing.FileBasedIndex;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
@@ -81,4 +85,84 @@ public class ObjDUtil {
         }
         return Option.none();
     }
+
+    public static IChain<PsiNamedElement> classFields(ObjDClassStatement stm) {
+        return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
+            @Override
+            public PsiNamedElement f(ObjDClassConstructorField x) {
+                return x.getDefName();
+            }
+        }).append(chain(stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
+            @Override
+            public PsiNamedElement f(ObjDDefStatement x) {
+                return x.getDefName();
+            }
+        })).append(chain(stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+            @Override
+            public PsiNamedElement f(ObjDFieldStatement x) {
+                return x.getDefName();
+            }
+        })).append(parentFields(stm.getClassExtends()));
+    }
+
+    private static IChain<PsiNamedElement> parentFields(ObjDClassExtends classExtends) {
+        if(classExtends == null) return chain();
+        PsiElement resolve = classExtends.getDataTypeRef().getReference().resolve();
+        if(resolve == null) return chain();
+        return classFields((ObjDClassStatement) resolve.getParent());
+    }
+
+    public static boolean isAfterDot(PsiElement element) {
+        return getDot(element).isDefined();
+    }
+
+    public static Option<Dot> getDot(final PsiElement element) {
+        final PsiElement par = element.getParent();
+        if(par.getParent() instanceof ObjDExprDot) {
+            final ObjDExprDot dot = (ObjDExprDot) par.getParent();
+            if(dot.getExprList().get(0) == par) return Option.none();
+            return Option.<Dot>some(new Dot() {
+                @Override
+                public Left getLeft() {
+                    return new Left() {
+                        @Override
+                        public ObjDTp getTp() {
+                            Iterator<ObjDExpr> i = dot.getExprList().iterator();
+                            ObjDExpr prev = null;
+                            while (i.hasNext()) {
+                                ObjDExpr next = i.next();
+                                if(next == par) return prev.getTp();
+                                prev = next;
+                            }
+                            return new ObjDTp.Unknown("Error in dot");
+                        }
+                    };
+                }
+
+                @Override
+                public PsiElement getRight() {
+                    return element;
+                }
+            });
+        } else {
+            return Option.none();
+        }
+    }
+
+    public static List<ObjDClassGeneric> getDeclaredGenerics(PsiElement element) {
+        List<ObjDClassGeneric> ret = new ArrayList<ObjDClassGeneric>();
+        while(element != null) {
+            if(element instanceof ObjDClassStatement) {
+                ObjDClassGenerics classGenerics = ((ObjDClassStatement) element).getClassGenerics();
+                if(classGenerics != null) ret.addAll(classGenerics.getClassGenericList());
+            }
+            if(element instanceof ObjDDefStatement) {
+                ObjDClassGenerics classGenerics = ((ObjDDefStatement) element).getClassGenerics();
+                if(classGenerics != null) ret.addAll(classGenerics.getClassGenericList());
+            }
+            element = element.getParent();
+        }
+        return ret;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.antonzherdev.objd.reference;
 
 import com.antonzherdev.chain.B;
+import com.antonzherdev.chain.F;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.openapi.util.TextRange;
@@ -10,6 +11,8 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
 
@@ -24,6 +27,13 @@ public class DataTypeReference extends PsiReferenceBase<ObjDDataTypeRef> {
     public PsiElement resolve() {
         ObjDFile file = (ObjDFile) getElement().getContainingFile();
         return ObjDUtil.availableClassesInFile(file)
+                .append(
+                        chain(ObjDUtil.getDeclaredGenerics(getElement())).map(new F<ObjDClassGeneric, ObjDClassName>() {
+                            @Override
+                            public ObjDClassName f(ObjDClassGeneric x) {
+                                return x.getClassName();
+                            }
+                        }))
                 .find(new B<ObjDClassName>() {
                     @Override
                     public Boolean f(ObjDClassName className) {

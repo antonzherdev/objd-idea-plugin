@@ -24,7 +24,9 @@ import_statement ::= (W_IMPORT (import_od_file | STRING | (LESS IDENT MORE)))
 import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                                      methods=[getName setName getNameIdentifier getReference]}
 
-class_statement ::= ((W_CLASS | W_TRAIT | W_STRUCT | W_ENUM) class_name expr_call_generics? class_constructor_fields? class_extends? class_body?)
+class_statement ::= ((W_CLASS | W_TRAIT | W_STRUCT | W_ENUM) class_name class_generics? class_constructor_fields? class_extends? class_body?)
+class_generics ::= LESS class_generic (COMMA class_generic)* MORE
+class_generic ::= class_name
 class_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                methods=[getName setName getNameIdentifier]}
 
@@ -40,13 +42,16 @@ class_body ::= (OPEN_BRACE enum_item* (def_statement | field_statement)* CLOSE_B
 
 private enum_item ::= IDENT expr_call_params?
 
-field_statement ::= (field_mods* (W_VAR | W_VAL)? def_name (COLON data_type)? (SET expr_)?)
-private field_mods ::= (W_PRIVATE | W_STATIC | W_WEAK)
+field_statement ::= (mods (W_VAR | W_VAL)? def_name (COLON data_type)? (SET expr_)?)  {methods = [isStatic]}
+mods ::= mod*
+private mod ::= static_mod | weak_mod | private_mod
+private static_mod ::= W_STATIC {extends = mod}
+private weak_mod ::= W_WEAK {extends = mod}
+private private_mod ::= W_PRIVATE {extends = mod}
 
-def_statement ::= (def_mods* W_DEF def_name expr_call_generics? def_parameters? (COLON data_type)? SET? expr_?)
+def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? SET? expr_?) {methods = [isStatic]}
 private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET)
 def_parameter ::= (def_name? COLON data_type (SET expr_)?)
-private def_mods ::= (W_PRIVATE | W_STATIC)
 
 data_type ::= (data_type_simple| data_type_collection | data_type_tuple) WHAT? (ARROW data_type)?
 private data_type_simple ::= ((data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? (ARROW data_type)?)
@@ -56,7 +61,7 @@ private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 private data_type_collection ::= OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET
 private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
 
-expr_ ::= (expr_val | expr_set) {extends = expr_}
+expr_ ::= (expr_val | expr_set) {extends = expr_ methods = [getTp]}
 term_ ::= expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self
     {extends = expr_}
 expr_self ::= W_SELF {extends = expr_}
@@ -72,7 +77,7 @@ expr_bool ::= expr_comp ((AND | OR) expr_bool)? {extends = expr_}
 expr_comp ::= expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}
 expr_pm ::= expr_md ((PLUS | MINUS) expr_pm)? {extends = expr_}
 expr_md ::= expr_dot ((MUL | DIV) expr_md)? {extends = expr_}
-expr_dot ::= expr_index (DOT expr_dot)? {extends = expr_  methods=[left="/expr_[0]" right="/expr_[1]"]}
+expr_dot ::= expr_index (DOT expr_index)* {extends = expr_}
 expr_index ::=term_ index_op? {extends = expr_}
 private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET expr_arr?
 

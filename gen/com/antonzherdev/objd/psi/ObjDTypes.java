@@ -12,6 +12,8 @@ public interface ObjDTypes {
   IElementType CLASS_BODY = new ObjDElementType("CLASS_BODY");
   IElementType CLASS_CONSTRUCTOR_FIELD = new ObjDElementType("CLASS_CONSTRUCTOR_FIELD");
   IElementType CLASS_EXTENDS = new ObjDElementType("CLASS_EXTENDS");
+  IElementType CLASS_GENERIC = new ObjDElementType("CLASS_GENERIC");
+  IElementType CLASS_GENERICS = new ObjDElementType("CLASS_GENERICS");
   IElementType CLASS_NAME = new ObjDElementType("CLASS_NAME");
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
   IElementType DATA_TYPE = new ObjDElementType("DATA_TYPE");
@@ -42,6 +44,7 @@ public interface ObjDTypes {
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
+  IElementType MODS = new ObjDElementType("MODS");
   IElementType TERM = new ObjDElementType("TERM");
 
   IElementType AND = new ObjDTokenType("AND");
@@ -121,6 +124,12 @@ public interface ObjDTypes {
       }
       else if (type == CLASS_EXTENDS) {
         return new ObjDClassExtendsImpl(node);
+      }
+      else if (type == CLASS_GENERIC) {
+        return new ObjDClassGenericImpl(node);
+      }
+      else if (type == CLASS_GENERICS) {
+        return new ObjDClassGenericsImpl(node);
       }
       else if (type == CLASS_NAME) {
         return new ObjDClassNameImpl(node);
@@ -211,6 +220,9 @@ public interface ObjDTypes {
       }
       else if (type == LAMBDA_PAR) {
         return new ObjDLambdaParImpl(node);
+      }
+      else if (type == MODS) {
+        return new ObjDModsImpl(node);
       }
       else if (type == TERM) {
         return new ObjDTermImpl(node);

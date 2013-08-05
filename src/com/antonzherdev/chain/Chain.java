@@ -7,12 +7,17 @@ import java.util.*;
 
 @SuppressWarnings({"Convert2Diamond", "unchecked"})
 public class Chain<X> implements IChain<X> {
+    public static final IChain<Object> EMPTY = chain();
     private final ChainLink<?, X> link;
     private final Chain<?> previous;
 
     Chain(ChainLink<?, X> link, Chain<?> previous) {
         this.link = link;
         this.previous = previous;
+    }
+
+    public static <T> IChain<T> empty() {
+        return (IChain<T>) EMPTY;
     }
 
     public static <A> IChain<A> chain(Iterable<? extends A> source) {

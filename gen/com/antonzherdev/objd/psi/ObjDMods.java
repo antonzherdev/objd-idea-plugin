@@ -4,10 +4,7 @@ package com.antonzherdev.objd.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.antonzherdev.objd.tp.ObjDTp;
 
-public interface ObjDExpr extends PsiElement {
-
-  ObjDTp getTp();
+public interface ObjDMods extends PsiElement {
 
 }

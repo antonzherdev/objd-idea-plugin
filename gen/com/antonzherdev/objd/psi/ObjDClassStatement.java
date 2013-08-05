@@ -16,10 +16,10 @@ public interface ObjDClassStatement extends PsiElement {
   @Nullable
   ObjDClassExtends getClassExtends();
 
-  @NotNull
-  ObjDClassName getClassName();
+  @Nullable
+  ObjDClassGenerics getClassGenerics();
 
   @NotNull
-  List<ObjDDataType> getDataTypeList();
+  ObjDClassName getClassName();
 
 }

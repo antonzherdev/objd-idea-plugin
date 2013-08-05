@@ -18,9 +18,15 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
   }
 
   @Override
-  @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
+  @Nullable
+  public ObjDClassGenerics getClassGenerics() {
+    return findChildByClass(ObjDClassGenerics.class);
+  }
+
+  @Override
+  @Nullable
+  public ObjDDataType getDataType() {
+    return findChildByClass(ObjDDataType.class);
   }
 
   @Override
@@ -41,9 +47,19 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
     return findChildByClass(ObjDExpr.class);
   }
 
+  @Override
+  @NotNull
+  public ObjDMods getMods() {
+    return findNotNullChildByClass(ObjDMods.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefStatement(this);
     else super.accept(visitor);
+  }
+
+  public boolean isStatic() {
+    return ObjDPsiImplUtil.isStatic(this);
   }
 
 }

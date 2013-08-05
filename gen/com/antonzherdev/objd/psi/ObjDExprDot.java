@@ -10,10 +10,4 @@ public interface ObjDExprDot extends ObjDExpr {
   @NotNull
   List<ObjDExpr> getExprList();
 
-  @NotNull
-  ObjDExpr getLeft();
-
-  @Nullable
-  ObjDExpr getRight();
-
 }

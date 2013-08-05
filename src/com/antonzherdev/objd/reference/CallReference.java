@@ -1,9 +1,7 @@
 package com.antonzherdev.objd.reference;
 
-import com.antonzherdev.chain.B;
-import com.antonzherdev.chain.Chain;
-import com.antonzherdev.chain.F;
-import com.antonzherdev.chain.IChain;
+import com.antonzherdev.chain.*;
+import com.antonzherdev.objd.Dot;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.openapi.util.TextRange;
@@ -39,26 +37,19 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     }
 
     public static IChain<PsiNamedElement> getRefsChain(PsiElement element) {
-        if(isAfterDot(element)) {
-            return chain();
+        Option<Dot> dot = ObjDUtil.getDot(element);
+        if(dot.isDefined()) {
+            return dot.get().getLeft().getTp().getRefsChain();
         }
         return ObjDUtil.availableClassesInFile(element.getContainingFile())
                 .<PsiNamedElement>cast()
                 .append(ObjDUtil.getClass(element).map(new F<ObjDClassStatement,IChain<PsiNamedElement>>() {
                     @Override
                     public IChain<PsiNamedElement> f(ObjDClassStatement x) {
-                        return classFields(x);
+                        return ObjDUtil.classFields(x);
                     }
                 }).getOrElse(Chain.<PsiNamedElement>chain()))
                 .append(vars(element));
-    }
-
-    public static boolean isAfterDot(PsiElement element) {
-        if(element.getParent().getParent() instanceof ObjDExprDot) {
-            ObjDExprDot dot = (ObjDExprDot) element.getParent().getParent();
-            return dot.getRight() == element.getParent();
-        }
-        return false;
     }
 
     private static List<PsiNamedElement> vars(PsiElement element) {
@@ -97,33 +88,6 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
             p = element.getParent();
             if(p != null) vars(items, p);
         }
-    }
-
-    private static IChain<PsiNamedElement> classFields(ObjDClassStatement stm) {
-        return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDClassConstructorField x) {
-                return x.getDefName();
-            }
-        }).append(chain(stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDDefStatement x) {
-                return x.getDefName();
-            }
-        })).append(chain(stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDFieldStatement x) {
-                return x.getDefName();
-            }
-        })).append(parentFields(stm.getClassExtends()));
-
-    }
-
-    private static IChain<PsiNamedElement> parentFields(ObjDClassExtends classExtends) {
-        if(classExtends == null) return chain();
-        PsiElement resolve = classExtends.getDataTypeRef().getReference().resolve();
-        if(resolve == null) return chain();
-        return classFields((ObjDClassStatement) resolve.getParent());
     }
 
 
