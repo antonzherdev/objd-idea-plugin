@@ -8,12 +8,19 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprIndexImpl extends ObjDExprImpl implements ObjDExprIndex {
+public class ObjDIndexOpImpl extends ASTWrapperPsiElement implements ObjDIndexOp {
 
-  public ObjDExprIndexImpl(ASTNode node) {
+  public ObjDIndexOpImpl(ASTNode node) {
     super(node);
+  }
+
+  @Override
+  @NotNull
+  public ObjDExpr getExpr() {
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   @Override
@@ -22,14 +29,8 @@ public class ObjDExprIndexImpl extends ObjDExprImpl implements ObjDExprIndex {
     return findChildByClass(ObjDIndexOp.class);
   }
 
-  @Override
-  @NotNull
-  public ObjDTerm getTerm() {
-    return findNotNullChildByClass(ObjDTerm.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprIndex(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitIndexOp(this);
     else super.accept(visitor);
   }
 

@@ -195,6 +195,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIndexOp(@NotNull ObjDIndexOp o) {
+    visitPsiElement(o);
+  }
+
   public void visitLambdaPar(@NotNull ObjDLambdaPar o) {
     visitPsiElement(o);
   }

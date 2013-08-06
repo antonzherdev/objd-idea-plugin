@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDExprIndex extends ObjDExpr {
+public interface ObjDIndexOp extends PsiElement {
+
+  @NotNull
+  ObjDExpr getExpr();
 
   @Nullable
   ObjDIndexOp getIndexOp();
-
-  @NotNull
-  ObjDTerm getTerm();
 
 }

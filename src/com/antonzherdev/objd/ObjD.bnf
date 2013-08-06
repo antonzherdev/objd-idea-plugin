@@ -86,7 +86,7 @@ expr_pm ::= expr_md ((PLUS | MINUS) expr_pm)? {extends = expr_}
 expr_md ::= expr_dot ((MUL | DIV) expr_md)? {extends = expr_}
 expr_dot ::= expr_index (DOT expr_index)* {extends = expr_}
 expr_index ::=term_ index_op? {extends = expr_}
-private index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET expr_arr?
+index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op?
 
 expr_call ::= call_name expr_call_generics? expr_call_params? {extends = expr_}
 call_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"

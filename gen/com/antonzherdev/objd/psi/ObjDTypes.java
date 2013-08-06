@@ -55,6 +55,7 @@ public interface ObjDTypes {
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
+  IElementType INDEX_OP = new ObjDElementType("INDEX_OP");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
   IElementType MODS = new ObjDElementType("MODS");
   IElementType TERM = new ObjDElementType("TERM");
@@ -265,6 +266,9 @@ public interface ObjDTypes {
       }
       else if (type == IMPORT_STATEMENT) {
         return new ObjDImportStatementImpl(node);
+      }
+      else if (type == INDEX_OP) {
+        return new ObjDIndexOpImpl(node);
       }
       else if (type == LAMBDA_PAR) {
         return new ObjDLambdaParImpl(node);
