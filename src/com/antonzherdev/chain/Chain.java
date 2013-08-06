@@ -21,6 +21,7 @@ public class Chain<X> implements IChain<X> {
     }
 
     public static <A> IChain<A> chain(Iterable<? extends A> source) {
+        if(source == null) return empty();
         return new Chain<A>(new SourceChainLink<A>(source), null);
     }
 
@@ -33,6 +34,7 @@ public class Chain<X> implements IChain<X> {
     }
 
     public static <A> IChain<A> chain(A... source) {
+        if(source == null) return empty();
         return new Chain<A>(new SourceChainLink<A>(Arrays.asList(source)), null);
     }
 
@@ -584,21 +586,25 @@ public class Chain<X> implements IChain<X> {
 
     @Override
     public IChain<X> append(X... items) {
+        if(items == null) return this;
         return append(Arrays.asList(items));
     }
 
     @Override
     public IChain<X> prepend(X... items) {
+        if(items == null) return this;
         return prepend(Arrays.asList(items));
     }
 
     @Override
     public IChain<X> append(Iterable<? extends X> items) {
+        if(items == null) return this;
         return link(new AppendChainLink<X>(items));
     }
 
     @Override
     public IChain<X> prepend(Iterable<? extends X> items) {
+        if(items == null) return this;
         return link(new PrependChainLink<X>(items));
     }
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
+import static com.antonzherdev.chain.Chain.unionChain;
 
 public class CallReference extends PsiReferenceBase<ObjDCallName> {
     public CallReference(@NotNull ObjDCallName element, TextRange textRange) {
@@ -41,14 +42,33 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         if(dot.isDefined()) {
             return dot.get().getLeft().getTp().getRefsChain();
         }
-        return ObjDUtil.availableClassesInFile(element.getContainingFile())
-                .<PsiNamedElement>cast()
-                .append(ObjDUtil.getClass(element).map(new F<ObjDClassStatement,IChain<PsiNamedElement>>() {
+        return ObjDUtil.availableFiles(element.getContainingFile())
+                .flatMap(new F<ObjDFile, Iterable<PsiNamedElement>>() {
                     @Override
-                    public IChain<PsiNamedElement> f(ObjDClassStatement x) {
-                        return ObjDUtil.classFields(x);
+                    public Iterable<PsiNamedElement> f(ObjDFile f) {
+                        return unionChain(
+                                ObjDUtil.getClassesInFile(f).map(new F<ObjDClassStatement, PsiNamedElement>() {
+                                    @Override
+                                    public PsiNamedElement f(ObjDClassStatement x) {
+                                        return x.getClassName();
+                                    }
+                                }),
+                                ObjDUtil.getDefsInFile(f).map(new F<ObjDDefStatement, PsiNamedElement>() {
+                                    @Override
+                                    public PsiNamedElement f(ObjDDefStatement x) {
+                                        return x.getDefName();
+                                    }
+                                }));
+
                     }
-                }).getOrElse(Chain.<PsiNamedElement>chain()))
+                })
+                .append(
+                        ObjDUtil.getClass(element).map(new F<ObjDClassStatement,IChain<PsiNamedElement>>() {
+                            @Override
+                            public IChain<PsiNamedElement> f(ObjDClassStatement x) {
+                                return ObjDUtil.classFields(x);
+                            }
+                        }).getOrElse(Chain.<PsiNamedElement>empty()))
                 .append(vars(element));
     }
 
@@ -60,8 +80,7 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
 
     private static void vars(ArrayList<PsiNamedElement> items, PsiElement element) {
         if(element instanceof ObjDExprVal) {
-            ObjDExprVal v = (ObjDExprVal) element;
-            if(v != null) items.add(v.getDefName());
+            items.add(((ObjDExprVal) element).getDefName());
         } else if(element instanceof ObjDDefStatement) {
             chain(((ObjDDefStatement) element).getDefParameterList()).map(new F<ObjDDefParameter,ObjDDefName>() {
                 @Override

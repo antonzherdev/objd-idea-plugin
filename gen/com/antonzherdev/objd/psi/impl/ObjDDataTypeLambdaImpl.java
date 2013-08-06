@@ -22,6 +22,12 @@ public class ObjDDataTypeLambdaImpl extends ObjDDataTypeImpl implements ObjDData
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
   }
 
+  @Override
+  @Nullable
+  public ObjDDataTypeSelf getDataTypeSelf() {
+    return findChildByClass(ObjDDataTypeSelf.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeLambda(this);
     else super.accept(visitor);

@@ -16,6 +16,7 @@ public interface ObjDTypes {
   IElementType CLASS_GENERICS = new ObjDElementType("CLASS_GENERICS");
   IElementType CLASS_NAME = new ObjDElementType("CLASS_NAME");
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
+  IElementType CLASS_TYPE = new ObjDElementType("CLASS_TYPE");
   IElementType DATA_TYPE = new ObjDElementType("DATA_TYPE");
   IElementType DATA_TYPE_COLLECTION = new ObjDElementType("DATA_TYPE_COLLECTION");
   IElementType DATA_TYPE_GENERICS = new ObjDElementType("DATA_TYPE_GENERICS");
@@ -23,17 +24,21 @@ public interface ObjDTypes {
   IElementType DATA_TYPE_MAP = new ObjDElementType("DATA_TYPE_MAP");
   IElementType DATA_TYPE_OPTION = new ObjDElementType("DATA_TYPE_OPTION");
   IElementType DATA_TYPE_REF = new ObjDElementType("DATA_TYPE_REF");
+  IElementType DATA_TYPE_SELF = new ObjDElementType("DATA_TYPE_SELF");
   IElementType DATA_TYPE_SIMPLE = new ObjDElementType("DATA_TYPE_SIMPLE");
   IElementType DATA_TYPE_TUPLE = new ObjDElementType("DATA_TYPE_TUPLE");
   IElementType DEF_NAME = new ObjDElementType("DEF_NAME");
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
+  IElementType ENUM_ITEM = new ObjDElementType("ENUM_ITEM");
   IElementType EXPR = new ObjDElementType("EXPR");
   IElementType EXPR_ARR = new ObjDElementType("EXPR_ARR");
   IElementType EXPR_BOOL = new ObjDElementType("EXPR_BOOL");
   IElementType EXPR_BRACES = new ObjDElementType("EXPR_BRACES");
   IElementType EXPR_BRACKETS = new ObjDElementType("EXPR_BRACKETS");
   IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
+  IElementType EXPR_CALL_PARAM = new ObjDElementType("EXPR_CALL_PARAM");
+  IElementType EXPR_CALL_PARAMS = new ObjDElementType("EXPR_CALL_PARAMS");
   IElementType EXPR_COMP = new ObjDElementType("EXPR_COMP");
   IElementType EXPR_DOT = new ObjDElementType("EXPR_DOT");
   IElementType EXPR_IF = new ObjDElementType("EXPR_IF");
@@ -144,6 +149,9 @@ public interface ObjDTypes {
       else if (type == CLASS_STATEMENT) {
         return new ObjDClassStatementImpl(node);
       }
+      else if (type == CLASS_TYPE) {
+        return new ObjDClassTypeImpl(node);
+      }
       else if (type == DATA_TYPE) {
         return new ObjDDataTypeImpl(node);
       }
@@ -165,6 +173,9 @@ public interface ObjDTypes {
       else if (type == DATA_TYPE_REF) {
         return new ObjDDataTypeRefImpl(node);
       }
+      else if (type == DATA_TYPE_SELF) {
+        return new ObjDDataTypeSelfImpl(node);
+      }
       else if (type == DATA_TYPE_SIMPLE) {
         return new ObjDDataTypeSimpleImpl(node);
       }
@@ -179,6 +190,9 @@ public interface ObjDTypes {
       }
       else if (type == DEF_STATEMENT) {
         return new ObjDDefStatementImpl(node);
+      }
+      else if (type == ENUM_ITEM) {
+        return new ObjDEnumItemImpl(node);
       }
       else if (type == EXPR) {
         return new ObjDExprImpl(node);
@@ -197,6 +211,12 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_CALL) {
         return new ObjDExprCallImpl(node);
+      }
+      else if (type == EXPR_CALL_PARAM) {
+        return new ObjDExprCallParamImpl(node);
+      }
+      else if (type == EXPR_CALL_PARAMS) {
+        return new ObjDExprCallParamsImpl(node);
       }
       else if (type == EXPR_COMP) {
         return new ObjDExprCompImpl(node);

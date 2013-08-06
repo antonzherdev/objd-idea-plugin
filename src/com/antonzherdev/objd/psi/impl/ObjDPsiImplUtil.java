@@ -54,4 +54,8 @@ public class ObjDPsiImplUtil {
     public static boolean isStatic(ObjDFieldStatementImpl statement) {
         return statement.getMods().getNode().findChildByType(ObjDTypes.W_STATIC) != null;
     }
+
+    public static boolean isEnum(ObjDClassStatement s) {
+        return s.getClassType().getNode().findChildByType(ObjDTypes.W_ENUM) != null;
+    }
 }

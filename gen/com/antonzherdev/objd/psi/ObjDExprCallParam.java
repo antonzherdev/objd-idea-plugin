@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDDataType extends PsiElement {
+public interface ObjDExprCallParam extends PsiElement {
 
   @Nullable
-  ObjDDataTypeSelf getDataTypeSelf();
+  ObjDDefName getDefName();
+
+  @NotNull
+  ObjDExpr getExpr();
 
 }

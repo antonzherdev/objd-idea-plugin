@@ -39,6 +39,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassType(@NotNull ObjDClassType o) {
+    visitPsiElement(o);
+  }
+
   public void visitDataType(@NotNull ObjDDataType o) {
     visitPsiElement(o);
   }
@@ -67,6 +71,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
+  public void visitDataTypeSelf(@NotNull ObjDDataTypeSelf o) {
+    visitPsiElement(o);
+  }
+
   public void visitDataTypeSimple(@NotNull ObjDDataTypeSimple o) {
     visitDataType(o);
   }
@@ -84,6 +92,10 @@ public class ObjDVisitor extends PsiElementVisitor {
   }
 
   public void visitDefStatement(@NotNull ObjDDefStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEnumItem(@NotNull ObjDEnumItem o) {
     visitPsiElement(o);
   }
 
@@ -109,6 +121,14 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitExprCall(@NotNull ObjDExprCall o) {
     visitExpr(o);
+  }
+
+  public void visitExprCallParam(@NotNull ObjDExprCallParam o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExprCallParams(@NotNull ObjDExprCallParams o) {
+    visitPsiElement(o);
   }
 
   public void visitExprComp(@NotNull ObjDExprComp o) {

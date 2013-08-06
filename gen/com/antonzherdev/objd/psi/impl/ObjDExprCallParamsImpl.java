@@ -11,20 +11,20 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDDataTypeImpl extends ASTWrapperPsiElement implements ObjDDataType {
+public class ObjDExprCallParamsImpl extends ASTWrapperPsiElement implements ObjDExprCallParams {
 
-  public ObjDDataTypeImpl(ASTNode node) {
+  public ObjDExprCallParamsImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public ObjDDataTypeSelf getDataTypeSelf() {
-    return findChildByClass(ObjDDataTypeSelf.class);
+  @NotNull
+  public List<ObjDExprCallParam> getExprCallParamList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExprCallParam.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataType(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallParams(this);
     else super.accept(visitor);
   }
 

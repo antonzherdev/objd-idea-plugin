@@ -17,9 +17,15 @@ public class ObjDDataTypeOptionImpl extends ObjDDataTypeImpl implements ObjDData
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDDataType getDataType() {
-    return findNotNullChildByClass(ObjDDataType.class);
+    return findChildByClass(ObjDDataType.class);
+  }
+
+  @Override
+  @Nullable
+  public ObjDDataTypeSelf getDataTypeSelf() {
+    return findChildByClass(ObjDDataTypeSelf.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

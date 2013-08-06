@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDDataTypeOption extends ObjDDataType {
 
-  @NotNull
+  @Nullable
   ObjDDataType getDataType();
+
+  @Nullable
+  ObjDDataTypeSelf getDataTypeSelf();
 
 }

@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
+import static com.antonzherdev.chain.Chain.empty;
 
 public class ObjDUtil {
     public static Option<ObjDFile> findFile(Project project, final String fileName) {
@@ -36,7 +37,7 @@ public class ObjDUtil {
     }
 
     public static Option<ObjDClassStatement> findKernelClass(Project project, final String name) {
-        return getClassesInFile(findFile(project, name).get()).find(new B<ObjDClassStatement>() {
+        return getClassesInFile(findFile(project, name).getOrNull()).find(new B<ObjDClassStatement>() {
             @Override
             public Boolean f(ObjDClassStatement x) {
                 return x.getClassName().getName().equals(name);
@@ -59,17 +60,8 @@ public class ObjDUtil {
     }
 
     public static IChain<ObjDClassName> availableClassesInFile(PsiFile file) {
-        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
-                .map(new F<ASTNode,ObjDFile>() {
-                    @Override
-                    public ObjDFile f(ASTNode astNode) {
-                        ObjDImportOdFile od = astNode.getPsi(ObjDImportStatement.class).getImportOdFile();
-                        if(od == null) return null;
-                        return (ObjDFile) od.getReference().resolve();
-                    }
-                })
-                .prepend((ObjDFile)file)
-                .flatMap(new F<ObjDFile,IChain<ObjDClassStatement>>() {
+        return availableFiles(file)
+                .flatMap(new F<ObjDFile, IChain<ObjDClassStatement>>() {
                     @Override
                     public IChain<ObjDClassStatement> f(ObjDFile objDFile) {
                         return getClassesInFile(objDFile);
@@ -83,11 +75,46 @@ public class ObjDUtil {
                 });
     }
 
-    private static IChain<ObjDClassStatement> getClassesInFile(ObjDFile objDFile) {
+    public static IChain<ObjDFile> availableFiles(PsiFile file) {
+        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
+                .map(new F<ASTNode,ObjDFile>() {
+                    @Override
+                    public ObjDFile f(ASTNode astNode) {
+                        ObjDImportOdFile od = astNode.getPsi(ObjDImportStatement.class).getImportOdFile();
+                        if(od == null) return null;
+                        return (ObjDFile) od.getReference().resolve();
+                    }
+                })
+                .prepend((ObjDFile)file)
+                .append(getKernelFiles(file.getProject()));
+    }
+
+    private static IChain<ObjDFile> getKernelFiles(Project project) {
+        return getAllVirtualFiles(project)
+                .filter(new B<VirtualFile>() {
+                    @Override
+                    public Boolean f(VirtualFile f) {
+                        return f.getNameWithoutExtension().startsWith("OD");
+                    }
+                })
+                .map(toObjDFileF(project));
+    }
+
+    public static IChain<ObjDClassStatement> getClassesInFile(ObjDFile objDFile) {
+        if(objDFile == null) return empty();
         return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.CLASS_STATEMENT))).map(new F<ASTNode,ObjDClassStatement>() {
             @Override
             public ObjDClassStatement f(ASTNode astNode) {
                 return astNode.getPsi(ObjDClassStatement.class);
+            }
+        });
+    }
+
+    public static IChain<ObjDDefStatement> getDefsInFile(ObjDFile objDFile) {
+        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.DEF_STATEMENT))).map(new F<ASTNode,ObjDDefStatement>() {
+            @Override
+            public ObjDDefStatement f(ASTNode astNode) {
+                return astNode.getPsi(ObjDDefStatement.class);
             }
         });
     }
@@ -101,28 +128,46 @@ public class ObjDUtil {
     }
 
     public static IChain<PsiNamedElement> classFields(ObjDClassStatement stm) {
+        if(stm == null) return empty();
+
         return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
             @Override
             public PsiNamedElement f(ObjDClassConstructorField x) {
                 return x.getDefName();
             }
-        }).append(chain(stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
+        }).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
             @Override
             public PsiNamedElement f(ObjDDefStatement x) {
                 return x.getDefName();
             }
-        })).append(chain(stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+        })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
             @Override
             public PsiNamedElement f(ObjDFieldStatement x) {
                 return x.getDefName();
             }
-        })).append(parentFields(stm.getClassExtends()));
+        })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, PsiNamedElement>() {
+            @Override
+            public PsiNamedElement f(ObjDEnumItem x) {
+                return x.getDefName();
+            }
+        }))
+        .append(enumSpecials(stm))
+        .append(parentFields(stm));
     }
 
-    private static IChain<PsiNamedElement> parentFields(ObjDClassExtends classExtends) {
-        if(classExtends == null) return chain();
+    private static IChain<PsiNamedElement> enumSpecials(ObjDClassStatement stm) {
+        return stm.isEnum() ? classFields(findKernelClass(stm.getProject(), "ODEnum").getOrNull()) : null;
+    }
+
+    private static IChain<PsiNamedElement> parentFields(ObjDClassStatement stm) {
+        ObjDClassExtends classExtends = stm.getClassExtends();
+        if(classExtends == null) {
+            if(stm.getClassName().getName().equals("ODObject")) return empty();
+            else return classFields(findKernelClass(stm.getProject(), "ODObject").getOrNull());
+        }
+
         PsiElement resolve = classExtends.getDataTypeRef().getReference().resolve();
-        if(resolve == null) return chain();
+        if(resolve == null) return empty();
         return classFields((ObjDClassStatement) resolve.getParent());
     }
 

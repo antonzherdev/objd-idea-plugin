@@ -6,14 +6,18 @@ import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
 import static com.antonzherdev.chain.Chain.empty;
-import static com.antonzherdev.chain.Chain.unionChain;
 
 public abstract class ObjDTp {
-
+    public static final F<ObjDDefStatement,PsiNamedElement> DEF_NAME = new F<ObjDDefStatement, PsiNamedElement>() {
+        @Override
+        public PsiNamedElement f(ObjDDefStatement x) {
+            return x.getDefName();
+        }
+    };
     public static final Unknown NO_SELF = new Unknown("No self");
 
     public static ObjDTp getTpForExpression(ObjDExpr expr) {
@@ -73,11 +77,11 @@ public abstract class ObjDTp {
         }
 
         return tp.map(new F<ObjDDataType,ObjDTp>() {
-                @Override
-                public ObjDTp f(ObjDDataType x) {
-                    return getTpForDataType(x);
-                }
-            }).getOrElse(d);
+            @Override
+            public ObjDTp f(ObjDDataType x) {
+                return getTpForDataType(x);
+            }
+        }).getOrElse(d);
     }
 
     private static ObjDTp getTpForDataType(ObjDDataType dataType) {
@@ -150,29 +154,47 @@ public abstract class ObjDTp {
         @Override
         public IChain<PsiNamedElement> getRefsChain() {
             if(classStatement.getClassBody() == null) return empty();
-            return unionChain(
-                    chain(classStatement.getClassBody().getDefStatementList()).filter(new B<ObjDDefStatement>() {
-                        @Override
-                        public Boolean f(ObjDDefStatement x) {
-                            return x.isStatic();
-                        }
-                    }).map(new F<ObjDDefStatement, PsiNamedElement>() {
-                        @Override
-                        public PsiNamedElement f(ObjDDefStatement x) {
-                            return x.getDefName();
-                        }
-                    }),
-                    chain(classStatement.getClassBody().getFieldStatementList()).filter(new B<ObjDFieldStatement>() {
-                        @Override
-                        public Boolean f(ObjDFieldStatement x) {
-                            return x.isStatic();
-                        }
-                    }).map(new F<ObjDFieldStatement, PsiNamedElement>() {
-                        @Override
-                        public PsiNamedElement f(ObjDFieldStatement x) {
-                            return x.getDefName();
-                        }
-                    }));
+            return
+                    Chain.<PsiNamedElement>chain().append(
+                            chain(classStatement.getClassBody().getDefStatementList()).filter(new B<ObjDDefStatement>() {
+                                @Override
+                                public Boolean f(ObjDDefStatement x) {
+                                    return x.isStatic();
+                                }
+                            }).map(DEF_NAME)
+                    ).append(
+                            chain(classStatement.getClassBody().getFieldStatementList()).filter(new B<ObjDFieldStatement>() {
+                                @Override
+                                public Boolean f(ObjDFieldStatement x) {
+                                    return x.isStatic();
+                                }
+                            }).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+                                @Override
+                                public PsiNamedElement f(ObjDFieldStatement x) {
+                                    return x.getDefName();
+                                }
+                            })
+                    ).append(
+                            chain(classStatement.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, PsiNamedElement>() {
+                                @Override
+                                public PsiNamedElement f(ObjDEnumItem x) {
+                                    return x.getDefName();
+                                }
+                            })
+                    ).append(classStatement.isEnum()
+                            ?
+                            chain(ObjDUtil.findKernelClass(classStatement.getProject(), "ODEnum")).flatMap(new F<ObjDClassStatement,List<ObjDDefStatement>>() {
+                                @Override
+                                public List<ObjDDefStatement> f(ObjDClassStatement x) {
+                                    return x.getClassBody().getDefStatementList();
+                                }
+                            }).filter(new B<ObjDDefStatement>() {
+                                @Override
+                                public Boolean f(ObjDDefStatement x) {
+                                    return x.isStatic();
+                                }
+                            }).map(DEF_NAME)
+                            : null);
         }
     }
 

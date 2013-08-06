@@ -22,4 +22,9 @@ public interface ObjDClassStatement extends PsiElement {
   @NotNull
   ObjDClassName getClassName();
 
+  @NotNull
+  ObjDClassType getClassType();
+
+  boolean isEnum();
+
 }

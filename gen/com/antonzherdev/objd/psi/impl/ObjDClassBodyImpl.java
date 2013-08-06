@@ -19,20 +19,14 @@ public class ObjDClassBodyImpl extends ASTWrapperPsiElement implements ObjDClass
 
   @Override
   @NotNull
-  public List<ObjDDefName> getDefNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefName.class);
-  }
-
-  @Override
-  @NotNull
   public List<ObjDDefStatement> getDefStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefStatement.class);
   }
 
   @Override
   @NotNull
-  public List<ObjDExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
+  public List<ObjDEnumItem> getEnumItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDEnumItem.class);
   }
 
   @Override

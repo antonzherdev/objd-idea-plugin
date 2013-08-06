@@ -8,13 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface ObjDClassBody extends PsiElement {
 
   @NotNull
-  List<ObjDDefName> getDefNameList();
-
-  @NotNull
   List<ObjDDefStatement> getDefStatementList();
 
   @NotNull
-  List<ObjDExpr> getExprList();
+  List<ObjDEnumItem> getEnumItemList();
 
   @NotNull
   List<ObjDFieldStatement> getFieldStatementList();

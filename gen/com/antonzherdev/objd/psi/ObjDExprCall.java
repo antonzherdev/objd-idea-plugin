@@ -13,10 +13,7 @@ public interface ObjDExprCall extends ObjDExpr {
   @NotNull
   List<ObjDDataType> getDataTypeList();
 
-  @NotNull
-  List<ObjDDefName> getDefNameList();
-
-  @NotNull
-  List<ObjDExpr> getExprList();
+  @Nullable
+  ObjDExprCallParams getExprCallParams();
 
 }

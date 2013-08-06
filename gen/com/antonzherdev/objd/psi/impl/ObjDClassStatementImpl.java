@@ -47,9 +47,19 @@ public class ObjDClassStatementImpl extends ASTWrapperPsiElement implements ObjD
     return findNotNullChildByClass(ObjDClassName.class);
   }
 
+  @Override
+  @NotNull
+  public ObjDClassType getClassType() {
+    return findNotNullChildByClass(ObjDClassType.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassStatement(this);
     else super.accept(visitor);
+  }
+
+  public boolean isEnum() {
+    return ObjDPsiImplUtil.isEnum(this);
   }
 
 }

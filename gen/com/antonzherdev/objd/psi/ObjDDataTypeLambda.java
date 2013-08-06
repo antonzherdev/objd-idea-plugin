@@ -10,4 +10,7 @@ public interface ObjDDataTypeLambda extends ObjDDataType {
   @NotNull
   List<ObjDDataType> getDataTypeList();
 
+  @Nullable
+  ObjDDataTypeSelf getDataTypeSelf();
+
 }

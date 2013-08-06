@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDDataType extends PsiElement {
-
-  @Nullable
-  ObjDDataTypeSelf getDataTypeSelf();
+public interface ObjDClassType extends PsiElement {
 
 }

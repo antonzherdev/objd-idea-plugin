@@ -29,15 +29,9 @@ public class ObjDExprCallImpl extends ObjDExprImpl implements ObjDExprCall {
   }
 
   @Override
-  @NotNull
-  public List<ObjDDefName> getDefNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDefName.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ObjDExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
+  @Nullable
+  public ObjDExprCallParams getExprCallParams() {
+    return findChildByClass(ObjDExprCallParams.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
