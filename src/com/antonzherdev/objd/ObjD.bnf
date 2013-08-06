@@ -62,8 +62,8 @@ data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | T
 data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
 data_type_lambda ::= (data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self) ARROW data_type {extends = data_type}
-data_type_collection ::= OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET {extends = data_type}
-data_type_map ::= OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type}
+data_type_collection ::= OPEN_SQUARE_BRACKET W_VAR? data_type CLOSE_SQUARE_BRACKET {extends = data_type}
+data_type_map ::= OPEN_SQUARE_BRACKET W_VAR? data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type}
 data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {extends = data_type}
 data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple | data_type_self) WHAT {extends = data_type}
 data_type_generics ::= LESS data_type (COMMA data_type)* MORE

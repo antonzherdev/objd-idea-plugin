@@ -18,8 +18,8 @@ public class ObjDDataTypeCollectionImpl extends ObjDDataTypeImpl implements ObjD
 
   @Override
   @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
+  public ObjDDataType getDataType() {
+    return findNotNullChildByClass(ObjDDataType.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

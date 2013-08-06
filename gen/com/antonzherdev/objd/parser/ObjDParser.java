@@ -631,15 +631,15 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET
+  // OPEN_SQUARE_BRACKET W_VAR? data_type CLOSE_SQUARE_BRACKET
   public static boolean data_type_collection(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_collection")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
+    result_ = result_ && data_type_collection_1(builder_, level_ + 1);
     result_ = result_ && data_type(builder_, level_ + 1);
-    result_ = result_ && data_type_collection_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
     if (result_) {
       marker_.done(DATA_TYPE_COLLECTION);
@@ -650,27 +650,11 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (COLON data_type)?
-  private static boolean data_type_collection_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_collection_2")) return false;
-    data_type_collection_2_0(builder_, level_ + 1);
+  // W_VAR?
+  private static boolean data_type_collection_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_collection_1")) return false;
+    consumeToken(builder_, W_VAR);
     return true;
-  }
-
-  // COLON data_type
-  private static boolean data_type_collection_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_collection_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COLON);
-    result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -765,13 +749,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET
+  // OPEN_SQUARE_BRACKET W_VAR? data_type COLON data_type CLOSE_SQUARE_BRACKET
   public static boolean data_type_map(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_map")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
+    result_ = result_ && data_type_map_1(builder_, level_ + 1);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
     result_ = result_ && data_type(builder_, level_ + 1);
@@ -783,6 +768,13 @@ public class ObjDParser implements PsiParser {
       marker_.rollbackTo();
     }
     return result_;
+  }
+
+  // W_VAR?
+  private static boolean data_type_map_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_map_1")) return false;
+    consumeToken(builder_, W_VAR);
+    return true;
   }
 
   /* ********************************************************** */

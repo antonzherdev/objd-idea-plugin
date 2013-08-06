@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ObjDDataTypeCollection extends ObjDDataType {
 
   @NotNull
-  List<ObjDDataType> getDataTypeList();
+  ObjDDataType getDataType();
 
 }
