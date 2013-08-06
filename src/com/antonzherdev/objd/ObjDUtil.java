@@ -185,9 +185,10 @@ public class ObjDUtil {
     }
 
     public static Option<Dot> getDot(final PsiElement element) {
-        final PsiElement par = element.getParent();
+        final PsiElement par = removeIndex(element.getParent());
+
         if(par.getParent() instanceof ObjDExprDot) {
-            final ObjDExprDot dot = (ObjDExprDot) par.getParent();
+           final ObjDExprDot dot = (ObjDExprDot) par.getParent();
             if(dot.getExprList().get(0) == par) return Option.none();
             return Option.<Dot>some(new Dot() {
                 @Override
@@ -215,6 +216,13 @@ public class ObjDUtil {
         } else {
             return Option.none();
         }
+    }
+
+    private static PsiElement removeIndex(PsiElement parent) {
+        while(parent.getParent() instanceof ObjDExprIndex) {
+            parent = parent.getParent();
+        }
+        return parent;
     }
 
     public static List<ObjDClassGeneric> getDeclaredGenerics(PsiElement element) {
