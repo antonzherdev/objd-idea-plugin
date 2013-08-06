@@ -4,6 +4,7 @@ import com.antonzherdev.chain.*;
 import com.antonzherdev.objd.Dot;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
+import com.antonzherdev.objd.tp.PsiRef;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
@@ -20,6 +21,7 @@ import static com.antonzherdev.chain.Chain.chain;
 import static com.antonzherdev.chain.Chain.unionChain;
 
 public class CallReference extends PsiReferenceBase<ObjDCallName> {
+
     public CallReference(@NotNull ObjDCallName element, TextRange textRange) {
         super(element, textRange);
     }
@@ -29,15 +31,17 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     @Override
     public PsiElement resolve() {
         return getRefsChain(getElement())
-                .find(new B<PsiNamedElement>() {
+                .find(new B<PsiRef>() {
                     @Override
-                    public Boolean f(PsiNamedElement className) {
-                        return className.getName().equals(getElement().getName());
+                    public Boolean f(PsiRef x) {
+                        return x.getName().equals(getElement().getName());
                     }
-                }).getOrNull();
+                })
+                .map(PsiRef.ELEMENT_F)
+                .getOrNull();
     }
 
-    public static IChain<PsiNamedElement> getRefsChain(PsiElement element) {
+    public static IChain<PsiRef> getRefsChain(PsiElement element) {
         Option<Dot> dot = ObjDUtil.getDot(element);
         if(dot.isDefined()) {
             return dot.get().getLeft().getTp().getRefsChain();
@@ -69,7 +73,8 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                                 return ObjDUtil.classFields(x);
                             }
                         }).getOrElse(Chain.<PsiNamedElement>empty()))
-                .append(vars(element));
+                .append(vars(element))
+                .map(PsiRef.APPLY);
     }
 
     private static List<PsiNamedElement> vars(PsiElement element) {

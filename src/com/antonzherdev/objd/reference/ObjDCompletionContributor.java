@@ -4,6 +4,7 @@ import com.antonzherdev.chain.P;
 import com.antonzherdev.objd.ObjDLanguage;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
+import com.antonzherdev.objd.tp.PsiRef;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
@@ -56,9 +57,9 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                 resultSet.addElement(create("false"));
                                 resultSet.addElement(create("self"));
                             }
-                            CallReference.getRefsChain(parent).foreach(new P<PsiNamedElement>() {
+                            CallReference.getRefsChain(parent).foreach(new P<PsiRef>() {
                                 @Override
-                                public void p(PsiNamedElement x) {
+                                public void p(PsiRef x) {
                                     resultSet.addElement(create(x.getName()));
                                 }
                             });

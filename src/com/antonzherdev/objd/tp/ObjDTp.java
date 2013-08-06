@@ -22,9 +22,15 @@ public abstract class ObjDTp {
 
     public static ObjDTp getTpForExpression(ObjDExpr expr) {
         if(expr instanceof ObjDExprCall) {
-            PsiElement ref = ((ObjDExprCall) expr).getCallName().getReference().resolve();
+            ObjDExprCall call = (ObjDExprCall) expr;
+            PsiElement ref = call.getCallName().getReference().resolve();
             if(ref instanceof ObjDClassName) {
-                return new Object((ObjDClassStatement) ref.getParent());
+                ObjDExprCallParams pars = call.getExprCallParams();
+                if((pars == null || pars.getExprCallParamList().isEmpty()) && !call.getCallName().getName().equals("new")) {
+                    return new Object((ObjDClassStatement) ref.getParent());
+                } else {
+                    return new Class((ObjDClassStatement) ref.getParent());
+                }
             } else if (ref instanceof ObjDDefName) {
                 return getTpForDef(ref.getParent());
             } else {
@@ -37,6 +43,9 @@ public abstract class ObjDTp {
                     return new Class(x);
                 }
             }).getOrElse(NO_SELF);
+        } else if(expr instanceof ObjDExprDot) {
+            List<ObjDExpr> exprList = ((ObjDExprDot) expr).getExprList();
+            return exprList.get(exprList.size() - 1).getTp();
         }
 
         return new Unknown("Unknown class " + expr.getClass().getName());
@@ -120,7 +129,7 @@ public abstract class ObjDTp {
         }).getOrElse(new Unknown("No " + name));
     }
 
-    public abstract IChain<PsiNamedElement> getRefsChain();
+    public abstract IChain<PsiRef> getRefsChain();
 
     public boolean isDefined() {
         return true;
@@ -134,7 +143,7 @@ public abstract class ObjDTp {
         }
 
         @Override
-        public IChain<PsiNamedElement> getRefsChain() {
+        public IChain<PsiRef> getRefsChain() {
             return chain();
         }
 
@@ -152,16 +161,16 @@ public abstract class ObjDTp {
         }
 
         @Override
-        public IChain<PsiNamedElement> getRefsChain() {
+        public IChain<PsiRef> getRefsChain() {
             if(classStatement.getClassBody() == null) return empty();
             return
-                    Chain.<PsiNamedElement>chain().append(
+                    Chain.<PsiRef>chain().append(
                             chain(classStatement.getClassBody().getDefStatementList()).filter(new B<ObjDDefStatement>() {
                                 @Override
                                 public Boolean f(ObjDDefStatement x) {
                                     return x.isStatic();
                                 }
-                            }).map(DEF_NAME)
+                            }).map(DEF_NAME).map(PsiRef.APPLY)
                     ).append(
                             chain(classStatement.getClassBody().getFieldStatementList()).filter(new B<ObjDFieldStatement>() {
                                 @Override
@@ -173,14 +182,14 @@ public abstract class ObjDTp {
                                 public PsiNamedElement f(ObjDFieldStatement x) {
                                     return x.getDefName();
                                 }
-                            })
+                            }).map(PsiRef.APPLY)
                     ).append(
                             chain(classStatement.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, PsiNamedElement>() {
                                 @Override
                                 public PsiNamedElement f(ObjDEnumItem x) {
                                     return x.getDefName();
                                 }
-                            })
+                            }).map(PsiRef.APPLY)
                     ).append(classStatement.isEnum()
                             ?
                             chain(ObjDUtil.findKernelClass(classStatement.getProject(), "ODEnum")).flatMap(new F<ObjDClassStatement,List<ObjDDefStatement>>() {
@@ -193,8 +202,8 @@ public abstract class ObjDTp {
                                 public Boolean f(ObjDDefStatement x) {
                                     return x.isStatic();
                                 }
-                            }).map(DEF_NAME)
-                            : null);
+                            }).map(DEF_NAME).map(PsiRef.APPLY)
+                            : chain(new PsiRef(classStatement.getClassName(), "new")));
         }
     }
 
@@ -206,8 +215,8 @@ public abstract class ObjDTp {
         }
 
         @Override
-        public IChain<PsiNamedElement> getRefsChain() {
-            return ObjDUtil.classFields(classStatement);
+        public IChain<PsiRef> getRefsChain() {
+            return ObjDUtil.classFields(classStatement).map(PsiRef.APPLY);
         }
     }
 
@@ -219,7 +228,7 @@ public abstract class ObjDTp {
         }
 
         @Override
-        public IChain<PsiNamedElement> getRefsChain() {
+        public IChain<PsiRef> getRefsChain() {
             return empty();
         }
 
