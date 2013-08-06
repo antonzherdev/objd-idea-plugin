@@ -54,7 +54,7 @@ private private_mod ::= W_PRIVATE {extends = mod}
 
 def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? SET? expr_?) {methods = [isStatic]}
 private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET)
-def_parameter ::= (def_name? COLON data_type (SET expr_)?)
+def_parameter ::= ((def_name | W_SELF)? COLON data_type (SET expr_)?)
 
 data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self)
 data_type_self ::= W_SELF

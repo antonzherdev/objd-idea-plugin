@@ -977,11 +977,9 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // def_name? COLON data_type (SET expr_)?
+  // (def_name | W_SELF)? COLON data_type (SET expr_)?
   public static boolean def_parameter(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "def_parameter")) return false;
-    if (!nextTokenIs(builder_, COLON) && !nextTokenIs(builder_, IDENT)
-        && replaceVariants(builder_, 2, "<def parameter>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<def parameter>");
@@ -999,11 +997,27 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // def_name?
+  // (def_name | W_SELF)?
   private static boolean def_parameter_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "def_parameter_0")) return false;
-    def_name(builder_, level_ + 1);
+    def_parameter_0_0(builder_, level_ + 1);
     return true;
+  }
+
+  // def_name | W_SELF
+  private static boolean def_parameter_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "def_parameter_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = def_name(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, W_SELF);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   // (SET expr_)?
