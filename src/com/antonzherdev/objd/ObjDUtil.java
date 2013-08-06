@@ -119,6 +119,15 @@ public class ObjDUtil {
         });
     }
 
+    public static IChain<ObjDFieldStatement> getValsInFile(ObjDFile objDFile) {
+        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.FIELD_STATEMENT))).map(new F<ASTNode,ObjDFieldStatement>() {
+            @Override
+            public ObjDFieldStatement f(ASTNode astNode) {
+                return astNode.getPsi(ObjDFieldStatement.class);
+            }
+        });
+    }
+
     public static Option<ObjDClassStatement> getClass(PsiElement element) {
         while(element != null) {
             if(element instanceof ObjDClassStatement) return Option.some((ObjDClassStatement)element);

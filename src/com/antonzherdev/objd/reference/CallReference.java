@@ -50,16 +50,20 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                 .flatMap(new F<ObjDFile, Iterable<PsiNamedElement>>() {
                     @Override
                     public Iterable<PsiNamedElement> f(ObjDFile f) {
-                        return unionChain(
+                        return
                                 ObjDUtil.getClassesInFile(f).map(new F<ObjDClassStatement, PsiNamedElement>() {
                                     @Override
                                     public PsiNamedElement f(ObjDClassStatement x) {
                                         return x.getClassName();
                                     }
-                                }),
-                                ObjDUtil.getDefsInFile(f).map(new F<ObjDDefStatement, PsiNamedElement>() {
+                                }).append(ObjDUtil.getDefsInFile(f).map(new F<ObjDDefStatement, PsiNamedElement>() {
                                     @Override
                                     public PsiNamedElement f(ObjDDefStatement x) {
+                                        return x.getDefName();
+                                    }
+                                })).append(ObjDUtil.getValsInFile(f).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+                                    @Override
+                                    public PsiNamedElement f(ObjDFieldStatement x) {
                                         return x.getDefName();
                                     }
                                 }));
@@ -101,7 +105,6 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                     return x.getDefName();
                 }
             }).addAllTo(items);
-            return;
         }
         else if(element instanceof ObjDFieldStatement) return;
 
