@@ -18,9 +18,9 @@ public class ObjDClassExtendsImpl extends ASTWrapperPsiElement implements ObjDCl
   }
 
   @Override
-  @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
+  @Nullable
+  public ObjDDataTypeGenerics getDataTypeGenerics() {
+    return findChildByClass(ObjDDataTypeGenerics.class);
   }
 
   @Override

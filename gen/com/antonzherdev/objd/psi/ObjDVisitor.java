@@ -43,8 +43,36 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDataTypeCollection(@NotNull ObjDDataTypeCollection o) {
+    visitDataType(o);
+  }
+
+  public void visitDataTypeGenerics(@NotNull ObjDDataTypeGenerics o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDataTypeLambda(@NotNull ObjDDataTypeLambda o) {
+    visitDataType(o);
+  }
+
+  public void visitDataTypeMap(@NotNull ObjDDataTypeMap o) {
+    visitDataType(o);
+  }
+
+  public void visitDataTypeOption(@NotNull ObjDDataTypeOption o) {
+    visitDataType(o);
+  }
+
   public void visitDataTypeRef(@NotNull ObjDDataTypeRef o) {
     visitNamedElement(o);
+  }
+
+  public void visitDataTypeSimple(@NotNull ObjDDataTypeSimple o) {
+    visitDataType(o);
+  }
+
+  public void visitDataTypeTuple(@NotNull ObjDDataTypeTuple o) {
+    visitDataType(o);
   }
 
   public void visitDefName(@NotNull ObjDDefName o) {

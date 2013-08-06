@@ -1,9 +1,6 @@
 package com.antonzherdev.objd;
 
-import com.antonzherdev.chain.B;
-import com.antonzherdev.chain.F;
-import com.antonzherdev.chain.IChain;
-import com.antonzherdev.chain.Option;
+import com.antonzherdev.chain.*;
 import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.tp.ObjDTp;
 import com.intellij.lang.ASTNode;
@@ -19,7 +16,6 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.indexing.FileBasedIndex;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,6 +33,15 @@ public class ObjDUtil {
 
     public static IChain<ObjDFile> getAllFiles(final Project project) {
         return getAllVirtualFiles(project).map(toObjDFileF(project));
+    }
+
+    public static Option<ObjDClassStatement> findKernelClass(Project project, final String name) {
+        return getClassesInFile(findFile(project, name).get()).find(new B<ObjDClassStatement>() {
+            @Override
+            public Boolean f(ObjDClassStatement x) {
+                return x.getClassName().getName().equals(name);
+            }
+        });
     }
 
     private static F<VirtualFile, ObjDFile> toObjDFileF(final Project project) {
@@ -64,18 +69,27 @@ public class ObjDUtil {
                     }
                 })
                 .prepend((ObjDFile)file)
-                .flatMap(new F<ObjDFile, List<ASTNode>>() {
+                .flatMap(new F<ObjDFile,IChain<ObjDClassStatement>>() {
                     @Override
-                    public List<ASTNode> f(ObjDFile objDFile) {
-                        return Arrays.asList(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.CLASS_STATEMENT)));
+                    public IChain<ObjDClassStatement> f(ObjDFile objDFile) {
+                        return getClassesInFile(objDFile);
                     }
                 })
-                .map(new F<ASTNode,ObjDClassName>() {
+                .map(new F<ObjDClassStatement,ObjDClassName>() {
                     @Override
-                    public ObjDClassName f(ASTNode astNode) {
-                        return astNode.getPsi(ObjDClassStatement.class).getClassName();
+                    public ObjDClassName f(ObjDClassStatement x) {
+                        return x.getClassName();
                     }
                 });
+    }
+
+    private static IChain<ObjDClassStatement> getClassesInFile(ObjDFile objDFile) {
+        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.CLASS_STATEMENT))).map(new F<ASTNode,ObjDClassStatement>() {
+            @Override
+            public ObjDClassStatement f(ASTNode astNode) {
+                return astNode.getPsi(ObjDClassStatement.class);
+            }
+        });
     }
 
     public static Option<ObjDClassStatement> getClass(PsiElement element) {

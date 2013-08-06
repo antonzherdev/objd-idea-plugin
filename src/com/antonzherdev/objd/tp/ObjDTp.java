@@ -6,6 +6,8 @@ import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 
+import java.util.Arrays;
+
 import static com.antonzherdev.chain.Chain.chain;
 import static com.antonzherdev.chain.Chain.empty;
 import static com.antonzherdev.chain.Chain.unionChain;
@@ -79,20 +81,39 @@ public abstract class ObjDTp {
     }
 
     private static ObjDTp getTpForDataType(ObjDDataType dataType) {
-        PsiElement ref = dataType.getDataTypeRef().getReference().resolve();
-        if(ref == null) return new Unknown("No reference for data type " + dataType);
-        if(ref instanceof ObjDClassName) {
-            PsiElement par = ref.getParent();
-            if(par instanceof ObjDClassStatement) {
-                return new Class((ObjDClassStatement) par);
-            } else if(par instanceof ObjDClassGeneric) {
-                return new Generic((ObjDClassGeneric) par);
+        if(dataType instanceof ObjDDataTypeSimple) {
+            PsiElement ref = ((ObjDDataTypeSimple) dataType).getDataTypeRef().getReference().resolve();
+            if(ref == null) return new Unknown("No reference for data type " + dataType);
+            if(ref instanceof ObjDClassName) {
+                PsiElement par = ref.getParent();
+                if(par instanceof ObjDClassStatement) {
+                    return new Class((ObjDClassStatement) par);
+                } else if(par instanceof ObjDClassGeneric) {
+                    return new Generic((ObjDClassGeneric) par);
+                } else {
+                    return new Unknown("Unknown class type " + par.getClass());
+                }
             } else {
-                return new Unknown("Unknown class type " + par.getClass());
+                return new Unknown("Unknown data type class ref " + ref.getClass());
             }
-        } else {
-            return new Unknown("Unknown data type class ref " + ref.getClass());
+        } else if(dataType instanceof ObjDDataTypeOption) {
+            return getKernelClassTp(dataType, "ODOption");
+        } else if(dataType instanceof ObjDDataTypeCollection) {
+            return getKernelClassTp(dataType, "ODArray");
+        } else if(dataType instanceof ObjDDataTypeMap) {
+            return getKernelClassTp(dataType, "ODMap");
+        }else {
+            return new Unknown("Not simple type " + dataType.getClass());
         }
+    }
+
+    private static ObjDTp getKernelClassTp(ObjDDataType dataType, String name) {
+        return ObjDUtil.findKernelClass(dataType.getProject(), name).map(new F<ObjDClassStatement,ObjDTp>() {
+            @Override
+            public ObjDTp f(ObjDClassStatement x) {
+                return new Class(x);
+            }
+        }).getOrElse(new Unknown("No " + name));
     }
 
     public abstract IChain<PsiNamedElement> getRefsChain();
@@ -128,6 +149,7 @@ public abstract class ObjDTp {
 
         @Override
         public IChain<PsiNamedElement> getRefsChain() {
+            if(classStatement.getClassBody() == null) return empty();
             return unionChain(
                     chain(classStatement.getClassBody().getDefStatementList()).filter(new B<ObjDDefStatement>() {
                         @Override

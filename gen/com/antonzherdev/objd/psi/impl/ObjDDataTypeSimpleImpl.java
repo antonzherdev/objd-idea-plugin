@@ -8,17 +8,28 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDDataTypeImpl extends ASTWrapperPsiElement implements ObjDDataType {
+public class ObjDDataTypeSimpleImpl extends ObjDDataTypeImpl implements ObjDDataTypeSimple {
 
-  public ObjDDataTypeImpl(ASTNode node) {
+  public ObjDDataTypeSimpleImpl(ASTNode node) {
     super(node);
   }
 
+  @Override
+  @Nullable
+  public ObjDDataTypeGenerics getDataTypeGenerics() {
+    return findChildByClass(ObjDDataTypeGenerics.class);
+  }
+
+  @Override
+  @Nullable
+  public ObjDDataTypeRef getDataTypeRef() {
+    return findChildByClass(ObjDDataTypeRef.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataType(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeSimple(this);
     else super.accept(visitor);
   }
 

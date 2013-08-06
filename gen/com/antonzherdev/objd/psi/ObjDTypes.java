@@ -17,7 +17,14 @@ public interface ObjDTypes {
   IElementType CLASS_NAME = new ObjDElementType("CLASS_NAME");
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
   IElementType DATA_TYPE = new ObjDElementType("DATA_TYPE");
+  IElementType DATA_TYPE_COLLECTION = new ObjDElementType("DATA_TYPE_COLLECTION");
+  IElementType DATA_TYPE_GENERICS = new ObjDElementType("DATA_TYPE_GENERICS");
+  IElementType DATA_TYPE_LAMBDA = new ObjDElementType("DATA_TYPE_LAMBDA");
+  IElementType DATA_TYPE_MAP = new ObjDElementType("DATA_TYPE_MAP");
+  IElementType DATA_TYPE_OPTION = new ObjDElementType("DATA_TYPE_OPTION");
   IElementType DATA_TYPE_REF = new ObjDElementType("DATA_TYPE_REF");
+  IElementType DATA_TYPE_SIMPLE = new ObjDElementType("DATA_TYPE_SIMPLE");
+  IElementType DATA_TYPE_TUPLE = new ObjDElementType("DATA_TYPE_TUPLE");
   IElementType DEF_NAME = new ObjDElementType("DEF_NAME");
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
@@ -140,8 +147,29 @@ public interface ObjDTypes {
       else if (type == DATA_TYPE) {
         return new ObjDDataTypeImpl(node);
       }
+      else if (type == DATA_TYPE_COLLECTION) {
+        return new ObjDDataTypeCollectionImpl(node);
+      }
+      else if (type == DATA_TYPE_GENERICS) {
+        return new ObjDDataTypeGenericsImpl(node);
+      }
+      else if (type == DATA_TYPE_LAMBDA) {
+        return new ObjDDataTypeLambdaImpl(node);
+      }
+      else if (type == DATA_TYPE_MAP) {
+        return new ObjDDataTypeMapImpl(node);
+      }
+      else if (type == DATA_TYPE_OPTION) {
+        return new ObjDDataTypeOptionImpl(node);
+      }
       else if (type == DATA_TYPE_REF) {
         return new ObjDDataTypeRefImpl(node);
+      }
+      else if (type == DATA_TYPE_SIMPLE) {
+        return new ObjDDataTypeSimpleImpl(node);
+      }
+      else if (type == DATA_TYPE_TUPLE) {
+        return new ObjDDataTypeTupleImpl(node);
       }
       else if (type == DEF_NAME) {
         return new ObjDDefNameImpl(node);

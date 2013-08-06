@@ -53,13 +53,16 @@ def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON da
 private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET)
 def_parameter ::= (def_name? COLON data_type (SET expr_)?)
 
-data_type ::= (data_type_simple| data_type_collection | data_type_tuple) WHAT? (ARROW data_type)?
-private data_type_simple ::= ((data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? (ARROW data_type)?)
+data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple)
+data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? {extends = data_type}
 data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
-private data_type_generics ::= LESS data_type (COMMA data_type)* MORE
-private data_type_collection ::= OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET
-private data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
+data_type_lambda ::= (data_type_option | data_type_collection | data_type_tuple | data_type_simple) ARROW data_type {extends = data_type}
+data_type_collection ::= OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET {extends = data_type}
+data_type_map ::= OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type}
+data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {extends = data_type}
+data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple) WHAT {extends = data_type}
+data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 
 expr_ ::= (expr_val | expr_set) {extends = expr_ methods = [getTp]}
 term_ ::= expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self

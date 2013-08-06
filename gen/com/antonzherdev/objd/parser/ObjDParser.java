@@ -50,8 +50,29 @@ public class ObjDParser implements PsiParser {
     else if (root_ == DATA_TYPE) {
       result_ = data_type(builder_, level_ + 1);
     }
+    else if (root_ == DATA_TYPE_COLLECTION) {
+      result_ = data_type_collection(builder_, level_ + 1);
+    }
+    else if (root_ == DATA_TYPE_GENERICS) {
+      result_ = data_type_generics(builder_, level_ + 1);
+    }
+    else if (root_ == DATA_TYPE_LAMBDA) {
+      result_ = data_type_lambda(builder_, level_ + 1);
+    }
+    else if (root_ == DATA_TYPE_MAP) {
+      result_ = data_type_map(builder_, level_ + 1);
+    }
+    else if (root_ == DATA_TYPE_OPTION) {
+      result_ = data_type_option(builder_, level_ + 1);
+    }
     else if (root_ == DATA_TYPE_REF) {
       result_ = data_type_ref(builder_, level_ + 1);
+    }
+    else if (root_ == DATA_TYPE_SIMPLE) {
+      result_ = data_type_simple(builder_, level_ + 1);
+    }
+    else if (root_ == DATA_TYPE_TUPLE) {
+      result_ = data_type_tuple(builder_, level_ + 1);
     }
     else if (root_ == DEF_NAME) {
       result_ = def_name(builder_, level_ + 1);
@@ -152,6 +173,8 @@ public class ObjDParser implements PsiParser {
   }
 
   private static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    TokenSet.create(DATA_TYPE, DATA_TYPE_COLLECTION, DATA_TYPE_LAMBDA, DATA_TYPE_MAP,
+      DATA_TYPE_OPTION, DATA_TYPE_SIMPLE, DATA_TYPE_TUPLE),
     TokenSet.create(EXPR, EXPR_ARR, EXPR_BOOL, EXPR_BRACES,
       EXPR_BRACKETS, EXPR_CALL, EXPR_COMP, EXPR_DOT,
       EXPR_IF, EXPR_INDEX, EXPR_LAMBDA, EXPR_MD,
@@ -561,16 +584,24 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (data_type_simple| data_type_collection | data_type_tuple) WHAT? (ARROW data_type)?
+  // data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple
   public static boolean data_type(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type")) return false;
     boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type>");
-    result_ = data_type_0(builder_, level_ + 1);
-    result_ = result_ && data_type_1(builder_, level_ + 1);
-    result_ = result_ && data_type_2(builder_, level_ + 1);
-    if (result_) {
+    result_ = data_type_lambda(builder_, level_ + 1);
+    if (!result_) result_ = data_type_option(builder_, level_ + 1);
+    if (!result_) result_ = data_type_collection(builder_, level_ + 1);
+    if (!result_) result_ = data_type_map(builder_, level_ + 1);
+    if (!result_) result_ = data_type_tuple(builder_, level_ + 1);
+    if (!result_) result_ = data_type_simple(builder_, level_ + 1);
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), DATA_TYPE)) {
+      marker_.drop();
+    }
+    else if (result_) {
       marker_.done(DATA_TYPE);
     }
     else {
@@ -580,56 +611,9 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // data_type_simple| data_type_collection | data_type_tuple
-  private static boolean data_type_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = data_type_simple(builder_, level_ + 1);
-    if (!result_) result_ = data_type_collection(builder_, level_ + 1);
-    if (!result_) result_ = data_type_tuple(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // WHAT?
-  private static boolean data_type_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_1")) return false;
-    consumeToken(builder_, WHAT);
-    return true;
-  }
-
-  // (ARROW data_type)?
-  private static boolean data_type_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_2")) return false;
-    data_type_2_0(builder_, level_ + 1);
-    return true;
-  }
-
-  // ARROW data_type
-  private static boolean data_type_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, ARROW);
-    result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
   /* ********************************************************** */
   // OPEN_SQUARE_BRACKET data_type (COLON data_type)? CLOSE_SQUARE_BRACKET
-  static boolean data_type_collection(PsiBuilder builder_, int level_) {
+  public static boolean data_type_collection(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_collection")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
     boolean result_ = false;
@@ -638,11 +622,11 @@ public class ObjDParser implements PsiParser {
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && data_type_collection_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(DATA_TYPE_COLLECTION);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
     return result_;
   }
@@ -672,7 +656,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // LESS data_type (COMMA data_type)* MORE
-  static boolean data_type_generics(PsiBuilder builder_, int level_) {
+  public static boolean data_type_generics(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_generics")) return false;
     if (!nextTokenIs(builder_, LESS)) return false;
     boolean result_ = false;
@@ -681,11 +665,11 @@ public class ObjDParser implements PsiParser {
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && data_type_generics_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, MORE);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(DATA_TYPE_GENERICS);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
     return result_;
   }
@@ -723,6 +707,101 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // (data_type_option | data_type_collection | data_type_tuple | data_type_simple) ARROW data_type
+  public static boolean data_type_lambda(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_lambda")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type lambda>");
+    result_ = data_type_lambda_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, ARROW);
+    result_ = result_ && data_type(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(DATA_TYPE_LAMBDA);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // data_type_option | data_type_collection | data_type_tuple | data_type_simple
+  private static boolean data_type_lambda_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_lambda_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = data_type_option(builder_, level_ + 1);
+    if (!result_) result_ = data_type_collection(builder_, level_ + 1);
+    if (!result_) result_ = data_type_tuple(builder_, level_ + 1);
+    if (!result_) result_ = data_type_simple(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET
+  public static boolean data_type_map(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_map")) return false;
+    if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
+    result_ = result_ && data_type(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, COLON);
+    result_ = result_ && data_type(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
+    if (result_) {
+      marker_.done(DATA_TYPE_MAP);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // (data_type_simple| data_type_collection | data_type_tuple) WHAT
+  public static boolean data_type_option(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_option")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type option>");
+    result_ = data_type_option_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, WHAT);
+    if (result_) {
+      marker_.done(DATA_TYPE_OPTION);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // data_type_simple| data_type_collection | data_type_tuple
+  private static boolean data_type_option_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_option_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = data_type_simple(builder_, level_ + 1);
+    if (!result_) result_ = data_type_collection(builder_, level_ + 1);
+    if (!result_) result_ = data_type_tuple(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // IDENT
   public static boolean data_type_ref(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_ref")) return false;
@@ -740,20 +819,26 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? (ARROW data_type)?
-  static boolean data_type_simple(PsiBuilder builder_, int level_) {
+  // (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics?
+  public static boolean data_type_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple")) return false;
     boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type simple>");
     result_ = data_type_simple_0(builder_, level_ + 1);
     result_ = result_ && data_type_simple_1(builder_, level_ + 1);
-    result_ = result_ && data_type_simple_2(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), DATA_TYPE_SIMPLE)) {
       marker_.drop();
     }
+    else if (result_) {
+      marker_.done(DATA_TYPE_SIMPLE);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -785,32 +870,9 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // (ARROW data_type)?
-  private static boolean data_type_simple_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_simple_2")) return false;
-    data_type_simple_2_0(builder_, level_ + 1);
-    return true;
-  }
-
-  // ARROW data_type
-  private static boolean data_type_simple_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_simple_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, ARROW);
-    result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
   /* ********************************************************** */
   // OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET
-  static boolean data_type_tuple(PsiBuilder builder_, int level_) {
+  public static boolean data_type_tuple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_tuple")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
     boolean result_ = false;
@@ -819,11 +881,11 @@ public class ObjDParser implements PsiParser {
     result_ = result_ && data_type_tuple_1(builder_, level_ + 1);
     result_ = result_ && data_type_tuple_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(DATA_TYPE_TUPLE);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
     return result_;
   }
