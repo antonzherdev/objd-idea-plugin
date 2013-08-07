@@ -81,7 +81,15 @@ public abstract class ObjDTp {
                     return ((ObjDFieldStatement) def).getExpr().getTp();
                 }
             };
-        } else {
+        } else if(def instanceof ObjDClassConstructorField) {
+            tp = Option.opt(((ObjDClassConstructorField) def).getDataType());
+            d = new F0<ObjDTp>() {
+                @Override
+                public ObjDTp f() {
+                    return ((ObjDClassConstructorField) def).getExpr().getTp();
+                }
+            };
+        }   else {
             return new Unknown("Unknown def class " + def.getClass().getName());
         }
 
