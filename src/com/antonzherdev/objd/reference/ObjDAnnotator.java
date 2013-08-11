@@ -24,7 +24,7 @@ public class ObjDAnnotator  implements Annotator {
             }
         } else if(element instanceof ObjDDataTypeRef) {
             PsiReference reference = element.getReference();
-            if(reference != null && reference.resolve() == null) {
+            if(!((ObjDDataTypeRef) element).getName().equals("_") && reference != null && reference.resolve() == null) {
                 addAnotation("Unresolved data type", element, holder);
             }
         }
