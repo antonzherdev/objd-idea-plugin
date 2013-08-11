@@ -40,6 +40,7 @@ public interface ObjDTypes {
   IElementType EXPR_CALL_PARAM = new ObjDElementType("EXPR_CALL_PARAM");
   IElementType EXPR_CALL_PARAMS = new ObjDElementType("EXPR_CALL_PARAMS");
   IElementType EXPR_COMP = new ObjDElementType("EXPR_COMP");
+  IElementType EXPR_DO = new ObjDElementType("EXPR_DO");
   IElementType EXPR_DOT = new ObjDElementType("EXPR_DOT");
   IElementType EXPR_IF = new ObjDElementType("EXPR_IF");
   IElementType EXPR_INDEX = new ObjDElementType("EXPR_INDEX");
@@ -48,10 +49,12 @@ public interface ObjDTypes {
   IElementType EXPR_MINUS = new ObjDElementType("EXPR_MINUS");
   IElementType EXPR_NOT = new ObjDElementType("EXPR_NOT");
   IElementType EXPR_PM = new ObjDElementType("EXPR_PM");
+  IElementType EXPR_RETURN = new ObjDElementType("EXPR_RETURN");
   IElementType EXPR_SELF = new ObjDElementType("EXPR_SELF");
   IElementType EXPR_SET = new ObjDElementType("EXPR_SET");
   IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
+  IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
@@ -102,8 +105,10 @@ public interface ObjDTypes {
   IElementType TP_UINT = new ObjDTokenType("TP_UINT");
   IElementType TP_VOID = new ObjDTokenType("TP_VOID");
   IElementType WHAT = new ObjDTokenType("WHAT");
+  IElementType W_BREAK = new ObjDTokenType("W_BREAK");
   IElementType W_CLASS = new ObjDTokenType("W_CLASS");
   IElementType W_DEF = new ObjDTokenType("W_DEF");
+  IElementType W_DO = new ObjDTokenType("W_DO");
   IElementType W_ELSE = new ObjDTokenType("W_ELSE");
   IElementType W_ENUM = new ObjDTokenType("W_ENUM");
   IElementType W_EXTENDS = new ObjDTokenType("W_EXTENDS");
@@ -112,6 +117,7 @@ public interface ObjDTypes {
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
+  IElementType W_RETURN = new ObjDTokenType("W_RETURN");
   IElementType W_SELF = new ObjDTokenType("W_SELF");
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
   IElementType W_STRUCT = new ObjDTokenType("W_STRUCT");
@@ -122,6 +128,7 @@ public interface ObjDTypes {
   IElementType W_VAL = new ObjDTokenType("W_VAL");
   IElementType W_VAR = new ObjDTokenType("W_VAR");
   IElementType W_WEAK = new ObjDTokenType("W_WEAK");
+  IElementType W_WHILE = new ObjDTokenType("W_WHILE");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -222,6 +229,9 @@ public interface ObjDTypes {
       else if (type == EXPR_COMP) {
         return new ObjDExprCompImpl(node);
       }
+      else if (type == EXPR_DO) {
+        return new ObjDExprDoImpl(node);
+      }
       else if (type == EXPR_DOT) {
         return new ObjDExprDotImpl(node);
       }
@@ -246,6 +256,9 @@ public interface ObjDTypes {
       else if (type == EXPR_PM) {
         return new ObjDExprPmImpl(node);
       }
+      else if (type == EXPR_RETURN) {
+        return new ObjDExprReturnImpl(node);
+      }
       else if (type == EXPR_SELF) {
         return new ObjDExprSelfImpl(node);
       }
@@ -257,6 +270,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_VAL) {
         return new ObjDExprValImpl(node);
+      }
+      else if (type == EXPR_WHILE) {
+        return new ObjDExprWhileImpl(node);
       }
       else if (type == FIELD_STATEMENT) {
         return new ObjDFieldStatementImpl(node);

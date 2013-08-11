@@ -119,6 +119,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_COMP) {
       result_ = expr_comp(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_DO) {
+      result_ = expr_do(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_DOT) {
       result_ = expr_dot(builder_, level_ + 1);
     }
@@ -143,6 +146,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_PM) {
       result_ = expr_pm(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_RETURN) {
+      result_ = expr_return(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_SELF) {
       result_ = expr_self(builder_, level_ + 1);
     }
@@ -154,6 +160,9 @@ public class ObjDParser implements PsiParser {
     }
     else if (root_ == EXPR_VAL) {
       result_ = expr_val(builder_, level_ + 1);
+    }
+    else if (root_ == EXPR_WHILE) {
+      result_ = expr_while(builder_, level_ + 1);
     }
     else if (root_ == FIELD_STATEMENT) {
       result_ = field_statement(builder_, level_ + 1);
@@ -194,10 +203,11 @@ public class ObjDParser implements PsiParser {
     TokenSet.create(DATA_TYPE, DATA_TYPE_COLLECTION, DATA_TYPE_LAMBDA, DATA_TYPE_MAP,
       DATA_TYPE_OPTION, DATA_TYPE_SIMPLE, DATA_TYPE_TUPLE),
     TokenSet.create(EXPR, EXPR_ARR, EXPR_BOOL, EXPR_BRACES,
-      EXPR_BRACKETS, EXPR_CALL, EXPR_COMP, EXPR_DOT,
-      EXPR_IF, EXPR_INDEX, EXPR_LAMBDA, EXPR_MD,
-      EXPR_MINUS, EXPR_NOT, EXPR_PM, EXPR_SELF,
-      EXPR_SET, EXPR_THROW, EXPR_VAL, TERM),
+      EXPR_BRACKETS, EXPR_CALL, EXPR_COMP, EXPR_DO,
+      EXPR_DOT, EXPR_IF, EXPR_INDEX, EXPR_LAMBDA,
+      EXPR_MD, EXPR_MINUS, EXPR_NOT, EXPR_PM,
+      EXPR_SELF, EXPR_SET, EXPR_THROW, EXPR_VAL,
+      EXPR_WHILE, TERM),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -1693,6 +1703,27 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET
+  public static boolean expr_do(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_do")) return false;
+    if (!nextTokenIs(builder_, W_DO)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_DO);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeTokens(builder_, 0, W_WHILE, OPEN_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    if (result_) {
+      marker_.done(EXPR_DO);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // expr_index (DOT expr_index)*
   public static boolean expr_dot(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_dot")) return false;
@@ -2024,6 +2055,24 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_RETURN expr_
+  public static boolean expr_return(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_return")) return false;
+    if (!nextTokenIs(builder_, W_RETURN)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_RETURN);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(EXPR_RETURN);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // W_SELF
   public static boolean expr_self(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_self")) return false;
@@ -2213,6 +2262,26 @@ public class ObjDParser implements PsiParser {
     }
     else {
       marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_
+  public static boolean expr_while(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_while")) return false;
+    if (!nextTokenIs(builder_, W_WHILE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, W_WHILE, OPEN_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(EXPR_WHILE);
+    }
+    else {
+      marker_.rollbackTo();
     }
     return result_;
   }
@@ -2640,7 +2709,8 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self
+  // expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
+  //     expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self | expr_while | expr_do | W_BREAK | expr_return
   public static boolean term_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "term_")) return false;
     boolean result_ = false;
@@ -2663,6 +2733,10 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, INT);
     if (!result_) result_ = consumeToken(builder_, FLOAT);
     if (!result_) result_ = expr_self(builder_, level_ + 1);
+    if (!result_) result_ = expr_while(builder_, level_ + 1);
+    if (!result_) result_ = expr_do(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, W_BREAK);
+    if (!result_) result_ = expr_return(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), TERM)) {
       marker_.drop();

@@ -53,6 +53,10 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "weak" {return ObjDTypes.W_WEAK; }
     "self" {return ObjDTypes.W_SELF; }
     "throw" {return ObjDTypes.W_THROW; }
+    "while" {return ObjDTypes.W_WHILE; }
+    "do" {return ObjDTypes.W_DO; }
+    "break" {return ObjDTypes.W_BREAK; }
+    "return" {return ObjDTypes.W_RETURN; }
 
     "bool" {return ObjDTypes.TP_BOOL; }
     "float" {return ObjDTypes.TP_FLOAT; }

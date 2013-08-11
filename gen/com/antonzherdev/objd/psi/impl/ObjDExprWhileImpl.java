@@ -10,20 +10,20 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDTermImpl extends ObjDExprImpl implements ObjDTerm {
+public class ObjDExprWhileImpl extends ObjDExprImpl implements ObjDExprWhile {
 
-  public ObjDTermImpl(ASTNode node) {
+  public ObjDExprWhileImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public ObjDExprReturn getExprReturn() {
-    return findChildByClass(ObjDExprReturn.class);
+  @NotNull
+  public List<ObjDExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTerm(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprWhile(this);
     else super.accept(visitor);
   }
 

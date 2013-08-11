@@ -69,8 +69,12 @@ data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple |
 data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 
 expr_ ::= (expr_val | expr_set) {extends = expr_ methods = [getTp]}
-term_ ::= expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets | expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self
+term_ ::= expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
+    expr_minus | W_NIL | W_TRUE | W_FALSE | STRING | INT | FLOAT | expr_self | expr_while | expr_do | W_BREAK | expr_return
     {extends = expr_}
+expr_while ::= W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_}
+expr_do ::= W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET {extends = expr_}
+expr_return ::= W_RETURN expr_
 expr_self ::= W_SELF {extends = expr_}
 expr_throw ::= W_THROW expr_  {extends = expr_}
 expr_not ::= EXCLAMATION expr_  {extends = expr_}
