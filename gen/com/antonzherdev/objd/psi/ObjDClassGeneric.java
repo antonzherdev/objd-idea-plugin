@@ -10,4 +10,7 @@ public interface ObjDClassGeneric extends PsiElement {
   @NotNull
   ObjDClassName getClassName();
 
+  @Nullable
+  ObjDDataType getDataType();
+
 }

@@ -23,6 +23,12 @@ public class ObjDClassGenericImpl extends ASTWrapperPsiElement implements ObjDCl
     return findNotNullChildByClass(ObjDClassName.class);
   }
 
+  @Override
+  @Nullable
+  public ObjDDataType getDataType() {
+    return findChildByClass(ObjDDataType.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassGeneric(this);
     else super.accept(visitor);

@@ -29,7 +29,7 @@ class_statement ::= (class_type class_name class_generics? class_constructor_fie
 }
 class_type ::= (W_CLASS | W_TRAIT | W_STRUCT | W_ENUM)
 class_generics ::= LESS class_generic (COMMA class_generic)* MORE
-class_generic ::= class_name
+class_generic ::= class_name (W_EXTENDS data_type)?
 class_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                methods=[getName setName getNameIdentifier]}
 

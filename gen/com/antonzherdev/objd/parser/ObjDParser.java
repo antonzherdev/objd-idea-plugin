@@ -457,18 +457,42 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // class_name
+  // class_name (W_EXTENDS data_type)?
   public static boolean class_generic(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_generic")) return false;
     if (!nextTokenIs(builder_, IDENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = class_name(builder_, level_ + 1);
+    result_ = result_ && class_generic_1(builder_, level_ + 1);
     if (result_) {
       marker_.done(CLASS_GENERIC);
     }
     else {
       marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // (W_EXTENDS data_type)?
+  private static boolean class_generic_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_generic_1")) return false;
+    class_generic_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // W_EXTENDS data_type
+  private static boolean class_generic_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_generic_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_EXTENDS);
+    result_ = result_ && data_type(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
     }
     return result_;
   }
