@@ -2412,7 +2412,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_IMPORT (import_od_file | STRING | (LESS IDENT MORE))
+  // W_IMPORT (import_od_file | STRING | (LESS IDENT (DIV IDENT)* DOT IDENT MORE))
   public static boolean import_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement")) return false;
     if (!nextTokenIs(builder_, W_IMPORT)) return false;
@@ -2429,7 +2429,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // import_od_file | STRING | (LESS IDENT MORE)
+  // import_od_file | STRING | (LESS IDENT (DIV IDENT)* DOT IDENT MORE)
   private static boolean import_statement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement_1")) return false;
     boolean result_ = false;
@@ -2446,12 +2446,45 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // LESS IDENT MORE
+  // LESS IDENT (DIV IDENT)* DOT IDENT MORE
   private static boolean import_statement_1_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement_1_2")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeTokens(builder_, 0, LESS, IDENT, MORE);
+    result_ = consumeTokens(builder_, 0, LESS, IDENT);
+    result_ = result_ && import_statement_1_2_2(builder_, level_ + 1);
+    result_ = result_ && consumeTokens(builder_, 0, DOT, IDENT, MORE);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // (DIV IDENT)*
+  private static boolean import_statement_1_2_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "import_statement_1_2_2")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!import_statement_1_2_2_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "import_statement_1_2_2");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // DIV IDENT
+  private static boolean import_statement_1_2_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "import_statement_1_2_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, DIV, IDENT);
     if (!result_) {
       marker_.rollbackTo();
     }
