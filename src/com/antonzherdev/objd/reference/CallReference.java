@@ -5,6 +5,7 @@ import com.antonzherdev.objd.Dot;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.tp.PsiRef;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
@@ -30,15 +31,19 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        return getRefsChain(getElement())
-                .find(new B<PsiRef>() {
-                    @Override
-                    public Boolean f(PsiRef x) {
-                        return x.getName().equals(getElement().getName());
-                    }
-                })
-                .map(PsiRef.ELEMENT_F)
-                .getOrNull();
+        try {
+            return getRefsChain(getElement())
+                    .find(new B<PsiRef>() {
+                        @Override
+                        public Boolean f(PsiRef x) {
+                            return x.getName().equals(getElement().getName());
+                        }
+                    })
+                    .map(PsiRef.ELEMENT_F)
+                    .getOrNull();
+        } catch (ProcessCanceledException e) {
+            return null;
+        }
     }
 
     public static IChain<PsiRef> getRefsChain(PsiElement element) {
