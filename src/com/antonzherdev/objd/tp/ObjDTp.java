@@ -103,7 +103,9 @@ public abstract class ObjDTp {
 
     private static ObjDTp getTpForDataType(ObjDDataType dataType) {
         if(dataType instanceof ObjDDataTypeSimple) {
-            PsiElement ref = ((ObjDDataTypeSimple) dataType).getDataTypeRef().getReference().resolve();
+            ObjDDataTypeRef dataTypeRef = ((ObjDDataTypeSimple) dataType).getDataTypeRef();
+            if(dataTypeRef == null) return new Unknown("No reference for data type " + dataType);
+            PsiElement ref = dataTypeRef.getReference().resolve();
             if(ref == null) return new Unknown("No reference for data type " + dataType);
             if(ref instanceof ObjDClassName) {
                 PsiElement par = ref.getParent();
