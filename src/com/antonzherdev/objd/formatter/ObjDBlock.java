@@ -31,7 +31,7 @@ public class ObjDBlock extends AbstractBlock {
         IElementType parentType = myNode.getElementType();
         for (ASTNode child = myNode.getFirstChildNode(); child != null; child = child.getTreeNext()) {
             IElementType childType = child.getElementType();
-            if(childType == TokenType.WHITE_SPACE) continue;
+            if(childType == TokenType.WHITE_SPACE || child.getChars().length() == 0) continue;
             Indent indent  = Indent.getNoneIndent();
             Wrap wrap = null;
             if (parentType == ObjDTypes.CLASS_BODY && childType == ObjDTypes.DEF_STATEMENT) {

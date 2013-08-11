@@ -15,7 +15,7 @@ public class ObjDFormatter implements FormattingModelBuilder {
     @Override
     public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
         return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(),
-                new ObjDBlock(element.getNode(), null, null, null, createSpaceBuilder(settings)), settings);
+                new ObjDBlock(element.getNode(), Indent.getNoneIndent(), null, null, createSpaceBuilder(settings)), settings);
     }
 
     @Nullable
