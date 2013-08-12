@@ -61,6 +61,7 @@ public interface ObjDTypes {
   IElementType INDEX_OP = new ObjDElementType("INDEX_OP");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
   IElementType MODS = new ObjDElementType("MODS");
+  IElementType PACK_STATEMENT = new ObjDElementType("PACK_STATEMENT");
   IElementType TERM = new ObjDElementType("TERM");
 
   IElementType AND = new ObjDTokenType("AND");
@@ -116,6 +117,7 @@ public interface ObjDTypes {
   IElementType W_IF = new ObjDTokenType("W_IF");
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
+  IElementType W_PACKAGE = new ObjDTokenType("W_PACKAGE");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
   IElementType W_RETURN = new ObjDTokenType("W_RETURN");
   IElementType W_SELF = new ObjDTokenType("W_SELF");
@@ -291,6 +293,9 @@ public interface ObjDTypes {
       }
       else if (type == MODS) {
         return new ObjDModsImpl(node);
+      }
+      else if (type == PACK_STATEMENT) {
+        return new ObjDPackStatementImpl(node);
       }
       else if (type == TERM) {
         return new ObjDTermImpl(node);

@@ -16,7 +16,8 @@
   psiImplUtilClass="com.antonzherdev.objd.psi.impl.ObjDPsiImplUtil"
 }
 
-file ::= statement_*
+file ::= pack_statement? statement_*
+pack_statement ::= W_PACKAGE IDENT (DOT IDENT)*
 
 private statement_ ::= ((W_STUB? (class_statement | def_statement | field_statement))|import_statement |COMMENT)
 

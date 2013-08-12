@@ -182,6 +182,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == MODS) {
       result_ = mods(builder_, level_ + 1);
     }
+    else if (root_ == PACK_STATEMENT) {
+      result_ = pack_statement(builder_, level_ + 1);
+    }
     else if (root_ == TERM) {
       result_ = term_(builder_, level_ + 1);
     }
@@ -2402,15 +2405,38 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // statement_*
+  // pack_statement? statement_*
   static boolean file(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "file")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = file_0(builder_, level_ + 1);
+    result_ = result_ && file_1(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // pack_statement?
+  private static boolean file_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "file_0")) return false;
+    pack_statement(builder_, level_ + 1);
+    return true;
+  }
+
+  // statement_*
+  private static boolean file_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "file_1")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
       if (!statement_(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "file");
+        empty_element_parsed_guard_(builder_, offset_, "file_1");
         break;
       }
       offset_ = next_offset_;
@@ -2675,6 +2701,55 @@ public class ObjDParser implements PsiParser {
     marker_.done(MODS);
     exitErrorRecordingSection(builder_, level_, true, false, _SECTION_GENERAL_, null);
     return true;
+  }
+
+  /* ********************************************************** */
+  // W_PACKAGE IDENT (DOT IDENT)*
+  public static boolean pack_statement(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "pack_statement")) return false;
+    if (!nextTokenIs(builder_, W_PACKAGE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, W_PACKAGE, IDENT);
+    result_ = result_ && pack_statement_2(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(PACK_STATEMENT);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // (DOT IDENT)*
+  private static boolean pack_statement_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "pack_statement_2")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!pack_statement_2_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "pack_statement_2");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // DOT IDENT
+  private static boolean pack_statement_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "pack_statement_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, DOT, IDENT);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   /* ********************************************************** */

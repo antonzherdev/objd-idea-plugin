@@ -33,6 +33,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     {FLOAT_CONST} {return ObjDTypes.FLOAT;}
     {INT_CONST} {return ObjDTypes.INT;}
 
+    "package" {return ObjDTypes.W_PACKAGE; }
     "class" {return ObjDTypes.W_CLASS; }
     "import" {return ObjDTypes.W_IMPORT; }
     "var" {return ObjDTypes.W_VAR; }
