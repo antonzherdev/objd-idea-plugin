@@ -240,8 +240,8 @@ public class ObjDUtil {
     public static List<ObjDClassGeneric> getDeclaredGenerics(PsiElement element) {
         List<ObjDClassGeneric> ret = new ArrayList<ObjDClassGeneric>();
         while(element != null) {
-            if(element instanceof ObjDClassStatement) {
-                ObjDClassGenerics classGenerics = ((ObjDClassStatement) element).getClassGenerics();
+            if(element instanceof ObjDClass) {
+                ObjDClassGenerics classGenerics = ((ObjDClass) element).getClassGenerics();
                 if(classGenerics != null) ret.addAll(classGenerics.getClassGenericList());
             }
             if(element instanceof ObjDDefStatement) {
