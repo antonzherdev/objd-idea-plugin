@@ -56,9 +56,9 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                     @Override
                     public Iterable<PsiNamedElement> f(ObjDFile f) {
                         return
-                                ObjDUtil.getClassesInFile(f).map(new F<ObjDClassStatement, PsiNamedElement>() {
+                                ObjDUtil.getClassesInFile(f).map(new F<ObjDClass, PsiNamedElement>() {
                                     @Override
-                                    public PsiNamedElement f(ObjDClassStatement x) {
+                                    public PsiNamedElement f(ObjDClass x) {
                                         return x.getClassName();
                                     }
                                 }).append(ObjDUtil.getDefsInFile(f).map(new F<ObjDDefStatement, PsiNamedElement>() {

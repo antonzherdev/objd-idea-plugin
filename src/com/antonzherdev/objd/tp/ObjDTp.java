@@ -27,9 +27,9 @@ public abstract class ObjDTp {
             if(ref instanceof ObjDClassName) {
                 ObjDExprCallParams pars = call.getExprCallParams();
                 if((pars == null || pars.getExprCallParamList().isEmpty()) && !call.getCallName().getName().equals("new")) {
-                    return new Object((ObjDClassStatement) ref.getParent());
+                    return new Object((ObjDClass) ref.getParent());
                 } else {
-                    return new Class((ObjDClassStatement) ref.getParent());
+                    return new Class((ObjDClass) ref.getParent());
                 }
             } else if (ref instanceof ObjDDefName) {
                 return getTpForDef(ref.getParent());
@@ -109,8 +109,8 @@ public abstract class ObjDTp {
             if(ref == null) return new Unknown("No reference for data type " + dataType);
             if(ref instanceof ObjDClassName) {
                 PsiElement par = ref.getParent();
-                if(par instanceof ObjDClassStatement) {
-                    return new Class((ObjDClassStatement) par);
+                if(par instanceof ObjDClass) {
+                    return new Class((ObjDClass) par);
                 } else if(par instanceof ObjDClassGeneric) {
                     return new Generic((ObjDClassGeneric) par);
                 } else {
@@ -131,9 +131,9 @@ public abstract class ObjDTp {
     }
 
     private static ObjDTp getKernelClassTp(ObjDDataType dataType, String name) {
-        return ObjDUtil.findKernelClass(dataType.getProject(), name).map(new F<ObjDClassStatement,ObjDTp>() {
+        return ObjDUtil.findKernelClass(dataType.getProject(), name).map(new F<ObjDClass,ObjDTp>() {
             @Override
-            public ObjDTp f(ObjDClassStatement x) {
+            public ObjDTp f(ObjDClass x) {
                 return new Class(x);
             }
         }).getOrElse(new Unknown("No " + name));
@@ -164,14 +164,16 @@ public abstract class ObjDTp {
 
     public static class Object extends ObjDTp {
 
-        private final ObjDClassStatement classStatement;
+        private final ObjDClass cls;
 
-        public Object(ObjDClassStatement classStatement) {
-            this.classStatement = classStatement;
+        public Object(ObjDClass cls) {
+            this.cls = cls;
         }
 
         @Override
         public IChain<PsiRef> getRefsChain() {
+            if(!(cls instanceof ObjDClassStatement)) return empty();
+            ObjDClassStatement classStatement = (ObjDClassStatement) cls;
             if(classStatement.getClassBody() == null) return empty();
             return
                     Chain.<PsiRef>chain().append(
@@ -202,7 +204,8 @@ public abstract class ObjDTp {
                             }).map(PsiRef.APPLY)
                     ).append(classStatement.isEnum()
                             ?
-                            chain(ObjDUtil.findKernelClass(classStatement.getProject(), "ODEnum")).flatMap(new F<ObjDClassStatement,List<ObjDDefStatement>>() {
+                            chain(ObjDUtil.findKernelClass(classStatement.getProject(), "ODEnum")
+                            ).<ObjDClassStatement>cast().flatMap(new F<ObjDClassStatement,List<ObjDDefStatement>>() {
                                 @Override
                                 public List<ObjDDefStatement> f(ObjDClassStatement x) {
                                     return x.getClassBody().getDefStatementList();
@@ -218,9 +221,9 @@ public abstract class ObjDTp {
     }
 
     public static class Class extends ObjDTp {
-        private final ObjDClassStatement classStatement;
+        private final ObjDClass classStatement;
 
-        public Class(ObjDClassStatement classStatement) {
+        public Class(ObjDClass classStatement) {
             this.classStatement = classStatement;
         }
 

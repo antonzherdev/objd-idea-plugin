@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDClassStatement extends ObjDClass {
-
-  @Nullable
-  ObjDClassBody getClassBody();
+public interface ObjDTypeStatement extends ObjDClass {
 
   @NotNull
-  List<ObjDClassConstructorField> getClassConstructorFieldList();
-
-  @Nullable
   ObjDClassExtends getClassExtends();
 
   @Nullable
@@ -21,10 +15,5 @@ public interface ObjDClassStatement extends ObjDClass {
 
   @NotNull
   ObjDClassName getClassName();
-
-  @NotNull
-  ObjDClassType getClassType();
-
-  boolean isEnum();
 
 }

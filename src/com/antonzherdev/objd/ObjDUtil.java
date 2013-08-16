@@ -16,6 +16,7 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.indexing.FileBasedIndex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class ObjDUtil {
         return getAllVirtualFiles(project).map(toObjDFileF(project));
     }
 
-    public static Option<ObjDClassStatement> findKernelClass(Project project, final String name) {
-        return getClassesInFile(findFile(project, name).getOrNull()).find(new B<ObjDClassStatement>() {
+    public static Option<ObjDClass> findKernelClass(Project project, final String name) {
+        return getClassesInFile(findFile(project, name).getOrNull()).find(new B<ObjDClass>() {
             @Override
-            public Boolean f(ObjDClassStatement x) {
+            public Boolean f(ObjDClass x) {
                 return x.getClassName().getName().equals(name);
             }
         });
@@ -61,15 +62,15 @@ public class ObjDUtil {
 
     public static IChain<ObjDClassName> availableClassesInFile(PsiFile file) {
         return availableFiles(file)
-                .flatMap(new F<ObjDFile, IChain<ObjDClassStatement>>() {
+                .flatMap(new F<ObjDFile, IChain<ObjDClass>>() {
                     @Override
-                    public IChain<ObjDClassStatement> f(ObjDFile objDFile) {
+                    public IChain<ObjDClass> f(ObjDFile objDFile) {
                         return getClassesInFile(objDFile);
                     }
                 })
-                .map(new F<ObjDClassStatement,ObjDClassName>() {
+                .map(new F<ObjDClass,ObjDClassName>() {
                     @Override
-                    public ObjDClassName f(ObjDClassStatement x) {
+                    public ObjDClassName f(ObjDClass x) {
                         return x.getClassName();
                     }
                 });
@@ -89,23 +90,24 @@ public class ObjDUtil {
                 .append(getKernelFiles(file.getProject()));
     }
 
+    final static List<String> kernelFiles = Arrays.asList("ODEnum", "ODObject", "CNTuple", "CNOption", "CNList", "CNMap");
     private static IChain<ObjDFile> getKernelFiles(Project project) {
         return getAllVirtualFiles(project)
                 .filter(new B<VirtualFile>() {
                     @Override
                     public Boolean f(VirtualFile f) {
-                        return f.getNameWithoutExtension().startsWith("OD");
+                        return kernelFiles.contains(f.getNameWithoutExtension());
                     }
                 })
                 .map(toObjDFileF(project));
     }
 
-    public static IChain<ObjDClassStatement> getClassesInFile(ObjDFile objDFile) {
+    public static IChain<ObjDClass> getClassesInFile(ObjDFile objDFile) {
         if(objDFile == null) return empty();
-        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.CLASS_STATEMENT))).map(new F<ASTNode,ObjDClassStatement>() {
+        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.CLASS_STATEMENT, ObjDTypes.TYPE_STATEMENT))).map(new F<ASTNode, ObjDClass>() {
             @Override
-            public ObjDClassStatement f(ASTNode astNode) {
-                return astNode.getPsi(ObjDClassStatement.class);
+            public ObjDClass f(ASTNode astNode) {
+                return astNode.getPsi(ObjDClass.class);
             }
         });
     }
@@ -136,39 +138,44 @@ public class ObjDUtil {
         return Option.none();
     }
 
-    public static IChain<PsiNamedElement> classFields(ObjDClassStatement stm) {
-        if(stm == null) return empty();
+    public static IChain<PsiNamedElement> classFields(ObjDClass cls) {
+        if(cls == null) return empty();
 
-        return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDClassConstructorField x) {
-                return x.getDefName();
-            }
-        }).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDDefStatement x) {
-                return x.getDefName();
-            }
-        })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDFieldStatement x) {
-                return x.getDefName();
-            }
-        })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, PsiNamedElement>() {
-            @Override
-            public PsiNamedElement f(ObjDEnumItem x) {
-                return x.getDefName();
-            }
-        }))
-        .append(enumSpecials(stm))
-        .append(parentFields(stm));
+        if(cls instanceof ObjDClassStatement) {
+            ObjDClassStatement stm = (ObjDClassStatement) cls;
+            return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
+                @Override
+                public PsiNamedElement f(ObjDClassConstructorField x) {
+                    return x.getDefName();
+                }
+            }).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
+                @Override
+                public PsiNamedElement f(ObjDDefStatement x) {
+                    return x.getDefName();
+                }
+            })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+                @Override
+                public PsiNamedElement f(ObjDFieldStatement x) {
+                    return x.getDefName();
+                }
+            })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, PsiNamedElement>() {
+                @Override
+                public PsiNamedElement f(ObjDEnumItem x) {
+                    return x.getDefName();
+                }
+            }))
+            .append(enumSpecials(stm))
+            .append(parentFields(stm));
+        } else {
+            return parentFields(cls);
+        }
     }
 
     private static IChain<PsiNamedElement> enumSpecials(ObjDClassStatement stm) {
         return stm.isEnum() ? classFields(findKernelClass(stm.getProject(), "ODEnum").getOrNull()) : null;
     }
 
-    private static IChain<PsiNamedElement> parentFields(ObjDClassStatement stm) {
+    private static IChain<PsiNamedElement> parentFields(ObjDClass stm) {
         ObjDClassExtends classExtends = stm.getClassExtends();
         if(classExtends == null) {
             if(stm.getClassName().getName().equals("ODObject")) return empty();

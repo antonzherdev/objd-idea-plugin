@@ -188,6 +188,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == TERM) {
       result_ = term_(builder_, level_ + 1);
     }
+    else if (root_ == TYPE_STATEMENT) {
+      result_ = type_statement(builder_, level_ + 1);
+    }
     else {
       Marker marker_ = builder_.mark();
       enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, null);
@@ -434,15 +437,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_EXTENDS data_type_ref data_type_generics?
+  // data_type_ref data_type_generics?
   public static boolean class_extends(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_extends")) return false;
-    if (!nextTokenIs(builder_, W_EXTENDS)) return false;
+    if (!nextTokenIs(builder_, IDENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, W_EXTENDS);
-    result_ = result_ && data_type_ref(builder_, level_ + 1);
-    result_ = result_ && class_extends_2(builder_, level_ + 1);
+    result_ = data_type_ref(builder_, level_ + 1);
+    result_ = result_ && class_extends_1(builder_, level_ + 1);
     if (result_) {
       marker_.done(CLASS_EXTENDS);
     }
@@ -453,8 +455,8 @@ public class ObjDParser implements PsiParser {
   }
 
   // data_type_generics?
-  private static boolean class_extends_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "class_extends_2")) return false;
+  private static boolean class_extends_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_extends_1")) return false;
     data_type_generics(builder_, level_ + 1);
     return true;
   }
@@ -570,7 +572,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // class_type class_name class_generics? class_constructor_fields? class_extends? class_body?
+  // class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends)? class_body?
   public static boolean class_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement")) return false;
     boolean result_ = false;
@@ -606,11 +608,27 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // class_extends?
+  // (W_EXTENDS class_extends)?
   private static boolean class_statement_4(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement_4")) return false;
-    class_extends(builder_, level_ + 1);
+    class_statement_4_0(builder_, level_ + 1);
     return true;
+  }
+
+  // W_EXTENDS class_extends
+  private static boolean class_statement_4_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_statement_4_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_EXTENDS);
+    result_ = result_ && class_extends(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   // class_body?
@@ -2777,7 +2795,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (W_STUB? (class_statement | def_statement | field_statement))|import_statement |COMMENT
+  // (W_STUB? (class_statement | def_statement | field_statement | type_statement))|import_statement |COMMENT
   static boolean statement_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "statement_")) return false;
     boolean result_ = false;
@@ -2794,7 +2812,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // W_STUB? (class_statement | def_statement | field_statement)
+  // W_STUB? (class_statement | def_statement | field_statement | type_statement)
   private static boolean statement__0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "statement__0")) return false;
     boolean result_ = false;
@@ -2817,7 +2835,7 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // class_statement | def_statement | field_statement
+  // class_statement | def_statement | field_statement | type_statement
   private static boolean statement__0_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "statement__0_1")) return false;
     boolean result_ = false;
@@ -2825,6 +2843,7 @@ public class ObjDParser implements PsiParser {
     result_ = class_statement(builder_, level_ + 1);
     if (!result_) result_ = def_statement(builder_, level_ + 1);
     if (!result_) result_ = field_statement(builder_, level_ + 1);
+    if (!result_) result_ = type_statement(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -2881,6 +2900,34 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // W_TYPE class_name class_generics? SET class_extends
+  public static boolean type_statement(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "type_statement")) return false;
+    if (!nextTokenIs(builder_, W_TYPE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_TYPE);
+    result_ = result_ && class_name(builder_, level_ + 1);
+    result_ = result_ && type_statement_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, SET);
+    result_ = result_ && class_extends(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(TYPE_STATEMENT);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // class_generics?
+  private static boolean type_statement_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "type_statement_2")) return false;
+    class_generics(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */

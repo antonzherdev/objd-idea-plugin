@@ -63,6 +63,7 @@ public interface ObjDTypes {
   IElementType MODS = new ObjDElementType("MODS");
   IElementType PACK_STATEMENT = new ObjDElementType("PACK_STATEMENT");
   IElementType TERM = new ObjDElementType("TERM");
+  IElementType TYPE_STATEMENT = new ObjDElementType("TYPE_STATEMENT");
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
@@ -127,6 +128,7 @@ public interface ObjDTypes {
   IElementType W_THROW = new ObjDTokenType("W_THROW");
   IElementType W_TRAIT = new ObjDTokenType("W_TRAIT");
   IElementType W_TRUE = new ObjDTokenType("W_TRUE");
+  IElementType W_TYPE = new ObjDTokenType("W_TYPE");
   IElementType W_VAL = new ObjDTokenType("W_VAL");
   IElementType W_VAR = new ObjDTokenType("W_VAR");
   IElementType W_WEAK = new ObjDTokenType("W_WEAK");
@@ -299,6 +301,9 @@ public interface ObjDTypes {
       }
       else if (type == TERM) {
         return new ObjDTermImpl(node);
+      }
+      else if (type == TYPE_STATEMENT) {
+        return new ObjDTypeStatementImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

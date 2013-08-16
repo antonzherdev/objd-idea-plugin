@@ -36,7 +36,7 @@ public class ObjDVisitor extends PsiElementVisitor {
   }
 
   public void visitClassStatement(@NotNull ObjDClassStatement o) {
-    visitPsiElement(o);
+    visitClass(o);
   }
 
   public void visitClassType(@NotNull ObjDClassType o) {
@@ -225,6 +225,14 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitTerm(@NotNull ObjDTerm o) {
     visitExpr(o);
+  }
+
+  public void visitTypeStatement(@NotNull ObjDTypeStatement o) {
+    visitClass(o);
+  }
+
+  public void visitClass(@NotNull ObjDClass o) {
+    visitPsiElement(o);
   }
 
   public void visitNamedElement(@NotNull ObjDNamedElement o) {

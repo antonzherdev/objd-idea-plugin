@@ -19,14 +19,18 @@
 file ::= pack_statement? statement_*
 pack_statement ::= W_PACKAGE IDENT (DOT IDENT)*
 
-private statement_ ::= ((W_STUB? (class_statement | def_statement | field_statement))|import_statement |COMMENT)
+private statement_ ::= ((W_STUB? (class_statement | def_statement | field_statement | type_statement))|import_statement |COMMENT)
 
 import_statement ::= (W_IMPORT (import_od_file | STRING | (LESS IDENT (DIV IDENT)* DOT IDENT MORE)))
 import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                                      methods=[getName setName getNameIdentifier getReference]}
 
-class_statement ::= (class_type class_name class_generics? class_constructor_fields? class_extends? class_body?) {
+type_statement ::= (W_TYPE class_name class_generics? SET class_extends) {
+    implements = "com.antonzherdev.objd.psi.ObjDClass"
+}
+class_statement ::= (class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends)? class_body?) {
     methods = [isEnum]
+    implements = "com.antonzherdev.objd.psi.ObjDClass"
 }
 class_type ::= (W_CLASS | W_TRAIT | W_STRUCT | W_ENUM)
 class_generics ::= LESS class_generic (COMMA class_generic)* MORE
@@ -40,7 +44,7 @@ def_name ::= IDENT
     {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier]}
 
-class_extends ::= (W_EXTENDS data_type_ref data_type_generics?)
+class_extends ::=  data_type_ref data_type_generics?
 
 class_body ::= (OPEN_BRACE enum_item* (def_statement | field_statement)* CLOSE_BRACE)
 
