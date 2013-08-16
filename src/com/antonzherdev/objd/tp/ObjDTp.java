@@ -120,11 +120,11 @@ public abstract class ObjDTp {
                 return new Unknown("Unknown data type class ref " + ref.getClass());
             }
         } else if(dataType instanceof ObjDDataTypeOption) {
-            return getKernelClassTp(dataType, "ODOption");
+            return getKernelClassTp(dataType, "CNOption");
         } else if(dataType instanceof ObjDDataTypeCollection) {
-            return getKernelClassTp(dataType, "ODArray");
+            return getKernelClassTp(dataType, "CNList");
         } else if(dataType instanceof ObjDDataTypeMap) {
-            return getKernelClassTp(dataType, "ODMap");
+            return getKernelClassTp(dataType, "CNMap");
         }else {
             return new Unknown("Not simple type " + dataType.getClass());
         }
