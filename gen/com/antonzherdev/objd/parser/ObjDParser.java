@@ -572,7 +572,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends)? class_body?
+  // W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends (W_WITH class_extends)* )? class_body?
   public static boolean class_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement")) return false;
     boolean result_ = false;
@@ -616,19 +616,52 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // (W_EXTENDS class_extends)?
+  // (W_EXTENDS class_extends (W_WITH class_extends)* )?
   private static boolean class_statement_5(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement_5")) return false;
     class_statement_5_0(builder_, level_ + 1);
     return true;
   }
 
-  // W_EXTENDS class_extends
+  // W_EXTENDS class_extends (W_WITH class_extends)*
   private static boolean class_statement_5_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement_5_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, W_EXTENDS);
+    result_ = result_ && class_extends(builder_, level_ + 1);
+    result_ = result_ && class_statement_5_0_2(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // (W_WITH class_extends)*
+  private static boolean class_statement_5_0_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_statement_5_0_2")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!class_statement_5_0_2_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "class_statement_5_0_2");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // W_WITH class_extends
+  private static boolean class_statement_5_0_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_statement_5_0_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_WITH);
     result_ = result_ && class_extends(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();

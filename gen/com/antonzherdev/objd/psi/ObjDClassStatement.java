@@ -13,8 +13,8 @@ public interface ObjDClassStatement extends ObjDClass {
   @NotNull
   List<ObjDClassConstructorField> getClassConstructorFieldList();
 
-  @Nullable
-  ObjDClassExtends getClassExtends();
+  @NotNull
+  List<ObjDClassExtends> getClassExtendsList();
 
   @Nullable
   ObjDClassGenerics getClassGenerics();

@@ -26,9 +26,10 @@ import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElement
                                      methods=[getName setName getNameIdentifier getReference]}
 
 type_statement ::= (W_TYPE class_name class_generics? SET class_extends) {
+    methods = [getClassExtendsList]
     implements = "com.antonzherdev.objd.psi.ObjDClass"
 }
-class_statement ::= W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends)? class_body? {
+class_statement ::= W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends (W_WITH class_extends)* )? class_body? {
     methods = [isEnum]
     implements = "com.antonzherdev.objd.psi.ObjDClass"
 }

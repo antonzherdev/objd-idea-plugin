@@ -4,6 +4,8 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public interface ObjDClass extends PsiElement {
     @Nullable
     ObjDClassGenerics getClassGenerics();
@@ -12,5 +14,5 @@ public interface ObjDClass extends PsiElement {
     ObjDClassName getClassName();
 
     @Nullable
-    ObjDClassExtends getClassExtends();
+    List<ObjDClassExtends> getClassExtendsList();
 }

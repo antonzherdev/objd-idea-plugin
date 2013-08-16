@@ -16,4 +16,6 @@ public interface ObjDTypeStatement extends ObjDClass {
   @NotNull
   ObjDClassName getClassName();
 
+  List<ObjDClassExtends> getClassExtendsList();
+
 }

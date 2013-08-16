@@ -40,4 +40,8 @@ public class ObjDTypeStatementImpl extends ASTWrapperPsiElement implements ObjDT
     else super.accept(visitor);
   }
 
+  public List<ObjDClassExtends> getClassExtendsList() {
+    return ObjDPsiImplUtil.getClassExtendsList(this);
+  }
+
 }

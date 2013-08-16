@@ -10,6 +10,9 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ObjDPsiImplUtil {
     public static String getName(ObjDNamedElementImpl element) {
         ASTNode keyNode = element.getNode().findChildByType(ObjDTypes.IDENT);
@@ -57,5 +60,9 @@ public class ObjDPsiImplUtil {
 
     public static boolean isEnum(ObjDClassStatement s) {
         return s.getClassType().getNode().findChildByType(ObjDTypes.W_ENUM) != null;
+    }
+
+    public static List<ObjDClassExtends> getClassExtendsList(ObjDTypeStatement stm) {
+        return Arrays.asList(stm.getClassExtends());
     }
 }

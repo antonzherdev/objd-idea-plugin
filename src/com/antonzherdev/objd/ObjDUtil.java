@@ -176,15 +176,20 @@ public class ObjDUtil {
     }
 
     private static IChain<PsiNamedElement> parentFields(ObjDClass stm) {
-        ObjDClassExtends classExtends = stm.getClassExtends();
-        if(classExtends == null) {
+        List<ObjDClassExtends> classExtends = stm.getClassExtendsList();
+        if(classExtends == null || classExtends.isEmpty()) {
             if(stm.getClassName().getName().equals("ODObject")) return empty();
             else return classFields(findKernelClass(stm.getProject(), "ODObject").getOrNull());
         }
 
-        PsiElement resolve = classExtends.getDataTypeRef().getReference().resolve();
-        if(resolve == null) return empty();
-        return classFields((ObjDClassStatement) resolve.getParent());
+        return chain(classExtends).flatMap(new F<ObjDClassExtends,IChain<PsiNamedElement>>() {
+            @Override
+            public IChain<PsiNamedElement> f(ObjDClassExtends objDClassExtends) {
+                PsiElement resolve = objDClassExtends.getDataTypeRef().getReference().resolve();
+                if(resolve == null) return empty();
+                return classFields((ObjDClassStatement) resolve.getParent());
+            }
+        });
     }
 
     public static boolean isAfterDot(PsiElement element) {

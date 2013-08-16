@@ -59,6 +59,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "break" {return ObjDTypes.W_BREAK; }
     "return" {return ObjDTypes.W_RETURN; }
     "type" {return ObjDTypes.W_TYPE; }
+    "with" {return ObjDTypes.W_WITH; }
 
     "bool" {return ObjDTypes.TP_BOOL; }
     "float" {return ObjDTypes.TP_FLOAT; }

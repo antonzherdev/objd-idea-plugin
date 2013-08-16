@@ -133,6 +133,7 @@ public interface ObjDTypes {
   IElementType W_VAR = new ObjDTokenType("W_VAR");
   IElementType W_WEAK = new ObjDTokenType("W_WEAK");
   IElementType W_WHILE = new ObjDTokenType("W_WHILE");
+  IElementType W_WITH = new ObjDTokenType("W_WITH");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
