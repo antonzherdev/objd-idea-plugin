@@ -172,9 +172,9 @@ public abstract class ObjDTp {
 
         @Override
         public IChain<PsiRef> getRefsChain() {
-            if(!(cls instanceof ObjDClassStatement)) return empty();
+            if(!(cls instanceof ObjDClassStatement)) return newChain(cls);
             ObjDClassStatement classStatement = (ObjDClassStatement) cls;
-            if(classStatement.getClassBody() == null) return empty();
+            if(classStatement.getClassBody() == null) return newChain(classStatement);
             return
                     Chain.<PsiRef>chain().append(
                             chain(classStatement.getClassBody().getDefStatementList()).filter(new B<ObjDDefStatement>() {
@@ -216,7 +216,11 @@ public abstract class ObjDTp {
                                     return x.isStatic();
                                 }
                             }).map(DEF_NAME).map(PsiRef.APPLY)
-                            : chain(new PsiRef(classStatement.getClassName(), "new")));
+                            : newChain(classStatement));
+        }
+
+        private IChain<PsiRef> newChain(ObjDClass classStatement) {
+            return chain(new PsiRef(classStatement.getClassName(), "new"));
         }
     }
 
