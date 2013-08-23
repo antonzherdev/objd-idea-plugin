@@ -730,14 +730,13 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET W_VAR? data_type CLOSE_SQUARE_BRACKET
+  // OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET
   public static boolean data_type_collection(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_collection")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
-    result_ = result_ && data_type_collection_1(builder_, level_ + 1);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
     if (result_) {
@@ -747,13 +746,6 @@ public class ObjDParser implements PsiParser {
       marker_.rollbackTo();
     }
     return result_;
-  }
-
-  // W_VAR?
-  private static boolean data_type_collection_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_collection_1")) return false;
-    consumeToken(builder_, W_VAR);
-    return true;
   }
 
   /* ********************************************************** */
@@ -848,14 +840,13 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET W_VAR? data_type COLON data_type CLOSE_SQUARE_BRACKET
+  // OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET
   public static boolean data_type_map(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_map")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
-    result_ = result_ && data_type_map_1(builder_, level_ + 1);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
     result_ = result_ && data_type(builder_, level_ + 1);
@@ -867,13 +858,6 @@ public class ObjDParser implements PsiParser {
       marker_.rollbackTo();
     }
     return result_;
-  }
-
-  // W_VAR?
-  private static boolean data_type_map_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_map_1")) return false;
-    consumeToken(builder_, W_VAR);
-    return true;
   }
 
   /* ********************************************************** */
@@ -914,6 +898,32 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // OPEN_SQUARE_BRACKET INT_CONST? CLOSE_SQUARE_BRACKET
+  static boolean data_type_post_arr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_post_arr")) return false;
+    if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
+    result_ = result_ && data_type_post_arr_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // INT_CONST?
+  private static boolean data_type_post_arr_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_post_arr_1")) return false;
+    consumeToken(builder_, INT_CONST);
+    return true;
+  }
+
+  /* ********************************************************** */
   // IDENT
   public static boolean data_type_ref(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_ref")) return false;
@@ -948,7 +958,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics?
+  // (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? data_type_post_arr?
   public static boolean data_type_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple")) return false;
     boolean result_ = false;
@@ -957,6 +967,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type simple>");
     result_ = data_type_simple_0(builder_, level_ + 1);
     result_ = result_ && data_type_simple_1(builder_, level_ + 1);
+    result_ = result_ && data_type_simple_2(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), DATA_TYPE_SIMPLE)) {
       marker_.drop();
@@ -996,6 +1007,13 @@ public class ObjDParser implements PsiParser {
   private static boolean data_type_simple_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple_1")) return false;
     data_type_generics(builder_, level_ + 1);
+    return true;
+  }
+
+  // data_type_post_arr?
+  private static boolean data_type_simple_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_simple_2")) return false;
+    data_type_post_arr(builder_, level_ + 1);
     return true;
   }
 

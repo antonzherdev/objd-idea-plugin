@@ -81,6 +81,7 @@ public interface ObjDTypes {
   IElementType FLOAT = new ObjDTokenType("FLOAT");
   IElementType IDENT = new ObjDTokenType("IDENT");
   IElementType INT = new ObjDTokenType("INT");
+  IElementType INT_CONST = new ObjDTokenType("INT_CONST");
   IElementType LESS = new ObjDTokenType("LESS");
   IElementType LESSEQ = new ObjDTokenType("LESSEQ");
   IElementType MINUS = new ObjDTokenType("MINUS");

@@ -64,12 +64,13 @@ def_parameter ::= ((def_name | W_SELF)? COLON data_type (SET expr_)?)
 
 data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self)
 data_type_self ::= W_SELF
-data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? {extends = data_type}
+data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? data_type_post_arr? {extends = data_type}
+private data_type_post_arr ::= OPEN_SQUARE_BRACKET INT_CONST? CLOSE_SQUARE_BRACKET
 data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
 data_type_lambda ::= (data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self) ARROW data_type {extends = data_type}
-data_type_collection ::= OPEN_SQUARE_BRACKET W_VAR? data_type CLOSE_SQUARE_BRACKET {extends = data_type}
-data_type_map ::= OPEN_SQUARE_BRACKET W_VAR? data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type}
+data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET {extends = data_type}
+data_type_map ::= OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type}
 data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {extends = data_type}
 data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple | data_type_self) WHAT {extends = data_type}
 data_type_generics ::= LESS data_type (COMMA data_type)* MORE
