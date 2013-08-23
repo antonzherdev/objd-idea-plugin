@@ -25,6 +25,9 @@ public interface ObjDClassStatement extends ObjDClass {
   @NotNull
   ObjDClassType getClassType();
 
+  @Nullable
+  ObjDExprCallParams getExprCallParams();
+
   boolean isEnum();
 
 }

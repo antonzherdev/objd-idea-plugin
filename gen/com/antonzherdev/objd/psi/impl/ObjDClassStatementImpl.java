@@ -53,6 +53,12 @@ public class ObjDClassStatementImpl extends ASTWrapperPsiElement implements ObjD
     return findNotNullChildByClass(ObjDClassType.class);
   }
 
+  @Override
+  @Nullable
+  public ObjDExprCallParams getExprCallParams() {
+    return findChildByClass(ObjDExprCallParams.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassStatement(this);
     else super.accept(visitor);

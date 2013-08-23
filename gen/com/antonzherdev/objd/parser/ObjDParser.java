@@ -572,7 +572,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends (W_WITH class_extends)* )? class_body?
+  // W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)* )? class_body?
   public static boolean class_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement")) return false;
     boolean result_ = false;
@@ -616,14 +616,14 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // (W_EXTENDS class_extends (W_WITH class_extends)* )?
+  // (W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)* )?
   private static boolean class_statement_5(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement_5")) return false;
     class_statement_5_0(builder_, level_ + 1);
     return true;
   }
 
-  // W_EXTENDS class_extends (W_WITH class_extends)*
+  // W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)*
   private static boolean class_statement_5_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement_5_0")) return false;
     boolean result_ = false;
@@ -631,6 +631,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, W_EXTENDS);
     result_ = result_ && class_extends(builder_, level_ + 1);
     result_ = result_ && class_statement_5_0_2(builder_, level_ + 1);
+    result_ = result_ && class_statement_5_0_3(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -640,15 +641,22 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (W_WITH class_extends)*
+  // expr_call_params?
   private static boolean class_statement_5_0_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_statement_5_0_2")) return false;
+    expr_call_params(builder_, level_ + 1);
+    return true;
+  }
+
+  // (W_WITH class_extends)*
+  private static boolean class_statement_5_0_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_statement_5_0_3")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!class_statement_5_0_2_0(builder_, level_ + 1)) break;
+      if (!class_statement_5_0_3_0(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "class_statement_5_0_2");
+        empty_element_parsed_guard_(builder_, offset_, "class_statement_5_0_3");
         break;
       }
       offset_ = next_offset_;
@@ -657,8 +665,8 @@ public class ObjDParser implements PsiParser {
   }
 
   // W_WITH class_extends
-  private static boolean class_statement_5_0_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "class_statement_5_0_2_0")) return false;
+  private static boolean class_statement_5_0_3_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_statement_5_0_3_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, W_WITH);
@@ -958,7 +966,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (data_type_ref | TP_BOOL | TP_STRING | 
+  // (data_type_ref | TP_BOOL | TP_STRING |
   //     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr?
   public static boolean data_type_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple")) return false;
@@ -983,7 +991,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // data_type_ref | TP_BOOL | TP_STRING | 
+  // data_type_ref | TP_BOOL | TP_STRING |
   //     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID
   private static boolean data_type_simple_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple_0")) return false;
