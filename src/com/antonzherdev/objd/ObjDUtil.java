@@ -90,7 +90,7 @@ public class ObjDUtil {
                 .append(getKernelFiles(file.getProject()));
     }
 
-    final static List<String> kernelFiles = Arrays.asList("ODEnum", "ODObject", "CNTuple", "CNOption", "CNList", "CNMap");
+    final static List<String> kernelFiles = Arrays.asList("ODEnum", "ODObject", "CNTuple", "CNOption", "CNList", "CNMap", "CNSeq");
     private static IChain<ObjDFile> getKernelFiles(Project project) {
         return getAllVirtualFiles(project)
                 .filter(new B<VirtualFile>() {

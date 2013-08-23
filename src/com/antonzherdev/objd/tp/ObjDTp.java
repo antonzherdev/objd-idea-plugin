@@ -122,7 +122,7 @@ public abstract class ObjDTp {
         } else if(dataType instanceof ObjDDataTypeOption) {
             return getKernelClassTp(dataType, "CNOption");
         } else if(dataType instanceof ObjDDataTypeCollection) {
-            return getKernelClassTp(dataType, "CNList");
+            return getKernelClassTp(dataType, "CNSeq");
         } else if(dataType instanceof ObjDDataTypeMap) {
             return getKernelClassTp(dataType, "CNMap");
         }else {
