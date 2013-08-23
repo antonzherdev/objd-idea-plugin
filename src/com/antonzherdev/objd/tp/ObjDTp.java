@@ -26,7 +26,7 @@ public abstract class ObjDTp {
             PsiElement ref = call.getCallName().getReference().resolve();
             if(ref instanceof ObjDClassName) {
                 ObjDExprCallParams pars = call.getExprCallParams();
-                if((pars == null || pars.getExprCallParamList().isEmpty()) && !call.getCallName().getName().equals("new")) {
+                if(pars == null && !call.getCallName().getName().equals("new")) {
                     return new Object((ObjDClass) ref.getParent());
                 } else {
                     return new Class((ObjDClass) ref.getParent());
