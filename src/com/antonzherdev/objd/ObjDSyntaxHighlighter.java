@@ -46,7 +46,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
             W_PRIVATE, W_STATIC, W_NIL, W_TRUE, W_FALSE, W_STUB, W_TRAIT, W_ENUM, W_STRUCT, W_THROW,
             W_WHILE, W_DO, W_RETURN, W_BREAK, W_PACKAGE, W_TYPE, W_WITH);
     private static final List<IElementType> DATATYPES = Arrays.asList(
-            TP_BOOL, TP_FLOAT, TP_INT, TP_STRING, TP_UINT, TP_VOID);
+            TP_BOOL, TP_FLOAT, TP_INT, TP_STRING, TP_UINT, TP_VOID, TP_BYTE, TP_UBYTE,
+            TP_INT4, TP_UINT4, TP_INT8, TP_UINT8, TP_FLOAT4, TP_FLOAT8);
     private static final List<IElementType> OPERATIONS = Arrays.asList(
             DOT, SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS, NOT_EQ,
             EXCLAMATION);

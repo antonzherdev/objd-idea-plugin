@@ -63,9 +63,17 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 
     "bool" {return ObjDTypes.TP_BOOL; }
     "float" {return ObjDTypes.TP_FLOAT; }
+    "float4" {return ObjDTypes.TP_FLOAT4; }
+    "float8" {return ObjDTypes.TP_FLOAT8; }
     "string" {return ObjDTypes.TP_STRING; }
+    "byte" {return ObjDTypes.TP_BYTE; }
     "int" {return ObjDTypes.TP_INT; }
+    "int4" {return ObjDTypes.TP_INT4; }
+    "int8" {return ObjDTypes.TP_INT8; }
+    "ubyte" {return ObjDTypes.TP_UBYTE; }
     "uint" {return ObjDTypes.TP_UINT; }
+    "uint4" {return ObjDTypes.TP_UINT4; }
+    "uint8" {return ObjDTypes.TP_UINT8; }
     "void" {return ObjDTypes.TP_VOID; }
 
     {IDENT_CHAR}+ {return ObjDTypes.IDENT; }

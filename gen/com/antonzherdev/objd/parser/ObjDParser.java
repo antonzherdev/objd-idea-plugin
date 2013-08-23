@@ -958,7 +958,8 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID) data_type_generics? data_type_post_arr?
+  // (data_type_ref | TP_BOOL | TP_STRING | 
+  //     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr?
   public static boolean data_type_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple")) return false;
     boolean result_ = false;
@@ -982,7 +983,8 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // data_type_ref | TP_BOOL | TP_STRING | TP_INT | TP_UINT | TP_FLOAT | TP_VOID
+  // data_type_ref | TP_BOOL | TP_STRING | 
+  //     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID
   private static boolean data_type_simple_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple_0")) return false;
     boolean result_ = false;
@@ -990,9 +992,17 @@ public class ObjDParser implements PsiParser {
     result_ = data_type_ref(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, TP_BOOL);
     if (!result_) result_ = consumeToken(builder_, TP_STRING);
+    if (!result_) result_ = consumeToken(builder_, TP_INT4);
+    if (!result_) result_ = consumeToken(builder_, TP_UINT4);
+    if (!result_) result_ = consumeToken(builder_, TP_INT8);
+    if (!result_) result_ = consumeToken(builder_, TP_UINT8);
     if (!result_) result_ = consumeToken(builder_, TP_INT);
     if (!result_) result_ = consumeToken(builder_, TP_UINT);
     if (!result_) result_ = consumeToken(builder_, TP_FLOAT);
+    if (!result_) result_ = consumeToken(builder_, TP_FLOAT8);
+    if (!result_) result_ = consumeToken(builder_, TP_FLOAT4);
+    if (!result_) result_ = consumeToken(builder_, TP_BYTE);
+    if (!result_) result_ = consumeToken(builder_, TP_UBYTE);
     if (!result_) result_ = consumeToken(builder_, TP_VOID);
     if (!result_) {
       marker_.rollbackTo();
