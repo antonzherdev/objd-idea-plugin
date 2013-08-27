@@ -52,6 +52,7 @@ public interface ObjDTypes {
   IElementType EXPR_RETURN = new ObjDElementType("EXPR_RETURN");
   IElementType EXPR_SELF = new ObjDElementType("EXPR_SELF");
   IElementType EXPR_SET = new ObjDElementType("EXPR_SET");
+  IElementType EXPR_STRING_CONST = new ObjDElementType("EXPR_STRING_CONST");
   IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
@@ -278,6 +279,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_SET) {
         return new ObjDExprSetImpl(node);
+      }
+      else if (type == EXPR_STRING_CONST) {
+        return new ObjDExprStringConstImpl(node);
       }
       else if (type == EXPR_THROW) {
         return new ObjDExprThrowImpl(node);

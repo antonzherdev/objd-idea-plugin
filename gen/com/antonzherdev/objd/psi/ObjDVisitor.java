@@ -183,6 +183,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitExprStringConst(@NotNull ObjDExprStringConst o) {
+    visitExpr(o);
+  }
+
   public void visitExprThrow(@NotNull ObjDExprThrow o) {
     visitExpr(o);
   }
