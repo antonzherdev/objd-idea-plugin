@@ -18,18 +18,18 @@ import com.intellij.psi.TokenType;
 WHITE_SPACE=[\ \t\f\r\n]
 END_OF_LINE_COMMENT="//"[^\r\n]*
 MULTI_LINE_COMMENT="/*"[^\00]*"*/"
-STRING="\"".*"\""
 IDENT_CHAR= [a-zA-Z0-9_]
 INT_CONST = -?[0-9]+
 FLOAT_CONST = -?[0-9]+[.][0-9]+
 %state COMMENT_STATE
+%state STRING_STATE
 
 %%
 
 <YYINITIAL> {
     {END_OF_LINE_COMMENT} {return ObjDTypes.COMMENT; }
     "/*" { yybegin(COMMENT_STATE); return ObjDTypes.COMMENT; }
-    {STRING} {return ObjDTypes.STRING;}
+    "\"" { yybegin(STRING_STATE); return ObjDTypes.STRING;}
     {FLOAT_CONST} {return ObjDTypes.FLOAT;}
     {INT_CONST} {return ObjDTypes.INT;}
 
@@ -115,6 +115,14 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "*/" {yybegin(YYINITIAL); return ObjDTypes.COMMENT;}
     .  {return ObjDTypes.COMMENT; }
 }
+
+<STRING_STATE> {
+    "\\\\" {return ObjDTypes.STRING;}
+    "\\\"" {return ObjDTypes.STRING;}
+    "\"" {yybegin(YYINITIAL); return ObjDTypes.STRING;}
+    .  {return ObjDTypes.STRING; }
+}
+
 
 {WHITE_SPACE}+ {return TokenType.WHITE_SPACE; }
 . { return TokenType.BAD_CHARACTER; }
