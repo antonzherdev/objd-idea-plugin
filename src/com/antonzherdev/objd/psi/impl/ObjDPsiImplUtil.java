@@ -16,7 +16,7 @@ import java.util.List;
 public class ObjDPsiImplUtil {
     public static String getName(ObjDNamedElementImpl element) {
         ASTNode keyNode = element.getNode().findChildByType(ObjDTypes.IDENT);
-        return keyNode != null ? keyNode.getText() : null;
+        return keyNode != null ? keyNode.getText() : element.getText();
     }
 
     public static PsiElement setName(ObjDNamedElementImpl element, String newName) {

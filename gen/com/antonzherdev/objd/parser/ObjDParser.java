@@ -250,19 +250,23 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IDENT
+  // IDENT | W_CLASS
   public static boolean call_name(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "call_name")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
+        && replaceVariants(builder_, 2, "<call name>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<call name>");
     result_ = consumeToken(builder_, IDENT);
+    if (!result_) result_ = consumeToken(builder_, W_CLASS);
     if (result_) {
       marker_.done(CALL_NAME);
     }
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -427,9 +431,11 @@ public class ObjDParser implements PsiParser {
   // def_name case_cond_tp?
   public static boolean case_cond_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_cond_val")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
+        && replaceVariants(builder_, 2, "<case cond val>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<case cond val>");
     result_ = def_name(builder_, level_ + 1);
     result_ = result_ && case_cond_val_1(builder_, level_ + 1);
     if (result_) {
@@ -438,6 +444,7 @@ public class ObjDParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -1323,19 +1330,23 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IDENT
+  // IDENT | W_CLASS
   public static boolean def_name(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "def_name")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
+        && replaceVariants(builder_, 2, "<def name>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<def name>");
     result_ = consumeToken(builder_, IDENT);
+    if (!result_) result_ = consumeToken(builder_, W_CLASS);
     if (result_) {
       marker_.done(DEF_NAME);
     }
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -1545,9 +1556,11 @@ public class ObjDParser implements PsiParser {
   // def_name expr_call_params?
   public static boolean enum_item(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "enum_item")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
+        && replaceVariants(builder_, 2, "<enum item>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<enum item>");
     result_ = def_name(builder_, level_ + 1);
     result_ = result_ && enum_item_1(builder_, level_ + 1);
     if (result_) {
@@ -1556,6 +1569,7 @@ public class ObjDParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -1803,9 +1817,11 @@ public class ObjDParser implements PsiParser {
   // call_name expr_call_generics? expr_call_params?
   public static boolean expr_call(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
+        && replaceVariants(builder_, 2, "<expr call>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr call>");
     result_ = call_name(builder_, level_ + 1);
     result_ = result_ && expr_call_1(builder_, level_ + 1);
     result_ = result_ && expr_call_2(builder_, level_ + 1);
@@ -1815,6 +1831,7 @@ public class ObjDParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -2311,8 +2328,6 @@ public class ObjDParser implements PsiParser {
   // (lambda_par | lambda_pars) ARROW expr_
   public static boolean expr_lambda(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_lambda")) return false;
-    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, OPEN_BRACKET)
-        && replaceVariants(builder_, 2, "<expr lambda>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr lambda>");
@@ -3053,9 +3068,11 @@ public class ObjDParser implements PsiParser {
   // def_name (COLON data_type)?
   public static boolean lambda_par(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "lambda_par")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
+        && replaceVariants(builder_, 2, "<lambda par>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<lambda par>");
     result_ = def_name(builder_, level_ + 1);
     result_ = result_ && lambda_par_1(builder_, level_ + 1);
     if (result_) {
@@ -3064,6 +3081,7 @@ public class ObjDParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
