@@ -41,7 +41,7 @@ class_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl
 
 private class_constructor_fields ::= (OPEN_BRACKET class_constructor_field (COMMA class_constructor_field)* CLOSE_BRACKET)
 class_constructor_field ::= (W_WEAK? (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?)
-def_name ::= (IDENT | W_CLASS)
+def_name ::= (IDENT | W_CLASS | W_TYPE)
     {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier]}
 
@@ -111,7 +111,7 @@ index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op?
 
 expr_call ::= call_name expr_call_generics? expr_call_params? expr_call_post_lambda? {extends = expr_}
 expr_call_post_lambda ::= OPEN_BRACE (lambda_par (COMMA lambda_par)* ARROW)? expr_* CLOSE_BRACE
-call_name ::= (IDENT | W_CLASS) {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
+call_name ::= (IDENT | W_CLASS | W_TYPE) {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
 private expr_call_generics ::= LESS data_type (COMMA data_type)* MORE
 expr_call_params ::= OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOSE_BRACKET
