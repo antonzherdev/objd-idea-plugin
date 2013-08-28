@@ -15,6 +15,22 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCaseCondConst(@NotNull ObjDCaseCondConst o) {
+    visitCaseCond(o);
+  }
+
+  public void visitCaseCondTp(@NotNull ObjDCaseCondTp o) {
+    visitCaseCond(o);
+  }
+
+  public void visitCaseCondUnapply(@NotNull ObjDCaseCondUnapply o) {
+    visitCaseCond(o);
+  }
+
+  public void visitCaseCondVal(@NotNull ObjDCaseCondVal o) {
+    visitCaseCond(o);
+  }
+
   public void visitCaseItem(@NotNull ObjDCaseItem o) {
     visitPsiElement(o);
   }

@@ -10,6 +10,10 @@ public interface ObjDTypes {
 
   IElementType CALL_NAME = new ObjDElementType("CALL_NAME");
   IElementType CASE_COND = new ObjDElementType("CASE_COND");
+  IElementType CASE_COND_CONST = new ObjDElementType("CASE_COND_CONST");
+  IElementType CASE_COND_TP = new ObjDElementType("CASE_COND_TP");
+  IElementType CASE_COND_UNAPPLY = new ObjDElementType("CASE_COND_UNAPPLY");
+  IElementType CASE_COND_VAL = new ObjDElementType("CASE_COND_VAL");
   IElementType CASE_ITEM = new ObjDElementType("CASE_ITEM");
   IElementType CLASS_BODY = new ObjDElementType("CLASS_BODY");
   IElementType CLASS_CONSTRUCTOR_FIELD = new ObjDElementType("CLASS_CONSTRUCTOR_FIELD");
@@ -83,7 +87,6 @@ public interface ObjDTypes {
   IElementType EQ = new ObjDTokenType("EQ");
   IElementType EXCLAMATION = new ObjDTokenType("EXCLAMATION");
   IElementType FLOAT = new ObjDTokenType("FLOAT");
-  IElementType IDEND = new ObjDTokenType("IDEND");
   IElementType IDENT = new ObjDTokenType("IDENT");
   IElementType INT = new ObjDTokenType("INT");
   IElementType INT_CONST = new ObjDTokenType("INT_CONST");
@@ -158,6 +161,18 @@ public interface ObjDTypes {
       }
       else if (type == CASE_COND) {
         return new ObjDCaseCondImpl(node);
+      }
+      else if (type == CASE_COND_CONST) {
+        return new ObjDCaseCondConstImpl(node);
+      }
+      else if (type == CASE_COND_TP) {
+        return new ObjDCaseCondTpImpl(node);
+      }
+      else if (type == CASE_COND_UNAPPLY) {
+        return new ObjDCaseCondUnapplyImpl(node);
+      }
+      else if (type == CASE_COND_VAL) {
+        return new ObjDCaseCondValImpl(node);
       }
       else if (type == CASE_ITEM) {
         return new ObjDCaseItemImpl(node);

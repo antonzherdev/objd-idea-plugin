@@ -29,6 +29,18 @@ public class ObjDParser implements PsiParser {
     else if (root_ == CASE_COND) {
       result_ = case_cond(builder_, level_ + 1);
     }
+    else if (root_ == CASE_COND_CONST) {
+      result_ = case_cond_const(builder_, level_ + 1);
+    }
+    else if (root_ == CASE_COND_TP) {
+      result_ = case_cond_tp(builder_, level_ + 1);
+    }
+    else if (root_ == CASE_COND_UNAPPLY) {
+      result_ = case_cond_unapply(builder_, level_ + 1);
+    }
+    else if (root_ == CASE_COND_VAL) {
+      result_ = case_cond_val(builder_, level_ + 1);
+    }
     else if (root_ == CASE_ITEM) {
       result_ = case_item(builder_, level_ + 1);
     }
@@ -218,6 +230,8 @@ public class ObjDParser implements PsiParser {
   }
 
   private static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    TokenSet.create(CASE_COND, CASE_COND_CONST, CASE_COND_TP, CASE_COND_UNAPPLY,
+      CASE_COND_VAL),
     TokenSet.create(DATA_TYPE, DATA_TYPE_COLLECTION, DATA_TYPE_LAMBDA, DATA_TYPE_MAP,
       DATA_TYPE_OPTION, DATA_TYPE_SIMPLE, DATA_TYPE_TUPLE),
     TokenSet.create(EXPR, EXPR_ARR, EXPR_BOOL, EXPR_BRACES,
@@ -253,21 +267,22 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // case_cond_unapply | case_cond_val | expr_string_const | INT | FLOAT | W_NIL | W_TRUE | W_FALSE
+  // case_cond_unapply | case_cond_val | expr_string_const | case_cond_const
   public static boolean case_cond(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_cond")) return false;
     boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<case cond>");
     result_ = case_cond_unapply(builder_, level_ + 1);
     if (!result_) result_ = case_cond_val(builder_, level_ + 1);
     if (!result_) result_ = expr_string_const(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, INT);
-    if (!result_) result_ = consumeToken(builder_, FLOAT);
-    if (!result_) result_ = consumeToken(builder_, W_NIL);
-    if (!result_) result_ = consumeToken(builder_, W_TRUE);
-    if (!result_) result_ = consumeToken(builder_, W_FALSE);
-    if (result_) {
+    if (!result_) result_ = case_cond_const(builder_, level_ + 1);
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), CASE_COND)) {
+      marker_.drop();
+    }
+    else if (result_) {
       marker_.done(CASE_COND);
     }
     else {
@@ -278,35 +293,88 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // INT | FLOAT | W_NIL | W_TRUE | W_FALSE
+  public static boolean case_cond_const(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_const")) return false;
+    boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<case cond const>");
+    result_ = consumeToken(builder_, INT);
+    if (!result_) result_ = consumeToken(builder_, FLOAT);
+    if (!result_) result_ = consumeToken(builder_, W_NIL);
+    if (!result_) result_ = consumeToken(builder_, W_TRUE);
+    if (!result_) result_ = consumeToken(builder_, W_FALSE);
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), CASE_COND_CONST)) {
+      marker_.drop();
+    }
+    else if (result_) {
+      marker_.done(CASE_COND_CONST);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // COMMA data_type
-  static boolean case_cond_tp(PsiBuilder builder_, int level_) {
+  public static boolean case_cond_tp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_cond_tp")) return false;
     if (!nextTokenIs(builder_, COMMA)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
     result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(CASE_COND_TP);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
     return result_;
   }
 
   /* ********************************************************** */
-  // IDENT OPEN_BRACKET case_cond (COMMA case_cond)* CLOSE_BRACKET case_cond_tp?
-  static boolean case_cond_unapply(PsiBuilder builder_, int level_) {
+  // data_type_ref? (OPEN_BRACKET case_cond (COMMA case_cond)* CLOSE_BRACKET) case_cond_tp?
+  public static boolean case_cond_unapply(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_cond_unapply")) return false;
-    if (!nextTokenIs(builder_, IDENT)) return false;
+    if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, OPEN_BRACKET)
+        && replaceVariants(builder_, 2, "<case cond unapply>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeTokens(builder_, 0, IDENT, OPEN_BRACKET);
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<case cond unapply>");
+    result_ = case_cond_unapply_0(builder_, level_ + 1);
+    result_ = result_ && case_cond_unapply_1(builder_, level_ + 1);
+    result_ = result_ && case_cond_unapply_2(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(CASE_COND_UNAPPLY);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // data_type_ref?
+  private static boolean case_cond_unapply_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_unapply_0")) return false;
+    data_type_ref(builder_, level_ + 1);
+    return true;
+  }
+
+  // OPEN_BRACKET case_cond (COMMA case_cond)* CLOSE_BRACKET
+  private static boolean case_cond_unapply_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_unapply_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, OPEN_BRACKET);
     result_ = result_ && case_cond(builder_, level_ + 1);
-    result_ = result_ && case_cond_unapply_3(builder_, level_ + 1);
+    result_ = result_ && case_cond_unapply_1_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
-    result_ = result_ && case_cond_unapply_5(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -317,14 +385,14 @@ public class ObjDParser implements PsiParser {
   }
 
   // (COMMA case_cond)*
-  private static boolean case_cond_unapply_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "case_cond_unapply_3")) return false;
+  private static boolean case_cond_unapply_1_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_unapply_1_2")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!case_cond_unapply_3_0(builder_, level_ + 1)) break;
+      if (!case_cond_unapply_1_2_0(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
-        empty_element_parsed_guard_(builder_, offset_, "case_cond_unapply_3");
+        empty_element_parsed_guard_(builder_, offset_, "case_cond_unapply_1_2");
         break;
       }
       offset_ = next_offset_;
@@ -333,8 +401,8 @@ public class ObjDParser implements PsiParser {
   }
 
   // COMMA case_cond
-  private static boolean case_cond_unapply_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "case_cond_unapply_3_0")) return false;
+  private static boolean case_cond_unapply_1_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_unapply_1_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
@@ -349,26 +417,26 @@ public class ObjDParser implements PsiParser {
   }
 
   // case_cond_tp?
-  private static boolean case_cond_unapply_5(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "case_cond_unapply_5")) return false;
+  private static boolean case_cond_unapply_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_unapply_2")) return false;
     case_cond_tp(builder_, level_ + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // IDEND case_cond_tp?
-  static boolean case_cond_val(PsiBuilder builder_, int level_) {
+  // def_name case_cond_tp?
+  public static boolean case_cond_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_cond_val")) return false;
-    if (!nextTokenIs(builder_, IDEND)) return false;
+    if (!nextTokenIs(builder_, IDENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, IDEND);
+    result_ = def_name(builder_, level_ + 1);
     result_ = result_ && case_cond_val_1(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
+    if (result_) {
+      marker_.done(CASE_COND_VAL);
     }
     else {
-      marker_.drop();
+      marker_.rollbackTo();
     }
     return result_;
   }
@@ -1918,7 +1986,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET (OPEN_BRACKET case_item* CLOSE_BRACKET | case_item*)
+  // W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET ((OPEN_BRACE case_item+ CLOSE_BRACE) | case_item+)
   public static boolean expr_case(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_case")) return false;
     if (!nextTokenIs(builder_, W_CASE)) return false;
@@ -1937,7 +2005,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // OPEN_BRACKET case_item* CLOSE_BRACKET | case_item*
+  // (OPEN_BRACE case_item+ CLOSE_BRACE) | case_item+
   private static boolean expr_case_4(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_case_4")) return false;
     boolean result_ = false;
@@ -1953,14 +2021,14 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // OPEN_BRACKET case_item* CLOSE_BRACKET
+  // OPEN_BRACE case_item+ CLOSE_BRACE
   private static boolean expr_case_4_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_case_4_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, OPEN_BRACKET);
+    result_ = consumeToken(builder_, OPEN_BRACE);
     result_ = result_ && expr_case_4_0_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACE);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -1970,11 +2038,14 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // case_item*
+  // case_item+
   private static boolean expr_case_4_0_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_case_4_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = case_item(builder_, level_ + 1);
     int offset_ = builder_.getCurrentOffset();
-    while (true) {
+    while (result_) {
       if (!case_item(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
@@ -1983,14 +2054,23 @@ public class ObjDParser implements PsiParser {
       }
       offset_ = next_offset_;
     }
-    return true;
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
-  // case_item*
+  // case_item+
   private static boolean expr_case_4_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_case_4_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = case_item(builder_, level_ + 1);
     int offset_ = builder_.getCurrentOffset();
-    while (true) {
+    while (result_) {
       if (!case_item(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
@@ -1999,7 +2079,13 @@ public class ObjDParser implements PsiParser {
       }
       offset_ = next_offset_;
     }
-    return true;
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   /* ********************************************************** */

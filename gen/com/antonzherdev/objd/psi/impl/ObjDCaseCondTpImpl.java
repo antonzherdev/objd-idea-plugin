@@ -8,23 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDCaseCondImpl extends ASTWrapperPsiElement implements ObjDCaseCond {
+public class ObjDCaseCondTpImpl extends ObjDCaseCondImpl implements ObjDCaseCondTp {
 
-  public ObjDCaseCondImpl(ASTNode node) {
+  public ObjDCaseCondTpImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public ObjDExprStringConst getExprStringConst() {
-    return findChildByClass(ObjDExprStringConst.class);
+  @NotNull
+  public ObjDDataType getDataType() {
+    return findNotNullChildByClass(ObjDDataType.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCond(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondTp(this);
     else super.accept(visitor);
   }
 

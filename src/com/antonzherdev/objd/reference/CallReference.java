@@ -110,8 +110,9 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                     return x.getDefName();
                 }
             }).addAllTo(items);
-        }
-        else if(element instanceof ObjDFieldStatement) return;
+        } else if(element instanceof ObjDCaseItem) {
+            caseCond(items, ((ObjDCaseItem) element).getCaseCond());
+        } else if(element instanceof ObjDFieldStatement) return;
 
         PsiElement p = element.getPrevSibling();
         if(p != null) {
@@ -119,6 +120,16 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         } else {
             p = element.getParent();
             if(p != null) vars(items, p);
+        }
+    }
+
+    private static void caseCond(ArrayList<PsiNamedElement> items, ObjDCaseCond caseCond) {
+        if(caseCond instanceof ObjDCaseCondVal) {
+            items.add(((ObjDCaseCondVal) caseCond).getDefName());
+        } else if(caseCond instanceof ObjDCaseCondUnapply) {
+            for (ObjDCaseCond x : ((ObjDCaseCondUnapply) caseCond).getCaseCondList()) {
+                caseCond(items, x);
+            }
         }
     }
 

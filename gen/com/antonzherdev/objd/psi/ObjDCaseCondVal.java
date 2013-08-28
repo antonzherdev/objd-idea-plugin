@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDCaseCond extends PsiElement {
+public interface ObjDCaseCondVal extends ObjDCaseCond {
 
   @Nullable
-  ObjDExprStringConst getExprStringConst();
+  ObjDCaseCondTp getCaseCondTp();
+
+  @NotNull
+  ObjDDefName getDefName();
 
 }
