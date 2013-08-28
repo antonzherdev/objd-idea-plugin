@@ -11,6 +11,14 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
+  public void visitCaseCond(@NotNull ObjDCaseCond o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCaseItem(@NotNull ObjDCaseItem o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassBody(@NotNull ObjDClassBody o) {
     visitPsiElement(o);
   }
@@ -128,6 +136,10 @@ public class ObjDVisitor extends PsiElementVisitor {
   }
 
   public void visitExprCallParams(@NotNull ObjDExprCallParams o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExprCase(@NotNull ObjDExprCase o) {
     visitPsiElement(o);
   }
 

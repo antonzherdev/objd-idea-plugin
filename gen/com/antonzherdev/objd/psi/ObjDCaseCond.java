@@ -5,12 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDTerm extends ObjDExpr {
+public interface ObjDCaseCond extends PsiElement {
+
+  @NotNull
+  List<ObjDCaseCond> getCaseCondList();
 
   @Nullable
-  ObjDExprCase getExprCase();
+  ObjDDataType getDataType();
 
   @Nullable
-  ObjDExprReturn getExprReturn();
+  ObjDExprStringConst getExprStringConst();
 
 }

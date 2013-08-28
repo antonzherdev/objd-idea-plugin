@@ -8,28 +8,29 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDTermImpl extends ObjDExprImpl implements ObjDTerm {
+public class ObjDCaseItemImpl extends ASTWrapperPsiElement implements ObjDCaseItem {
 
-  public ObjDTermImpl(ASTNode node) {
+  public ObjDCaseItemImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public ObjDExprCase getExprCase() {
-    return findChildByClass(ObjDExprCase.class);
+  @NotNull
+  public ObjDCaseCond getCaseCond() {
+    return findNotNullChildByClass(ObjDCaseCond.class);
   }
 
   @Override
-  @Nullable
-  public ObjDExprReturn getExprReturn() {
-    return findChildByClass(ObjDExprReturn.class);
+  @NotNull
+  public ObjDExpr getExpr() {
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTerm(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseItem(this);
     else super.accept(visitor);
   }
 

@@ -9,6 +9,8 @@ import com.antonzherdev.objd.psi.impl.*;
 public interface ObjDTypes {
 
   IElementType CALL_NAME = new ObjDElementType("CALL_NAME");
+  IElementType CASE_COND = new ObjDElementType("CASE_COND");
+  IElementType CASE_ITEM = new ObjDElementType("CASE_ITEM");
   IElementType CLASS_BODY = new ObjDElementType("CLASS_BODY");
   IElementType CLASS_CONSTRUCTOR_FIELD = new ObjDElementType("CLASS_CONSTRUCTOR_FIELD");
   IElementType CLASS_EXTENDS = new ObjDElementType("CLASS_EXTENDS");
@@ -39,6 +41,7 @@ public interface ObjDTypes {
   IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
   IElementType EXPR_CALL_PARAM = new ObjDElementType("EXPR_CALL_PARAM");
   IElementType EXPR_CALL_PARAMS = new ObjDElementType("EXPR_CALL_PARAMS");
+  IElementType EXPR_CASE = new ObjDElementType("EXPR_CASE");
   IElementType EXPR_COMP = new ObjDElementType("EXPR_COMP");
   IElementType EXPR_DO = new ObjDElementType("EXPR_DO");
   IElementType EXPR_DOT = new ObjDElementType("EXPR_DOT");
@@ -80,6 +83,7 @@ public interface ObjDTypes {
   IElementType EQ = new ObjDTokenType("EQ");
   IElementType EXCLAMATION = new ObjDTokenType("EXCLAMATION");
   IElementType FLOAT = new ObjDTokenType("FLOAT");
+  IElementType IDEND = new ObjDTokenType("IDEND");
   IElementType IDENT = new ObjDTokenType("IDENT");
   IElementType INT = new ObjDTokenType("INT");
   IElementType INT_CONST = new ObjDTokenType("INT_CONST");
@@ -118,6 +122,7 @@ public interface ObjDTypes {
   IElementType TP_VOID = new ObjDTokenType("TP_VOID");
   IElementType WHAT = new ObjDTokenType("WHAT");
   IElementType W_BREAK = new ObjDTokenType("W_BREAK");
+  IElementType W_CASE = new ObjDTokenType("W_CASE");
   IElementType W_CLASS = new ObjDTokenType("W_CLASS");
   IElementType W_DEF = new ObjDTokenType("W_DEF");
   IElementType W_DO = new ObjDTokenType("W_DO");
@@ -150,6 +155,12 @@ public interface ObjDTypes {
       IElementType type = node.getElementType();
        if (type == CALL_NAME) {
         return new ObjDCallNameImpl(node);
+      }
+      else if (type == CASE_COND) {
+        return new ObjDCaseCondImpl(node);
+      }
+      else if (type == CASE_ITEM) {
+        return new ObjDCaseItemImpl(node);
       }
       else if (type == CLASS_BODY) {
         return new ObjDClassBodyImpl(node);
@@ -240,6 +251,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_CALL_PARAMS) {
         return new ObjDExprCallParamsImpl(node);
+      }
+      else if (type == EXPR_CASE) {
+        return new ObjDExprCaseImpl(node);
       }
       else if (type == EXPR_COMP) {
         return new ObjDExprCompImpl(node);
