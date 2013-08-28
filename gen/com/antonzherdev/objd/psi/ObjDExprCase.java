@@ -11,6 +11,6 @@ public interface ObjDExprCase extends PsiElement {
   List<ObjDCaseItem> getCaseItemList();
 
   @NotNull
-  ObjDTerm getTerm();
+  ObjDExpr getExpr();
 
 }

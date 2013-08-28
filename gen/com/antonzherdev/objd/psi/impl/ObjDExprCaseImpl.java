@@ -25,8 +25,8 @@ public class ObjDExprCaseImpl extends ASTWrapperPsiElement implements ObjDExprCa
 
   @Override
   @NotNull
-  public ObjDTerm getTerm() {
-    return findNotNullChildByClass(ObjDTerm.class);
+  public ObjDExpr getExpr() {
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -80,7 +80,7 @@ expr_ ::= (expr_val | expr_set) {extends = expr_ methods = [getTp]}
 term_ ::= expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_while | expr_do | W_BREAK | expr_return
     {extends = expr_}
-expr_case ::= W_CASE OPEN_BRACKET term_ CLOSE_BRACKET (OPEN_BRACKET case_item* CLOSE_BRACKET | case_item*)
+expr_case ::= W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET (OPEN_BRACKET case_item* CLOSE_BRACKET | case_item*)
 case_item ::= case_cond ARROW expr_
 case_cond ::= (case_cond_unapply | case_cond_val | expr_string_const | INT | FLOAT | W_NIL | W_TRUE | W_FALSE)
 private case_cond_val ::= IDEND case_cond_tp?

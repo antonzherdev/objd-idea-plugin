@@ -1918,14 +1918,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_CASE OPEN_BRACKET term_ CLOSE_BRACKET (OPEN_BRACKET case_item* CLOSE_BRACKET | case_item*)
+  // W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET (OPEN_BRACKET case_item* CLOSE_BRACKET | case_item*)
   public static boolean expr_case(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_case")) return false;
     if (!nextTokenIs(builder_, W_CASE)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeTokens(builder_, 0, W_CASE, OPEN_BRACKET);
-    result_ = result_ && term_(builder_, level_ + 1);
+    result_ = result_ && expr_(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
     result_ = result_ && expr_case_4(builder_, level_ + 1);
     if (result_) {
