@@ -134,6 +134,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_CALL_PARAMS) {
       result_ = expr_call_params(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_CALL_POST_LAMBDA) {
+      result_ = expr_call_post_lambda(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_CASE) {
       result_ = expr_case(builder_, level_ + 1);
     }
@@ -1814,7 +1817,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // call_name expr_call_generics? expr_call_params?
+  // call_name expr_call_generics? expr_call_params? expr_call_post_lambda?
   public static boolean expr_call(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call")) return false;
     if (!nextTokenIs(builder_, IDENT) && !nextTokenIs(builder_, W_CLASS)
@@ -1825,6 +1828,7 @@ public class ObjDParser implements PsiParser {
     result_ = call_name(builder_, level_ + 1);
     result_ = result_ && expr_call_1(builder_, level_ + 1);
     result_ = result_ && expr_call_2(builder_, level_ + 1);
+    result_ = result_ && expr_call_3(builder_, level_ + 1);
     if (result_) {
       marker_.done(EXPR_CALL);
     }
@@ -1846,6 +1850,13 @@ public class ObjDParser implements PsiParser {
   private static boolean expr_call_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call_2")) return false;
     expr_call_params(builder_, level_ + 1);
+    return true;
+  }
+
+  // expr_call_post_lambda?
+  private static boolean expr_call_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_3")) return false;
+    expr_call_post_lambda(builder_, level_ + 1);
     return true;
   }
 
@@ -2000,6 +2011,98 @@ public class ObjDParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  /* ********************************************************** */
+  // OPEN_BRACE (lambda_par (COMMA lambda_par)* ARROW)? expr_* CLOSE_BRACE
+  public static boolean expr_call_post_lambda(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_post_lambda")) return false;
+    if (!nextTokenIs(builder_, OPEN_BRACE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, OPEN_BRACE);
+    result_ = result_ && expr_call_post_lambda_1(builder_, level_ + 1);
+    result_ = result_ && expr_call_post_lambda_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACE);
+    if (result_) {
+      marker_.done(EXPR_CALL_POST_LAMBDA);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // (lambda_par (COMMA lambda_par)* ARROW)?
+  private static boolean expr_call_post_lambda_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_post_lambda_1")) return false;
+    expr_call_post_lambda_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // lambda_par (COMMA lambda_par)* ARROW
+  private static boolean expr_call_post_lambda_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_post_lambda_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = lambda_par(builder_, level_ + 1);
+    result_ = result_ && expr_call_post_lambda_1_0_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, ARROW);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // (COMMA lambda_par)*
+  private static boolean expr_call_post_lambda_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_post_lambda_1_0_1")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!expr_call_post_lambda_1_0_1_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "expr_call_post_lambda_1_0_1");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // COMMA lambda_par
+  private static boolean expr_call_post_lambda_1_0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_post_lambda_1_0_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, COMMA);
+    result_ = result_ && lambda_par(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // expr_*
+  private static boolean expr_call_post_lambda_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_post_lambda_2")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!expr_(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "expr_call_post_lambda_2");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
   }
 
   /* ********************************************************** */

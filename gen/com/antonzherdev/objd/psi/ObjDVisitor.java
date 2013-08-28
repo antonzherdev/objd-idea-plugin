@@ -155,6 +155,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExprCallPostLambda(@NotNull ObjDExprCallPostLambda o) {
+    visitPsiElement(o);
+  }
+
   public void visitExprCase(@NotNull ObjDExprCase o) {
     visitPsiElement(o);
   }

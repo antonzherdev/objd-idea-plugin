@@ -110,7 +110,14 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                     return x.getDefName();
                 }
             }).addAllTo(items);
-        } else if(element instanceof ObjDCaseItem) {
+        }  else if(element instanceof ObjDExprCallPostLambda) {
+            chain(((ObjDExprCallPostLambda) element).getLambdaParList()).map(new F<ObjDLambdaPar,ObjDDefName>() {
+                @Override
+                public ObjDDefName f(ObjDLambdaPar x) {
+                    return x.getDefName();
+                }
+            }).addAllTo(items);
+        } if(element instanceof ObjDCaseItem) {
             caseCond(items, ((ObjDCaseItem) element).getCaseCond());
         } else if(element instanceof ObjDFieldStatement) return;
 

@@ -34,6 +34,12 @@ public class ObjDExprCallImpl extends ObjDExprImpl implements ObjDExprCall {
     return findChildByClass(ObjDExprCallParams.class);
   }
 
+  @Override
+  @Nullable
+  public ObjDExprCallPostLambda getExprCallPostLambda() {
+    return findChildByClass(ObjDExprCallPostLambda.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCall(this);
     else super.accept(visitor);

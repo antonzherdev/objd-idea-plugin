@@ -45,6 +45,7 @@ public interface ObjDTypes {
   IElementType EXPR_CALL = new ObjDElementType("EXPR_CALL");
   IElementType EXPR_CALL_PARAM = new ObjDElementType("EXPR_CALL_PARAM");
   IElementType EXPR_CALL_PARAMS = new ObjDElementType("EXPR_CALL_PARAMS");
+  IElementType EXPR_CALL_POST_LAMBDA = new ObjDElementType("EXPR_CALL_POST_LAMBDA");
   IElementType EXPR_CASE = new ObjDElementType("EXPR_CASE");
   IElementType EXPR_COMP = new ObjDElementType("EXPR_COMP");
   IElementType EXPR_DO = new ObjDElementType("EXPR_DO");
@@ -266,6 +267,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_CALL_PARAMS) {
         return new ObjDExprCallParamsImpl(node);
+      }
+      else if (type == EXPR_CALL_POST_LAMBDA) {
+        return new ObjDExprCallPostLambdaImpl(node);
       }
       else if (type == EXPR_CASE) {
         return new ObjDExprCaseImpl(node);

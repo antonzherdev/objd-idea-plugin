@@ -109,7 +109,8 @@ expr_dot ::= expr_index (DOT expr_index)* {extends = expr_}
 expr_index ::=term_ index_op? {extends = expr_}
 index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op?
 
-expr_call ::= call_name expr_call_generics? expr_call_params? {extends = expr_}
+expr_call ::= call_name expr_call_generics? expr_call_params? expr_call_post_lambda? {extends = expr_}
+expr_call_post_lambda ::= OPEN_BRACE (lambda_par (COMMA lambda_par)* ARROW)? expr_* CLOSE_BRACE
 call_name ::= (IDENT | W_CLASS) {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getReference]}
 private expr_call_generics ::= LESS data_type (COMMA data_type)* MORE

@@ -16,4 +16,7 @@ public interface ObjDExprCall extends ObjDExpr {
   @Nullable
   ObjDExprCallParams getExprCallParams();
 
+  @Nullable
+  ObjDExprCallPostLambda getExprCallPostLambda();
+
 }
