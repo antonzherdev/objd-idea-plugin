@@ -120,6 +120,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "\\\\" {return ObjDTypes.STRING;}
     "\\\"" {return ObjDTypes.STRING;}
     "\"" {yybegin(YYINITIAL); return ObjDTypes.STRING;}
+    {IDENT_CHAR}+ {return ObjDTypes.STRING; }
     .  {return ObjDTypes.STRING; }
 }
 

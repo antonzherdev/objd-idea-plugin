@@ -34,7 +34,7 @@ public class ObjDBlock extends AbstractBlock {
             if(childType == TokenType.WHITE_SPACE || child.getChars().length() == 0) continue;
             Indent indent  = Indent.getNoneIndent();
             Wrap wrap = null;
-            if (parentType == ObjDTypes.CLASS_BODY && childType == ObjDTypes.DEF_STATEMENT) {
+            if (parentType == ObjDTypes.CLASS_BODY && (childType == ObjDTypes.DEF_STATEMENT || childType == ObjDTypes.FIELD_STATEMENT)) {
                 wrap = Wrap.createWrap(WrapType.ALWAYS, true);
                 indent = Indent.getNormalIndent();
             } else if (parentType == ObjDTypes.EXPR_BRACES && childType != ObjDTypes.OPEN_BRACE &&  childType != ObjDTypes.CLOSE_BRACE) {
@@ -66,6 +66,8 @@ public class ObjDBlock extends AbstractBlock {
     protected Indent getChildIndent() {
         IElementType tp = getNode().getElementType();
         if(tp == ObjDTypes.CLASS_BODY || tp == ObjDTypes.EXPR_BRACES) return Indent.getNormalIndent();
+        if(tp == ObjDTypes.EXPR_STRING_CONST) return Indent.getSpaceIndent(1);
+        if(tp == ObjDTypes.CLASS_STATEMENT) return Indent.getNormalIndent();
         return Indent.getNoneIndent();
     }
 }
