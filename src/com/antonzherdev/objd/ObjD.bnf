@@ -21,7 +21,7 @@ pack_statement ::= W_PACKAGE IDENT (DOT IDENT)*
 
 private statement_ ::= ((W_STUB? (class_statement | def_statement | field_statement | type_statement))|import_statement |COMMENT)
 
-import_statement ::= (W_IMPORT (import_od_file | STRING | (LESS IDENT (DIV IDENT)* DOT IDENT MORE)))
+import_statement ::= (W_IMPORT (import_od_file | STRING+ | (LESS IDENT (DIV IDENT)* DOT IDENT MORE)))
 import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                                      methods=[getName setName getNameIdentifier getReference]}
 

@@ -2829,7 +2829,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_IMPORT (import_od_file | STRING | (LESS IDENT (DIV IDENT)* DOT IDENT MORE))
+  // W_IMPORT (import_od_file | STRING+ | (LESS IDENT (DIV IDENT)* DOT IDENT MORE))
   public static boolean import_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement")) return false;
     if (!nextTokenIs(builder_, W_IMPORT)) return false;
@@ -2846,14 +2846,39 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // import_od_file | STRING | (LESS IDENT (DIV IDENT)* DOT IDENT MORE)
+  // import_od_file | STRING+ | (LESS IDENT (DIV IDENT)* DOT IDENT MORE)
   private static boolean import_statement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_statement_1")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = import_od_file(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, STRING);
+    if (!result_) result_ = import_statement_1_1(builder_, level_ + 1);
     if (!result_) result_ = import_statement_1_2(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // STRING+
+  private static boolean import_statement_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "import_statement_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, STRING);
+    int offset_ = builder_.getCurrentOffset();
+    while (result_) {
+      if (!consumeToken(builder_, STRING)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "import_statement_1_1");
+        break;
+      }
+      offset_ = next_offset_;
+    }
     if (!result_) {
       marker_.rollbackTo();
     }
