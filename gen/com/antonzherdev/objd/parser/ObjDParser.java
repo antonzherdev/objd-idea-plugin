@@ -3254,7 +3254,13 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // static_mod | weak_mod | private_mod
+  // W_LAZY
+  static boolean lazy_mod(PsiBuilder builder_, int level_) {
+    return consumeToken(builder_, W_LAZY);
+  }
+
+  /* ********************************************************** */
+  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod
   static boolean mod(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mod")) return false;
     boolean result_ = false;
@@ -3262,6 +3268,8 @@ public class ObjDParser implements PsiParser {
     result_ = static_mod(builder_, level_ + 1);
     if (!result_) result_ = weak_mod(builder_, level_ + 1);
     if (!result_) result_ = private_mod(builder_, level_ + 1);
+    if (!result_) result_ = protected_mod(builder_, level_ + 1);
+    if (!result_) result_ = lazy_mod(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -3363,6 +3371,12 @@ public class ObjDParser implements PsiParser {
   // W_PRIVATE
   static boolean private_mod(PsiBuilder builder_, int level_) {
     return consumeToken(builder_, W_PRIVATE);
+  }
+
+  /* ********************************************************** */
+  // W_PROTECTED
+  static boolean protected_mod(PsiBuilder builder_, int level_) {
+    return consumeToken(builder_, W_PROTECTED);
   }
 
   /* ********************************************************** */

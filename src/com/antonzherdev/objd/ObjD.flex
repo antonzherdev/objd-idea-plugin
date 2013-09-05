@@ -41,6 +41,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "def" {return ObjDTypes.W_DEF; }
     "extends" {return ObjDTypes.W_EXTENDS; }
     "private" {return ObjDTypes.W_PRIVATE; }
+    "protected" {return ObjDTypes.W_PROTECTED; }
     "static" {return ObjDTypes.W_STATIC; }
     "nil" {return ObjDTypes.W_NIL; }
     "true" {return ObjDTypes.W_TRUE; }
@@ -61,6 +62,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "type" {return ObjDTypes.W_TYPE; }
     "with" {return ObjDTypes.W_WITH; }
     "case" {return ObjDTypes.W_CASE; }
+    "lazy" {return ObjDTypes.W_LAZY; }
 
     "bool" {return ObjDTypes.TP_BOOL; }
     "float" {return ObjDTypes.TP_FLOAT; }

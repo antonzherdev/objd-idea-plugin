@@ -136,9 +136,11 @@ public interface ObjDTypes {
   IElementType W_FALSE = new ObjDTokenType("W_FALSE");
   IElementType W_IF = new ObjDTokenType("W_IF");
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
+  IElementType W_LAZY = new ObjDTokenType("W_LAZY");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
   IElementType W_PACKAGE = new ObjDTokenType("W_PACKAGE");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
+  IElementType W_PROTECTED = new ObjDTokenType("W_PROTECTED");
   IElementType W_RETURN = new ObjDTokenType("W_RETURN");
   IElementType W_SELF = new ObjDTokenType("W_SELF");
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
