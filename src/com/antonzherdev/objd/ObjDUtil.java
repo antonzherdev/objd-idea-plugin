@@ -77,20 +77,37 @@ public class ObjDUtil {
     }
 
     public static IChain<ObjDFile> availableFiles(PsiFile file) {
-        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
-                .map(new F<ASTNode,ObjDFile>() {
+        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT, ObjDTypes.EXPORT_STATEMENT)))
+                .flatMap(new F<ASTNode, Iterable<ObjDFile>>() {
                     @Override
-                    public ObjDFile f(ASTNode astNode) {
-                        ObjDImportOdFile od = astNode.getPsi(ObjDImportStatement.class).getImportOdFile();
-                        if(od == null) return null;
-                        return (ObjDFile) od.getReference().resolve();
+                    public Iterable<ObjDFile> f(ASTNode astNode) {
+                        PsiElement psi = astNode.getPsi();
+                        ObjDImportOdFile od;
+                        if(psi instanceof ObjDImportStatement) {
+                            od = astNode.getPsi(ObjDImportStatement.class).getImportOdFile();
+                        } else {
+                            od = astNode.getPsi(ObjDExportStatement.class).getImportOdFile();
+                        }
+                        if(od == null) return empty();
+                        ObjDFile f = (ObjDFile) od.getReference().resolve();
+                        if(f == null) return empty();
+                        return chain(f.getNode().getChildren(TokenSet.create(ObjDTypes.EXPORT_STATEMENT)))
+                                .map(new F<ASTNode, ObjDFile>() {
+                                    @Override
+                                    public ObjDFile f(ASTNode astNode) {
+                                        ObjDImportOdFile od = astNode.getPsi(ObjDExportStatement.class).getImportOdFile();
+                                        if(od == null) return null;
+                                        return (ObjDFile) od.getReference().resolve();
+                                    }
+                                })
+                                .prepend(f);
                     }
                 })
                 .prepend((ObjDFile)file)
                 .append(getKernelFiles(file.getProject()));
     }
 
-    final static List<String> kernelFiles = Arrays.asList("ODEnum", "ODObject", "CNTuple", "CNOption", "CNList", "CNMap", "CNSeq");
+    final static List<String> kernelFiles = Arrays.asList("ODEnum", "ODObject", "CNTuple", "CNOption", "CNList", "CNMap", "CNSeq", "CNLazy");
     private static IChain<ObjDFile> getKernelFiles(Project project) {
         return getAllVirtualFiles(project)
                 .filter(new B<VirtualFile>() {

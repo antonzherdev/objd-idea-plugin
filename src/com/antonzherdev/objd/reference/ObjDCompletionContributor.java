@@ -23,7 +23,12 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull final CompletionResultSet resultSet) {
                         PsiElement parent = parameters.getPosition().getParent();
-                        if(parent instanceof ObjDImportOdFile) {
+                        PsiElement element = parameters.getPosition().getNavigationElement();
+                        if(parent instanceof ObjDFile && (element.getPrevSibling() instanceof ObjDClassStatement
+                                || (element.getPrevSibling() != null && element.getPrevSibling().getPrevSibling() instanceof ObjDClassStatement) ))
+                        {
+                            resultSet.addElement(create("extends "));
+                        } else if(parent instanceof ObjDImportOdFile) {
                             ObjDUtil.getAllFiles(parent.getProject()).foreach(new P<ObjDFile>() {
                                 @Override
                                 public void p(ObjDFile objDFile) {
@@ -38,8 +43,21 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                     resultSet.addElement(create(className.getName()));
                                 }
                             });
-                        } else if(parent.getParent() instanceof ObjDFile) {
+                            resultSet.addElement(create("byte"));
+                            resultSet.addElement(create("ubyte"));
+                            resultSet.addElement(create("float"));
+                            resultSet.addElement(create("float4"));
+                            resultSet.addElement(create("float8"));
+                            resultSet.addElement(create("int"));
+                            resultSet.addElement(create("int4"));
+                            resultSet.addElement(create("int8"));
+                            resultSet.addElement(create("uint"));
+                            resultSet.addElement(create("uint4"));
+                            resultSet.addElement(create("uint8"));
+                            resultSet.addElement(create("bool"));
+                        } else if(parent instanceof ObjDFile) {
                             resultSet.addElement(create("import "));
+                            resultSet.addElement(create("export "));
                             resultSet.addElement(create("val "));
                             resultSet.addElement(create("stub "));
                             resultSet.addElement(create("class "));
@@ -63,17 +81,17 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                     resultSet.addElement(create(x.getName()));
                                 }
                             });
-                        } else if(parent instanceof ObjDClassBody || parent.getParent() instanceof ObjDClassBody) {
+                        } else if(parent.getParent() instanceof ObjDEnumItem
+                                || (parent instanceof ObjDDefName && parent.getParent() instanceof ObjDFieldStatement)
+                        ) {
                             resultSet.addElement(create("val "));
                             resultSet.addElement(create("var "));
                             resultSet.addElement(create("private "));
+                            resultSet.addElement(create("protected "));
                             resultSet.addElement(create("def "));
                             resultSet.addElement(create("static "));
                             resultSet.addElement(create("weak "));
-                        } else if(parent instanceof ObjDDefName && (parent.getParent().getPrevSibling() instanceof ObjDClassStatement
-                                || (parent.getParent().getPrevSibling() != null && parent.getParent().getPrevSibling().getPrevSibling() instanceof ObjDClassStatement) ))
-                        {
-                            resultSet.addElement(create("extends "));
+                            resultSet.addElement(create("lazy "));
                         }
                     }
                 }

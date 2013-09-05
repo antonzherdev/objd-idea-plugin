@@ -37,6 +37,7 @@ public interface ObjDTypes {
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
   IElementType ENUM_ITEM = new ObjDElementType("ENUM_ITEM");
+  IElementType EXPORT_STATEMENT = new ObjDElementType("EXPORT_STATEMENT");
   IElementType EXPR = new ObjDElementType("EXPR");
   IElementType EXPR_ARR = new ObjDElementType("EXPR_ARR");
   IElementType EXPR_BOOL = new ObjDElementType("EXPR_BOOL");
@@ -132,6 +133,7 @@ public interface ObjDTypes {
   IElementType W_DO = new ObjDTokenType("W_DO");
   IElementType W_ELSE = new ObjDTokenType("W_ELSE");
   IElementType W_ENUM = new ObjDTokenType("W_ENUM");
+  IElementType W_EXPORT = new ObjDTokenType("W_EXPORT");
   IElementType W_EXTENDS = new ObjDTokenType("W_EXTENDS");
   IElementType W_FALSE = new ObjDTokenType("W_FALSE");
   IElementType W_IF = new ObjDTokenType("W_IF");
@@ -245,6 +247,9 @@ public interface ObjDTypes {
       }
       else if (type == ENUM_ITEM) {
         return new ObjDEnumItemImpl(node);
+      }
+      else if (type == EXPORT_STATEMENT) {
+        return new ObjDExportStatementImpl(node);
       }
       else if (type == EXPR) {
         return new ObjDExprImpl(node);

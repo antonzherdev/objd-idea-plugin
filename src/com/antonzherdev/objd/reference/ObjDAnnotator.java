@@ -4,6 +4,7 @@ package com.antonzherdev.objd.reference;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.ObjDCallName;
 import com.antonzherdev.objd.psi.ObjDDataTypeRef;
+import com.antonzherdev.objd.psi.ObjDImportOdFile;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.TextRange;
@@ -26,6 +27,11 @@ public class ObjDAnnotator  implements Annotator {
             PsiReference reference = element.getReference();
             if(!((ObjDDataTypeRef) element).getName().equals("_") && reference != null && reference.resolve() == null) {
                 addAnotation("Unresolved data type", element, holder);
+            }
+        } else if(element instanceof ObjDImportOdFile) {
+            PsiReference reference = element.getReference();
+            if(reference != null && reference.resolve() == null) {
+                addAnotation("Unresolved file", element, holder);
             }
         }
     }
