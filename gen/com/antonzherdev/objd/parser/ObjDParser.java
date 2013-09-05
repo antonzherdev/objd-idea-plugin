@@ -1144,7 +1144,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET INT_CONST? CLOSE_SQUARE_BRACKET
+  // OPEN_SQUARE_BRACKET INT? CLOSE_SQUARE_BRACKET
   static boolean data_type_post_arr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_post_arr")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
@@ -1162,10 +1162,10 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // INT_CONST?
+  // INT?
   private static boolean data_type_post_arr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_post_arr_1")) return false;
-    consumeToken(builder_, INT_CONST);
+    consumeToken(builder_, INT);
     return true;
   }
 
