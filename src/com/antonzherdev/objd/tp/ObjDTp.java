@@ -26,11 +26,7 @@ public abstract class ObjDTp {
             PsiElement ref = call.getCallName().getReference().resolve();
             if(ref instanceof ObjDClassName) {
                 ObjDExprCallParams pars = call.getExprCallParams();
-                if(pars == null && !call.getCallName().getName().equals("new")) {
-                    return new Object((ObjDClass) ref.getParent());
-                } else {
-                    return new Class((ObjDClass) ref.getParent());
-                }
+                return new Class((ObjDClass) ref.getParent());
             } else if (ref instanceof ObjDDefName) {
                 return getTpForDef(ref.getParent());
             } else {
@@ -172,9 +168,9 @@ public abstract class ObjDTp {
 
         @Override
         public IChain<PsiRef> getRefsChain() {
-            if(!(cls instanceof ObjDClassStatement)) return newChain(cls);
+            if(!(cls instanceof ObjDClassStatement)) return empty();
             ObjDClassStatement classStatement = (ObjDClassStatement) cls;
-            if(classStatement.getClassBody() == null) return newChain(classStatement);
+            if(classStatement.getClassBody() == null) return empty();
             return
                     Chain.<PsiRef>chain().append(
                             chain(classStatement.getClassBody().getDefStatementList()).filter(new B<ObjDDefStatement>() {
@@ -216,12 +212,9 @@ public abstract class ObjDTp {
                                     return x.isStatic();
                                 }
                             }).map(DEF_NAME).map(PsiRef.APPLY)
-                            : newChain(classStatement));
+                            : Chain.<PsiRef>empty());
         }
 
-        private IChain<PsiRef> newChain(ObjDClass classStatement) {
-            return chain(new PsiRef(classStatement.getClassName(), "new"));
-        }
     }
 
     public static class Class extends ObjDTp {
