@@ -923,13 +923,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_CLASS | W_TRAIT | W_STRUCT | W_ENUM
+  // W_CLASS | W_OBJECT | W_TRAIT | W_STRUCT | W_ENUM
   public static boolean class_type(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_type")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<class type>");
     result_ = consumeToken(builder_, W_CLASS);
+    if (!result_) result_ = consumeToken(builder_, W_OBJECT);
     if (!result_) result_ = consumeToken(builder_, W_TRAIT);
     if (!result_) result_ = consumeToken(builder_, W_STRUCT);
     if (!result_) result_ = consumeToken(builder_, W_ENUM);
