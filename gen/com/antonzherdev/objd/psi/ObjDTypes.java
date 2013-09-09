@@ -109,6 +109,7 @@ public interface ObjDTypes {
   IElementType PLUS_SET = new ObjDTokenType("PLUS_SET");
   IElementType SET = new ObjDTokenType("SET");
   IElementType STRING = new ObjDTokenType("STRING");
+  IElementType TP_ANY = new ObjDTokenType("TP_ANY");
   IElementType TP_BOOL = new ObjDTokenType("TP_BOOL");
   IElementType TP_BYTE = new ObjDTokenType("TP_BYTE");
   IElementType TP_FLOAT = new ObjDTokenType("TP_FLOAT");

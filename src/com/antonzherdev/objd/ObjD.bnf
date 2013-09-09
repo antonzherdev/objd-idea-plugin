@@ -66,7 +66,7 @@ def_parameter ::= ((def_name | W_SELF)? COLON data_type (SET expr_)?)
 
 data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self)
 data_type_self ::= W_SELF
-data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING |
+data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_ANY|
     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr? {extends = data_type}
 private data_type_post_arr ::= OPEN_SQUARE_BRACKET INT? CLOSE_SQUARE_BRACKET
 data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
