@@ -1,10 +1,9 @@
 package com.antonzherdev.objd.reference;
 
 import com.antonzherdev.objd.ObjDUtil;
-import com.antonzherdev.objd.psi.ObjDElementFactory;
-import com.antonzherdev.objd.psi.ObjDFile;
-import com.antonzherdev.objd.psi.ObjDImportOdFile;
-import com.antonzherdev.objd.psi.ObjDImportStatement;
+import com.antonzherdev.objd.psi.ObjDImportPart;
+import com.antonzherdev.objd.psi.ObjDTypes;
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
@@ -13,8 +12,11 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ObjDImportReference extends PsiReferenceBase<ObjDImportOdFile> {
-    public ObjDImportReference(@NotNull ObjDImportOdFile element, TextRange textRange) {
+import java.util.LinkedList;
+import java.util.List;
+
+public class ObjDImportReference extends PsiReferenceBase<ObjDImportPart> {
+    public ObjDImportReference(@NotNull ObjDImportPart element, TextRange textRange) {
         super(element, textRange);
     }
 
@@ -22,7 +24,19 @@ public class ObjDImportReference extends PsiReferenceBase<ObjDImportOdFile> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        return ObjDUtil.findFile(getElement().getProject(), getElement().getName()).getOrNull();
+        return ObjDUtil.findClass(getElement().getProject(), getPackName(), getElement().getName()).getOrNull();
+    }
+
+    public List<String> getPackName() {
+        List<String> ret = new LinkedList<String>();
+        ASTNode node = getElement().getNode();
+        while(true) {
+            node = node.getTreePrev();
+            node = node.getTreePrev();
+            if((node.getElementType() != ObjDTypes.IMPORT_PART)) break;
+            ret.add(0, node.getPsi(ObjDImportPart.class).getName());
+        }
+        return ret;
     }
 
     @NotNull

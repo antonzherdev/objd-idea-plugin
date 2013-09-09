@@ -11,14 +11,14 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiReference;
 
-public class ObjDImportOdFileImpl extends ObjDNamedElementImpl implements ObjDImportOdFile {
+public class ObjDImportPartImpl extends ObjDNamedElementImpl implements ObjDImportPart {
 
-  public ObjDImportOdFileImpl(ASTNode node) {
+  public ObjDImportPartImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitImportOdFile(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitImportPart(this);
     else super.accept(visitor);
   }
 

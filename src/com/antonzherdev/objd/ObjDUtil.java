@@ -16,7 +16,6 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.indexing.FileBasedIndex;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,6 +34,26 @@ public class ObjDUtil {
 
     public static IChain<ObjDFile> getAllFiles(final Project project) {
         return getAllVirtualFiles(project).map(toObjDFileF(project));
+    }
+
+
+    public static Option<ObjDClass> findClass(Project project, final Iterable<String> pack, final String name) {
+        return getAllFiles(project).filter(new F<ObjDFile, Boolean>() {
+            @Override
+            public Boolean f(ObjDFile f) {
+                return f.getPackage().equals(pack);
+            }
+        }).flatMap(new F<ObjDFile,IChain<ObjDClass>>() {
+            @Override
+            public IChain<ObjDClass> f(ObjDFile objDFile) {
+                return getClassesInFile(objDFile);
+            }
+        }).find(new F<ObjDClass, Boolean>() {
+            @Override
+            public Boolean f(ObjDClass objDClass) {
+                return objDClass.getClassName().getName().equals(name);
+            }
+        });
     }
 
     public static Option<ObjDClass> findKernelClass(Project project, final String name) {
@@ -60,51 +79,57 @@ public class ObjDUtil {
                 ObjDFileType.INSTANCE, GlobalSearchScope.allScope(project)));
     }
 
-    public static IChain<ObjDClassName> availableClassesInFile(PsiFile file) {
-        return availableFiles(file)
-                .flatMap(new F<ObjDFile, IChain<ObjDClass>>() {
+    public static IChain<ObjDClass> availableClassesInFile(final PsiFile file) {
+        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
+                .flatMap(new F<ASTNode, Iterable<ObjDClass>>() {
                     @Override
-                    public IChain<ObjDClass> f(ObjDFile objDFile) {
-                        return getClassesInFile(objDFile);
+                    public Iterable<ObjDClass> f(ASTNode astNode) {
+                        final List<String> parts = chain(astNode.getPsi(ObjDImportStatement.class).getImportPartList())
+                                .map(new F<ObjDImportPart, String>() {
+                                    @Override
+                                    public String f(ObjDImportPart objDImportPart) {
+                                        return objDImportPart.getName();
+                                    }
+                                }).list();
+                        String lastPart = parts.get(parts.size() - 1);
+                        if("_".equals(lastPart)) {
+                            return getAllFiles(file.getProject())
+                                    .filter(new F<ObjDFile, Boolean>() {
+                                        @Override
+                                        public Boolean f(ObjDFile objDFile) {
+                                            return objDFile.getPackage().startsWith(parts);
+                                        }
+                                    })
+                                    .flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
+                                        @Override
+                                        public Iterable<ObjDClass> f(ObjDFile objDFile) {
+                                            return getClassesInFile(objDFile);
+                                        }
+                                    });
+                        } else {
+                            return findClass(file.getProject(), parts.subList(0, parts.size() - 1), lastPart);
+                        }
                     }
                 })
-                .map(new F<ObjDClass,ObjDClassName>() {
+                .append(getKernelFiles(file.getProject()).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
                     @Override
-                    public ObjDClassName f(ObjDClass x) {
-                        return x.getClassName();
+                    public Iterable<ObjDClass> f(ObjDFile objDFile) {
+                        return getClassesInFile(objDFile);
+                    }
+                }));
+    }
+
+
+    private static IChain<ObjDFile> getKernelFiles(Project project) {
+        return getAllFiles(project)
+                .filter(new B<ObjDFile>() {
+                    @Override
+                    public Boolean f(ObjDFile f) {
+                        return f.getPackage().head().get().equals("core");
                     }
                 });
     }
 
-    public static IChain<ObjDFile> availableFiles(PsiFile file) {
-        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
-                .flatMap(new F<ASTNode, Iterable<ObjDFile>>() {
-                    @Override
-                    public Iterable<ObjDFile> f(ASTNode astNode) {
-                        PsiElement psi = astNode.getPsi();
-                        ObjDImportOdFile od;
-                        od = astNode.getPsi(ObjDImportStatement.class).getImportOdFile();
-                        if(od == null) return empty();
-                        ObjDFile f = (ObjDFile) od.getReference().resolve();
-                        if(f == null) return empty();
-                        return Arrays.asList(f);
-                    }
-                })
-                .prepend((ObjDFile)file)
-                .append(getKernelFiles(file.getProject()));
-    }
-
-    final static List<String> kernelFiles = Arrays.asList("ODEnum", "ODObject", "CNTuple", "CNOption", "CNList", "CNMap", "CNSeq", "CNLazy");
-    private static IChain<ObjDFile> getKernelFiles(Project project) {
-        return getAllVirtualFiles(project)
-                .filter(new B<VirtualFile>() {
-                    @Override
-                    public Boolean f(VirtualFile f) {
-                        return kernelFiles.contains(f.getNameWithoutExtension());
-                    }
-                })
-                .map(toObjDFileF(project));
-    }
 
     public static IChain<ObjDClass> getClassesInFile(ObjDFile objDFile) {
         if(objDFile == null) return empty();
@@ -256,5 +281,4 @@ public class ObjDUtil {
         }
         return ret;
     }
-
 }

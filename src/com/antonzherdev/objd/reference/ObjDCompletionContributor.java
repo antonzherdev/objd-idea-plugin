@@ -28,19 +28,11 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                 || (element.getPrevSibling() != null && element.getPrevSibling().getPrevSibling() instanceof ObjDClassStatement) ))
                         {
                             resultSet.addElement(create("extends "));
-                        } else if(parent instanceof ObjDImportOdFile) {
-                            ObjDUtil.getAllFiles(parent.getProject()).foreach(new P<ObjDFile>() {
-                                @Override
-                                public void p(ObjDFile objDFile) {
-                                    String name = objDFile.getName();
-                                    resultSet.addElement(create(name.substring(0, name.length() - 3)));
-                                }
-                            });
                         } else if(parent instanceof ObjDDataTypeRef) {
-                            ObjDUtil.availableClassesInFile(parent.getContainingFile()).foreach(new P<ObjDClassName>() {
+                            ObjDUtil.availableClassesInFile(parent.getContainingFile()).foreach(new P<ObjDClass>() {
                                 @Override
-                                public void p(ObjDClassName className) {
-                                    resultSet.addElement(create(className.getName()));
+                                public void p(ObjDClass className) {
+                                    resultSet.addElement(create(className.getClassName().getName()));
                                 }
                             });
                             resultSet.addElement(create("byte"));

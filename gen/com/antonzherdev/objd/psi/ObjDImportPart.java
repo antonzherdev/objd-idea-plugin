@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
 import com.intellij.psi.PsiReference;
 
-public interface ObjDImportOdFile extends ObjDNamedElement {
+public interface ObjDImportPart extends ObjDNamedElement {
 
   String getName();
 

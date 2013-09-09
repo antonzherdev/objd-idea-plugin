@@ -51,32 +51,15 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         if(dot.isDefined()) {
             return dot.get().getLeft().getTp().getRefsChain();
         }
-        return ObjDUtil.availableFiles(element.getContainingFile())
-                .flatMap(new F<ObjDFile, Iterable<PsiNamedElement>>() {
+        return ObjDUtil.availableClassesInFile(element.getContainingFile())
+                .map(new F<ObjDClass, PsiNamedElement>() {
                     @Override
-                    public Iterable<PsiNamedElement> f(ObjDFile f) {
-                        return
-                                ObjDUtil.getClassesInFile(f).map(new F<ObjDClass, PsiNamedElement>() {
-                                    @Override
-                                    public PsiNamedElement f(ObjDClass x) {
-                                        return x.getClassName();
-                                    }
-                                }).append(ObjDUtil.getDefsInFile(f).map(new F<ObjDDefStatement, PsiNamedElement>() {
-                                    @Override
-                                    public PsiNamedElement f(ObjDDefStatement x) {
-                                        return x.getDefName();
-                                    }
-                                })).append(ObjDUtil.getValsInFile(f).map(new F<ObjDFieldStatement, PsiNamedElement>() {
-                                    @Override
-                                    public PsiNamedElement f(ObjDFieldStatement x) {
-                                        return x.getDefName();
-                                    }
-                                }));
-
+                    public PsiNamedElement f(ObjDClass objDClass) {
+                        return objDClass.getClassName();
                     }
                 })
                 .append(
-                        ObjDUtil.getClass(element).map(new F<ObjDClassStatement,IChain<PsiNamedElement>>() {
+                        ObjDUtil.getClass(element).map(new F<ObjDClassStatement, IChain<PsiNamedElement>>() {
                             @Override
                             public IChain<PsiNamedElement> f(ObjDClassStatement x) {
                                 return ObjDUtil.classFields(x);

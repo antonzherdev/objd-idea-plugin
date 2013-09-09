@@ -16,15 +16,16 @@
   psiImplUtilClass="com.antonzherdev.objd.psi.impl.ObjDPsiImplUtil"
 }
 
-file ::= pack_statement? statement_*
-pack_statement ::= W_PACKAGE IDENT (DOT IDENT)*
+file ::= pack_statement statement_*
+pack_statement ::= W_PACKAGE pack_part (DOT pack_part)*
+pack_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
+                        methods=[getName setName getNameIdentifier]}
 
 private statement_ ::= (W_STUB? class_statement | W_STUB def_statement | W_STUB field_statement | type_statement | import_statement |COMMENT)
 
-import_statement ::= W_IMPORT import_od_file
-import_od_file ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
-                                     methods=[getName setName getNameIdentifier getReference]}
-
+import_statement ::= W_IMPORT import_part (DOT import_part)*
+import_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
+                                                           methods=[getName setName getNameIdentifier getReference] }
 type_statement ::= (W_TYPE class_name class_generics? SET class_extends) {
     methods = [getClassExtendsList]
     implements = "com.antonzherdev.objd.psi.ObjDClass"

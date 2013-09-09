@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDPackStatement extends PsiElement {
 
+  @NotNull
+  List<ObjDPackPart> getPackPartList();
+
 }

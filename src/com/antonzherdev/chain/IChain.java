@@ -262,5 +262,9 @@ public interface IChain<X> extends Iterable<X> {
 
     Option<X> max();
 
+    Option<X> head();
+
     void addAllTo(Collection<? super X> collection);
+
+    boolean startsWith(Iterable<X> collection);
 }

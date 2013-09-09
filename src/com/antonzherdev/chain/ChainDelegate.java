@@ -161,8 +161,23 @@ public class ChainDelegate<X> implements IChain<X> {
     }
 
     @Override
+    public Option<X> head() {
+        return base.head();
+    }
+
+    @Override
     public void addAllTo(Collection<? super X> collection) {
         base.addAllTo(collection);
+    }
+
+    @Override
+    public boolean startsWith(Iterable<X> collection) {
+        return base.startsWith(collection);
+    }
+
+    @Override
+    public boolean equals(Object collection) {
+        return base.equals(collection);
     }
 
     @Override

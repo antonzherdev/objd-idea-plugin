@@ -65,11 +65,12 @@ public interface ObjDTypes {
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
-  IElementType IMPORT_OD_FILE = new ObjDElementType("IMPORT_OD_FILE");
+  IElementType IMPORT_PART = new ObjDElementType("IMPORT_PART");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
   IElementType INDEX_OP = new ObjDElementType("INDEX_OP");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
   IElementType MODS = new ObjDElementType("MODS");
+  IElementType PACK_PART = new ObjDElementType("PACK_PART");
   IElementType PACK_STATEMENT = new ObjDElementType("PACK_STATEMENT");
   IElementType TERM = new ObjDElementType("TERM");
   IElementType TYPE_STATEMENT = new ObjDElementType("TYPE_STATEMENT");
@@ -331,8 +332,8 @@ public interface ObjDTypes {
       else if (type == FIELD_STATEMENT) {
         return new ObjDFieldStatementImpl(node);
       }
-      else if (type == IMPORT_OD_FILE) {
-        return new ObjDImportOdFileImpl(node);
+      else if (type == IMPORT_PART) {
+        return new ObjDImportPartImpl(node);
       }
       else if (type == IMPORT_STATEMENT) {
         return new ObjDImportStatementImpl(node);
@@ -345,6 +346,9 @@ public interface ObjDTypes {
       }
       else if (type == MODS) {
         return new ObjDModsImpl(node);
+      }
+      else if (type == PACK_PART) {
+        return new ObjDPackPartImpl(node);
       }
       else if (type == PACK_STATEMENT) {
         return new ObjDPackStatementImpl(node);

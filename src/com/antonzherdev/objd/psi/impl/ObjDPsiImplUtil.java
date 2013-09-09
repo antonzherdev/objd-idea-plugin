@@ -34,7 +34,7 @@ public class ObjDPsiImplUtil {
         return keyNode != null ? keyNode.getPsi() : null;
     }
 
-    public static PsiReference getReference(ObjDImportOdFile element) {
+    public static PsiReference getReference(ObjDImportPart element) {
         return new ObjDImportReference(element, TextRange.from(0, element.getTextLength()));
     }
 

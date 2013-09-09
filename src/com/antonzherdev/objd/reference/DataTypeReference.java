@@ -29,13 +29,18 @@ public class DataTypeReference extends PsiReferenceBase<ObjDDataTypeRef> {
         ObjDFile file = (ObjDFile) getElement().getContainingFile();
         try {
             return ObjDUtil.availableClassesInFile(file)
-                    .append(
-                            chain(ObjDUtil.getDeclaredGenerics(getElement())).map(new F<ObjDClassGeneric, ObjDClassName>() {
-                                @Override
-                                public ObjDClassName f(ObjDClassGeneric x) {
-                                    return x.getClassName();
-                                }
-                            }))
+                    .map(new F<ObjDClass, ObjDClassName>() {
+                        @Override
+                        public ObjDClassName f(ObjDClass x) {
+                            return x.getClassName();
+                        }
+                    })
+                    .append(chain(ObjDUtil.getDeclaredGenerics(getElement())).map(new F<ObjDClassGeneric, ObjDClassName>() {
+                        @Override
+                        public ObjDClassName f(ObjDClassGeneric x) {
+                            return x.getClassName();
+                        }
+                    }))
                     .find(new B<ObjDClassName>() {
                         @Override
                         public Boolean f(ObjDClassName className) {

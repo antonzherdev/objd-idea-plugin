@@ -235,7 +235,7 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitImportOdFile(@NotNull ObjDImportOdFile o) {
+  public void visitImportPart(@NotNull ObjDImportPart o) {
     visitNamedElement(o);
   }
 
@@ -253,6 +253,10 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitMods(@NotNull ObjDMods o) {
     visitPsiElement(o);
+  }
+
+  public void visitPackPart(@NotNull ObjDPackPart o) {
+    visitNamedElement(o);
   }
 
   public void visitPackStatement(@NotNull ObjDPackStatement o) {

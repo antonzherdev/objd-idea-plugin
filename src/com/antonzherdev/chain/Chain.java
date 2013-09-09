@@ -1,6 +1,7 @@
 package com.antonzherdev.chain;
 
 import com.antonzherdev.chain.links.*;
+import com.google.common.base.Objects;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -560,6 +561,63 @@ public class Chain<X> implements IChain<X> {
                 return YieldResult.Continue;
             }
         });
+    }
+
+    @Override
+    public Option<X> head() {
+        HeadYield<X> yield = new HeadYield<X>();
+        apply(yield);
+        return yield.ret;
+    }
+
+    private static class HeadYield<X> extends Yield<X> {
+        Option<X> ret = Option.none();
+
+        @Override
+        public YieldResult yield(X item) {
+            ret = Option.some(item);
+            return YieldResult.Break;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Iterable)) return false;
+        EqualsYield<X> yield = new EqualsYield<X>();
+        yield.i = ((Iterable) o).iterator();
+        apply(yield);
+        return yield.ret;
+    }
+
+    private static class EqualsYield<X> extends Yield<X> {
+        boolean ret = true;
+        Iterator<?> i;
+
+        @Override
+        public YieldResult yield(X item) {
+            ret = i.hasNext() && Objects.equal(i.next(), item);
+            return ret ? YieldResult.Continue : YieldResult.Break;
+        }
+    }
+
+    @Override
+    public boolean startsWith(Iterable<X> collection) {
+        StartsYield<X> yield = new StartsYield<X>();
+        yield.i = ((Iterable) collection).iterator();
+        if(!yield.i.hasNext()) return true;
+        apply(yield);
+        return yield.ret;
+    }
+
+    private static class StartsYield<X> extends Yield<X> {
+        boolean ret = true;
+        Iterator<?> i;
+
+        @Override
+        public YieldResult yield(X item) {
+            ret = Objects.equal(i.next(), item);
+            return ret && i.hasNext() ? YieldResult.Continue : YieldResult.Break;
+        }
     }
 
     private static class MaxYield<X> extends Yield<X> {

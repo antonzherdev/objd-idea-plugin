@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ObjDImportStatement extends PsiElement {
 
   @NotNull
-  ObjDImportOdFile getImportOdFile();
+  List<ObjDImportPart> getImportPartList();
 
 }
