@@ -61,7 +61,7 @@ private static_mod ::= W_STATIC {extends = mod}
 private weak_mod ::= W_WEAK {extends = mod}
 private private_mod ::= W_PRIVATE {extends = mod}
 
-def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? SET? expr_?) {methods = [isStatic]}
+def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? (SET expr_ | expr_braces)?) {methods = [isStatic]}
 private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET)
 def_parameter ::= ((def_name | W_SELF)? COLON data_type (SET expr_)?)
 

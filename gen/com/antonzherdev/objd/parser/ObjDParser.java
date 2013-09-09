@@ -1481,7 +1481,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? SET? expr_?
+  // mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? (SET expr_ | expr_braces)?
   public static boolean def_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "def_statement")) return false;
     boolean result_ = false;
@@ -1494,7 +1494,6 @@ public class ObjDParser implements PsiParser {
     result_ = result_ && def_statement_4(builder_, level_ + 1);
     result_ = result_ && def_statement_5(builder_, level_ + 1);
     result_ = result_ && def_statement_6(builder_, level_ + 1);
-    result_ = result_ && def_statement_7(builder_, level_ + 1);
     if (result_) {
       marker_.done(DEF_STATEMENT);
     }
@@ -1542,18 +1541,43 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // SET?
+  // (SET expr_ | expr_braces)?
   private static boolean def_statement_6(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "def_statement_6")) return false;
-    consumeToken(builder_, SET);
+    def_statement_6_0(builder_, level_ + 1);
     return true;
   }
 
-  // expr_?
-  private static boolean def_statement_7(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "def_statement_7")) return false;
-    expr_(builder_, level_ + 1);
-    return true;
+  // SET expr_ | expr_braces
+  private static boolean def_statement_6_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "def_statement_6_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = def_statement_6_0_0(builder_, level_ + 1);
+    if (!result_) result_ = expr_braces(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // SET expr_
+  private static boolean def_statement_6_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "def_statement_6_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, SET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
