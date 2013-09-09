@@ -18,9 +18,9 @@ public class ObjDImportStatementImpl extends ASTWrapperPsiElement implements Obj
   }
 
   @Override
-  @Nullable
+  @NotNull
   public ObjDImportOdFile getImportOdFile() {
-    return findChildByClass(ObjDImportOdFile.class);
+    return findNotNullChildByClass(ObjDImportOdFile.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

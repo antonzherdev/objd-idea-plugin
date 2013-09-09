@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDImportStatement extends PsiElement {
 
-  @Nullable
+  @NotNull
   ObjDImportOdFile getImportOdFile();
 
 }
