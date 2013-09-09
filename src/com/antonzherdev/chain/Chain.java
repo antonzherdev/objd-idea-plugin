@@ -606,7 +606,7 @@ public class Chain<X> implements IChain<X> {
         yield.i = ((Iterable) collection).iterator();
         if(!yield.i.hasNext()) return true;
         apply(yield);
-        return yield.ret;
+        return yield.ret && !yield.i.hasNext();
     }
 
     private static class StartsYield<X> extends Yield<X> {

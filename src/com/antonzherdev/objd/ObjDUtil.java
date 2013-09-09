@@ -7,7 +7,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.search.FileTypeIndex;
@@ -79,7 +78,8 @@ public class ObjDUtil {
                 ObjDFileType.INSTANCE, GlobalSearchScope.allScope(project)));
     }
 
-    public static IChain<ObjDClass> availableClassesInFile(final PsiFile file) {
+    public static IChain<ObjDClass> availableClassesInFile(final ObjDFile file) {
+        final List<String> thisPack = file.getPackage().list();
         return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
                 .flatMap(new F<ASTNode, Iterable<ObjDClass>>() {
                     @Override
@@ -91,13 +91,15 @@ public class ObjDUtil {
                                         return objDImportPart.getName();
                                     }
                                 }).list();
+                        if(parts.size() < 1) return empty();
                         String lastPart = parts.get(parts.size() - 1);
                         if("_".equals(lastPart)) {
+                            final List<String> pack = parts.subList(0, parts.size() - 1);
                             return getAllFiles(file.getProject())
                                     .filter(new F<ObjDFile, Boolean>() {
                                         @Override
                                         public Boolean f(ObjDFile objDFile) {
-                                            return objDFile.getPackage().startsWith(parts);
+                                            return objDFile.getPackage().startsWith(pack);
                                         }
                                     })
                                     .flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
@@ -111,12 +113,72 @@ public class ObjDUtil {
                         }
                     }
                 })
+                .append(
+                        getAllFiles(file.getProject()).filter(new B<ObjDFile>() {
+                            @Override
+                            public Boolean f(ObjDFile objDFile) {
+                                return objDFile.getPackage().equals(thisPack);
+                            }
+                        }).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
+                            @Override
+                            public Iterable<ObjDClass> f(ObjDFile objDFile) {
+                                return getClassesInFile(objDFile);
+                            }
+                        }))
                 .append(getKernelFiles(file.getProject()).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
                     @Override
                     public Iterable<ObjDClass> f(ObjDFile objDFile) {
                         return getClassesInFile(objDFile);
                     }
                 }));
+    }
+
+    public static IChain<PsiNamedElement> availableDefsInFile(final ObjDFile file) {
+        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
+                .flatMap(new F<ASTNode, Iterable<PsiNamedElement>>() {
+                    @Override
+                    public Iterable<PsiNamedElement> f(ASTNode astNode) {
+                        final List<String> parts = chain(astNode.getPsi(ObjDImportStatement.class).getImportPartList())
+                                .map(new F<ObjDImportPart, String>() {
+                                    @Override
+                                    public String f(ObjDImportPart objDImportPart) {
+                                        return objDImportPart.getName();
+                                    }
+                                }).list();
+                        if(parts.size() < 2) return empty();
+                        String lastPart = parts.get(parts.size() - 1);
+                        if ("_".equals(lastPart)) {
+                            final String objName = parts.get(parts.size() - 2);
+                            final List<String> pack = parts.subList(0, parts.size() - 2);
+                            return getAllFiles(file.getProject())
+                                    .filter(new F<ObjDFile, Boolean>() {
+                                        @Override
+                                        public Boolean f(ObjDFile objDFile) {
+                                            return objDFile.getPackage().startsWith(pack);
+                                        }
+                                    })
+                                    .flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
+                                        @Override
+                                        public Iterable<ObjDClass> f(ObjDFile objDFile) {
+                                            return getClassesInFile(objDFile).filter(new B<ObjDClass>() {
+                                                @Override
+                                                public Boolean f(ObjDClass objDClass) {
+                                                    return objDClass.getClassName().getName().equals(objName);
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .flatMap(new F<ObjDClass, Iterable<PsiNamedElement>>() {
+                                        @Override
+                                        public Iterable<PsiNamedElement> f(ObjDClass objDClass) {
+                                            return classFields(objDClass);
+                                        }
+                                    });
+                        } else {
+                            return empty();
+                        }
+                    }
+                });
     }
 
 
@@ -193,8 +255,8 @@ public class ObjDUtil {
                     return x.getDefName();
                 }
             }))
-            .append(enumSpecials(stm))
-            .append(parentFields(stm));
+                    .append(enumSpecials(stm))
+                    .append(parentFields(stm));
         } else {
             return parentFields(cls);
         }
@@ -229,7 +291,7 @@ public class ObjDUtil {
         final PsiElement par = removeIndex(element.getParent());
 
         if(par.getParent() instanceof ObjDExprDot) {
-           final ObjDExprDot dot = (ObjDExprDot) par.getParent();
+            final ObjDExprDot dot = (ObjDExprDot) par.getParent();
             if(dot.getExprList().get(0) == par) return Option.none();
             return Option.<Dot>some(new Dot() {
                 @Override

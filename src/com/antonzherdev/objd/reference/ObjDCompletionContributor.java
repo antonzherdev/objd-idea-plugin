@@ -29,7 +29,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                         {
                             resultSet.addElement(create("extends "));
                         } else if(parent instanceof ObjDDataTypeRef) {
-                            ObjDUtil.availableClassesInFile(parent.getContainingFile()).foreach(new P<ObjDClass>() {
+                            ObjDUtil.availableClassesInFile((ObjDFile) parent.getContainingFile()).foreach(new P<ObjDClass>() {
                                 @Override
                                 public void p(ObjDClass className) {
                                     resultSet.addElement(create(className.getClassName().getName()));

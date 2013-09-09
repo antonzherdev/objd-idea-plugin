@@ -51,13 +51,14 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
         if(dot.isDefined()) {
             return dot.get().getLeft().getTp().getRefsChain();
         }
-        return ObjDUtil.availableClassesInFile(element.getContainingFile())
+        return ObjDUtil.availableClassesInFile((ObjDFile) element.getContainingFile())
                 .map(new F<ObjDClass, PsiNamedElement>() {
                     @Override
                     public PsiNamedElement f(ObjDClass objDClass) {
                         return objDClass.getClassName();
                     }
                 })
+                .append(ObjDUtil.availableDefsInFile((ObjDFile) element.getContainingFile()))
                 .append(
                         ObjDUtil.getClass(element).map(new F<ObjDClassStatement, IChain<PsiNamedElement>>() {
                             @Override
