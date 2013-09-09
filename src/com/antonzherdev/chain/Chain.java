@@ -238,7 +238,7 @@ public class Chain<X> implements IChain<X> {
         return new Iterator<X>() {
             Lazy<Iterator<X>> i = new Lazy<Iterator<X>>() {
                 @Override
-                protected Iterator<X> create() throws Exception {
+                protected Iterator<X> create() {
                     return list().iterator();
                 }
             };

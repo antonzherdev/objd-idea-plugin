@@ -8,17 +8,13 @@ public abstract class Lazy<R> implements F0<R> {
 
     public R get() {
         if(!init) {
-            try {
-                value = create();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            value = create();
             init = true;
         }
         return value;
     }
 
-    protected abstract R create() throws Exception;
+    protected abstract R create();
 
     public static <R> Lazy<R> valueOf(final R value) {
         return new Lazy<R>() {
