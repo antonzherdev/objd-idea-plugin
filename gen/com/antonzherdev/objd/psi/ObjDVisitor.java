@@ -131,6 +131,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitExprBind(@NotNull ObjDExprBind o) {
+    visitExpr(o);
+  }
+
   public void visitExprBool(@NotNull ObjDExprBool o) {
     visitExpr(o);
   }
@@ -161,6 +165,10 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitExprCase(@NotNull ObjDExprCase o) {
     visitPsiElement(o);
+  }
+
+  public void visitExprClue(@NotNull ObjDExprClue o) {
+    visitExpr(o);
   }
 
   public void visitExprComp(@NotNull ObjDExprComp o) {

@@ -116,6 +116,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_ARR) {
       result_ = expr_arr(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_BIND) {
+      result_ = expr_bind(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_BOOL) {
       result_ = expr_bool(builder_, level_ + 1);
     }
@@ -139,6 +142,9 @@ public class ObjDParser implements PsiParser {
     }
     else if (root_ == EXPR_CASE) {
       result_ = expr_case(builder_, level_ + 1);
+    }
+    else if (root_ == EXPR_CLUE) {
+      result_ = expr_clue(builder_, level_ + 1);
     }
     else if (root_ == EXPR_COMP) {
       result_ = expr_comp(builder_, level_ + 1);
@@ -240,12 +246,13 @@ public class ObjDParser implements PsiParser {
       CASE_COND_VAL),
     TokenSet.create(DATA_TYPE, DATA_TYPE_COLLECTION, DATA_TYPE_LAMBDA, DATA_TYPE_MAP,
       DATA_TYPE_OPTION, DATA_TYPE_SIMPLE, DATA_TYPE_TUPLE),
-    TokenSet.create(EXPR, EXPR_ARR, EXPR_BOOL, EXPR_BRACES,
-      EXPR_BRACKETS, EXPR_CALL, EXPR_COMP, EXPR_DO,
-      EXPR_DOT, EXPR_IF, EXPR_INDEX, EXPR_LAMBDA,
-      EXPR_MD, EXPR_MINUS, EXPR_NOT, EXPR_PM,
-      EXPR_SELF, EXPR_SET, EXPR_STRING_CONST, EXPR_THROW,
-      EXPR_VAL, EXPR_WHILE, TERM),
+    TokenSet.create(EXPR, EXPR_ARR, EXPR_BIND, EXPR_BOOL,
+      EXPR_BRACES, EXPR_BRACKETS, EXPR_CALL, EXPR_CLUE,
+      EXPR_COMP, EXPR_DO, EXPR_DOT, EXPR_IF,
+      EXPR_INDEX, EXPR_LAMBDA, EXPR_MD, EXPR_MINUS,
+      EXPR_NOT, EXPR_PM, EXPR_SELF, EXPR_SET,
+      EXPR_STRING_CONST, EXPR_THROW, EXPR_VAL, EXPR_WHILE,
+      TERM),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -1690,6 +1697,53 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // expr_bool (BIND expr_bind)?
+  public static boolean expr_bind(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bind")) return false;
+    boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr bind>");
+    result_ = expr_bool(builder_, level_ + 1);
+    result_ = result_ && expr_bind_1(builder_, level_ + 1);
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), EXPR_BIND)) {
+      marker_.drop();
+    }
+    else if (result_) {
+      marker_.done(EXPR_BIND);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // (BIND expr_bind)?
+  private static boolean expr_bind_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bind_1")) return false;
+    expr_bind_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // BIND expr_bind
+  private static boolean expr_bind_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bind_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, BIND);
+    result_ = result_ && expr_bind(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // expr_comp ((AND | OR) expr_bool)?
   public static boolean expr_bool(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bool")) return false;
@@ -2230,6 +2284,69 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // expr_bind ((CLUE | CLONE) expr_clue)?
+  public static boolean expr_clue(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue")) return false;
+    boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr clue>");
+    result_ = expr_bind(builder_, level_ + 1);
+    result_ = result_ && expr_clue_1(builder_, level_ + 1);
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), EXPR_CLUE)) {
+      marker_.drop();
+    }
+    else if (result_) {
+      marker_.done(EXPR_CLUE);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // ((CLUE | CLONE) expr_clue)?
+  private static boolean expr_clue_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_1")) return false;
+    expr_clue_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // (CLUE | CLONE) expr_clue
+  private static boolean expr_clue_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = expr_clue_1_0_0(builder_, level_ + 1);
+    result_ = result_ && expr_clue(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // CLUE | CLONE
+  private static boolean expr_clue_1_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_1_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, CLUE);
+    if (!result_) result_ = consumeToken(builder_, CLONE);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
   public static boolean expr_comp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp")) return false;
@@ -2682,14 +2799,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_bool ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)? post_op?
+  // expr_clue ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_clue)? post_op?
   public static boolean expr_set(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_set")) return false;
     boolean result_ = false;
     int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr set>");
-    result_ = expr_bool(builder_, level_ + 1);
+    result_ = expr_clue(builder_, level_ + 1);
     result_ = result_ && expr_set_1(builder_, level_ + 1);
     result_ = result_ && expr_set_2(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
@@ -2706,20 +2823,20 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)?
+  // ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_clue)?
   private static boolean expr_set_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_set_1")) return false;
     expr_set_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // (SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool
+  // (SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_clue
   private static boolean expr_set_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_set_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = expr_set_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_bool(builder_, level_ + 1);
+    result_ = result_ && expr_clue(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }

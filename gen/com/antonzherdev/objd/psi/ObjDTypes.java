@@ -39,6 +39,7 @@ public interface ObjDTypes {
   IElementType ENUM_ITEM = new ObjDElementType("ENUM_ITEM");
   IElementType EXPR = new ObjDElementType("EXPR");
   IElementType EXPR_ARR = new ObjDElementType("EXPR_ARR");
+  IElementType EXPR_BIND = new ObjDElementType("EXPR_BIND");
   IElementType EXPR_BOOL = new ObjDElementType("EXPR_BOOL");
   IElementType EXPR_BRACES = new ObjDElementType("EXPR_BRACES");
   IElementType EXPR_BRACKETS = new ObjDElementType("EXPR_BRACKETS");
@@ -47,6 +48,7 @@ public interface ObjDTypes {
   IElementType EXPR_CALL_PARAMS = new ObjDElementType("EXPR_CALL_PARAMS");
   IElementType EXPR_CALL_POST_LAMBDA = new ObjDElementType("EXPR_CALL_POST_LAMBDA");
   IElementType EXPR_CASE = new ObjDElementType("EXPR_CASE");
+  IElementType EXPR_CLUE = new ObjDElementType("EXPR_CLUE");
   IElementType EXPR_COMP = new ObjDElementType("EXPR_COMP");
   IElementType EXPR_DO = new ObjDElementType("EXPR_DO");
   IElementType EXPR_DOT = new ObjDElementType("EXPR_DOT");
@@ -77,9 +79,12 @@ public interface ObjDTypes {
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
+  IElementType BIND = new ObjDTokenType("BIND");
+  IElementType CLONE = new ObjDTokenType("CLONE");
   IElementType CLOSE_BRACE = new ObjDTokenType("CLOSE_BRACE");
   IElementType CLOSE_BRACKET = new ObjDTokenType("CLOSE_BRACKET");
   IElementType CLOSE_SQUARE_BRACKET = new ObjDTokenType("CLOSE_SQUARE_BRACKET");
+  IElementType CLUE = new ObjDTokenType("CLUE");
   IElementType COLON = new ObjDTokenType("COLON");
   IElementType COMMA = new ObjDTokenType("COMMA");
   IElementType COMMENT = new ObjDTokenType("COMMENT");
@@ -254,6 +259,9 @@ public interface ObjDTypes {
       else if (type == EXPR_ARR) {
         return new ObjDExprArrImpl(node);
       }
+      else if (type == EXPR_BIND) {
+        return new ObjDExprBindImpl(node);
+      }
       else if (type == EXPR_BOOL) {
         return new ObjDExprBoolImpl(node);
       }
@@ -277,6 +285,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_CASE) {
         return new ObjDExprCaseImpl(node);
+      }
+      else if (type == EXPR_CLUE) {
+        return new ObjDExprClueImpl(node);
       }
       else if (type == EXPR_COMP) {
         return new ObjDExprCompImpl(node);
