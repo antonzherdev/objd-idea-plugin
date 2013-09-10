@@ -22,7 +22,7 @@ public class ObjDPsiImplUtil {
     public static PsiElement setName(ObjDNamedElementImpl element, String newName) {
         ASTNode keyNode = element.getNode().findChildByType(ObjDTypes.IDENT);
         if (keyNode != null) {
-            ObjDImportStatement imp = ObjDElementFactory.createImport(element.getProject(), newName);
+            ObjDPackStatement imp = ObjDElementFactory.createImport(element.getProject(), newName);
             ASTNode newKeyNode = imp.getLastChild().getFirstChild().getNode();
             element.getNode().replaceChild(keyNode, newKeyNode);
         }
