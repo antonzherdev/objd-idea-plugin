@@ -79,7 +79,7 @@ data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {ex
 data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple | data_type_self) WHAT {extends = data_type}
 data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 
-expr_ ::= (expr_val | expr_set) {extends = expr_ methods = [getTp]}
+expr_ ::= (expr_val | expr_clue) {extends = expr_ methods = [getTp]}
 term_ ::= expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_while | expr_do | W_BREAK | expr_return
     {extends = expr_}
@@ -103,9 +103,9 @@ expr_brackets ::= OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET  {extends = ex
 expr_if ::= (W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?)  {extends = expr_}
 private post_op ::= PLUS_PLUS | MINUS_MINUS
 
-expr_set ::= expr_clue ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_clue)? post_op? {extends = expr_}
-expr_clue ::= expr_bind ((CLUE | CLONE) expr_clue)? {extends = expr_}
-expr_bind ::= expr_bool (BIND expr_bind)? {extends = expr_}
+expr_clue ::= expr_bind ((CLUE | CLONE) expr_clue)? post_op? {extends = expr_}
+expr_bind ::= expr_set (BIND expr_bind)? {extends = expr_}
+expr_set ::= expr_bool ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)?
 expr_bool ::= expr_comp ((AND | OR) expr_bool)? {extends = expr_}
 expr_comp ::= expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}
 expr_pm ::= expr_md ((PLUS | MINUS) expr_pm)? {extends = expr_}

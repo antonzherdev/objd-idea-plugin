@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDExprBind extends ObjDExpr {
 
+  @Nullable
+  ObjDExprBind getExprBind();
+
   @NotNull
-  List<ObjDExpr> getExprList();
+  ObjDExprSet getExprSet();
 
 }
