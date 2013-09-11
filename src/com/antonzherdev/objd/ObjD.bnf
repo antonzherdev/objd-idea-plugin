@@ -104,7 +104,7 @@ expr_if ::= (W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?)  {exte
 private post_op ::= PLUS_PLUS | MINUS_MINUS
 
 expr_clue ::= expr_bind ((CLUE | CLONE) expr_clue)? post_op? {extends = expr_}
-expr_bind ::= expr_set (BIND expr_bind)? {extends = expr_}
+expr_bind ::= expr_set (MORE MORE expr_bind)? {extends = expr_}
 expr_set ::= expr_bool ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)?
 expr_bool ::= expr_comp ((AND | OR) expr_bool)? {extends = expr_}
 expr_comp ::= expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}

@@ -79,7 +79,6 @@ public interface ObjDTypes {
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
-  IElementType BIND = new ObjDTokenType("BIND");
   IElementType CLONE = new ObjDTokenType("CLONE");
   IElementType CLOSE_BRACE = new ObjDTokenType("CLOSE_BRACE");
   IElementType CLOSE_BRACKET = new ObjDTokenType("CLOSE_BRACKET");

@@ -1696,7 +1696,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_set (BIND expr_bind)?
+  // expr_set (MORE MORE expr_bind)?
   public static boolean expr_bind(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bind")) return false;
     boolean result_ = false;
@@ -1714,19 +1714,19 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (BIND expr_bind)?
+  // (MORE MORE expr_bind)?
   private static boolean expr_bind_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bind_1")) return false;
     expr_bind_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // BIND expr_bind
+  // MORE MORE expr_bind
   private static boolean expr_bind_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bind_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, BIND);
+    result_ = consumeTokens(builder_, 0, MORE, MORE);
     result_ = result_ && expr_bind(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
