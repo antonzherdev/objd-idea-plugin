@@ -48,7 +48,7 @@ def_name ::= (IDENT | W_CLASS | W_TYPE)
 
 class_extends ::=  data_type_ref data_type_generics?
 
-class_body ::= (OPEN_BRACE enum_item* (def_statement | field_statement)* CLOSE_BRACE)
+class_body ::= (OPEN_BRACE enum_item* (def_statement | field_statement | import_statement)* CLOSE_BRACE)
 
 enum_item ::= def_name expr_call_params?
 

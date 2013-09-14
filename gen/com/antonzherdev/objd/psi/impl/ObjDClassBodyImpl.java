@@ -35,6 +35,12 @@ public class ObjDClassBodyImpl extends ASTWrapperPsiElement implements ObjDClass
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDFieldStatement.class);
   }
 
+  @Override
+  @NotNull
+  public List<ObjDImportStatement> getImportStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDImportStatement.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassBody(this);
     else super.accept(visitor);

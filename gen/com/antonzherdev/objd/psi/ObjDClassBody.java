@@ -16,4 +16,7 @@ public interface ObjDClassBody extends PsiElement {
   @NotNull
   List<ObjDFieldStatement> getFieldStatementList();
 
+  @NotNull
+  List<ObjDImportStatement> getImportStatementList();
+
 }
