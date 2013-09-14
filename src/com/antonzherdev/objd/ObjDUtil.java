@@ -78,22 +78,29 @@ public class ObjDUtil {
                 ObjDFileType.INSTANCE, GlobalSearchScope.allScope(project)));
     }
 
+    @SuppressWarnings("unchecked")
+    private static Option<ObjDClassStatement> packageObject(Project project, List<String> pack) {
+        List<String> parPack = pack.subList(0, pack.size() - 1);
+        String name = pack.get(pack.size() - 1);
+        return (Option)findClass(project, parPack, name);
+    }
+
     public static IChain<ObjDClass> availableClassesInFile(final ObjDFile file) {
         final List<String> thisPack = file.getPackage().list();
-        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
-                .flatMap(new F<ASTNode, Iterable<ObjDClass>>() {
+        return getAllImports(file)
+                .flatMap(new F<ObjDImportStatement, Iterable<ObjDClass>>() {
                     @Override
-                    public Iterable<ObjDClass> f(ASTNode astNode) {
-                        final List<String> parts = chain(astNode.getPsi(ObjDImportStatement.class).getImportPartList())
+                    public Iterable<ObjDClass> f(ObjDImportStatement imp) {
+                        final List<String> parts = chain(imp.getImportPartList())
                                 .map(new F<ObjDImportPart, String>() {
                                     @Override
                                     public String f(ObjDImportPart objDImportPart) {
                                         return objDImportPart.getName();
                                     }
                                 }).list();
-                        if(parts.size() < 1) return empty();
+                        if (parts.size() < 1) return empty();
                         String lastPart = parts.get(parts.size() - 1);
-                        if("_".equals(lastPart)) {
+                        if ("_".equals(lastPart)) {
                             final List<String> pack = parts.subList(0, parts.size() - 1);
                             return getAllFiles(file.getProject())
                                     .filter(new F<ObjDFile, Boolean>() {
@@ -125,7 +132,7 @@ public class ObjDUtil {
                                 return getClassesInFile(objDFile);
                             }
                         }))
-                .append(getKernelFiles(file.getProject()).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
+                .prepend(getKernelFiles(file.getProject()).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
                     @Override
                     public Iterable<ObjDClass> f(ObjDFile objDFile) {
                         return getClassesInFile(objDFile);
@@ -133,12 +140,30 @@ public class ObjDUtil {
                 }));
     }
 
-    public static IChain<PsiNamedElement> availableDefsInFile(final ObjDFile file) {
+    private static IChain<ObjDImportStatement> getAllImports(ObjDFile file) {
+        final List<String> thisPack = file.getPackage().list();
         return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
-                .flatMap(new F<ASTNode, Iterable<PsiNamedElement>>() {
+                .map(new F<ASTNode, ObjDImportStatement>() {
                     @Override
-                    public Iterable<PsiNamedElement> f(ASTNode astNode) {
-                        final List<String> parts = chain(astNode.getPsi(ObjDImportStatement.class).getImportPartList())
+                    public ObjDImportStatement f(ASTNode astNode) {
+                        return astNode.getPsi(ObjDImportStatement.class);
+                    }
+                })
+                .append(chain(packageObject(file.getProject(), thisPack)).flatMap(new F<ObjDClassStatement, Iterable<ObjDImportStatement>>() {
+                    @Override
+                    public Iterable<ObjDImportStatement> f(ObjDClassStatement objDClass) {
+                        if(objDClass.getClassBody() == null) return empty();
+                        return objDClass.getClassBody().getImportStatementList();
+                    }
+                }));
+    }
+
+    public static IChain<PsiNamedElement> availableDefsInFile(final ObjDFile file) {
+        return getAllImports(file)
+                .flatMap(new F<ObjDImportStatement, Iterable<PsiNamedElement>>() {
+                    @Override
+                    public Iterable<PsiNamedElement> f(ObjDImportStatement imp) {
+                        final List<String> parts = chain(imp.getImportPartList())
                                 .map(new F<ObjDImportPart, String>() {
                                     @Override
                                     public String f(ObjDImportPart objDImportPart) {
