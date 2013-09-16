@@ -288,14 +288,14 @@ public class ObjDUtil {
     }
 
     private static IChain<PsiNamedElement> enumSpecials(ObjDClassStatement stm) {
-        return stm.isEnum() ? classFields(findKernelClass(stm.getProject(), "ODEnum").getOrNull()) : null;
+        return stm.isEnum() ? classFields(findKernelClass(stm.getProject(), "Enum").getOrNull()) : null;
     }
 
     private static IChain<PsiNamedElement> parentFields(ObjDClass stm) {
         List<ObjDClassExtends> classExtends = stm.getClassExtendsList();
         if(classExtends == null || classExtends.isEmpty()) {
-            if(stm.getClassName().getName().equals("ODObject")) return empty();
-            else return classFields(findKernelClass(stm.getProject(), "ODObject").getOrNull());
+            if(stm.getClassName().getName().equals("Object")) return empty();
+            else return classFields(findKernelClass(stm.getProject(), "Object").getOrNull());
         }
 
         return chain(classExtends).flatMap(new F<ObjDClassExtends,IChain<PsiNamedElement>>() {
