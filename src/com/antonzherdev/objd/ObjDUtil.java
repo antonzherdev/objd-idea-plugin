@@ -212,7 +212,7 @@ public class ObjDUtil {
                 .filter(new B<ObjDFile>() {
                     @Override
                     public Boolean f(ObjDFile f) {
-                        return f.getPackage().head().get().equals("core");
+                        return f.getPackage().head().getOrElse("").equals("core");
                     }
                 });
     }
