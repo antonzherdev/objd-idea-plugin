@@ -59,7 +59,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "do" {return ObjDTypes.W_DO; }
     "break" {return ObjDTypes.W_BREAK; }
     "return" {return ObjDTypes.W_RETURN; }
-    "type" {return ObjDTypes.W_TYPE; }
+    "typedef" {return ObjDTypes.W_TYPE; }
     "with" {return ObjDTypes.W_WITH; }
     "case" {return ObjDTypes.W_CASE; }
     "lazy" {return ObjDTypes.W_LAZY; }
