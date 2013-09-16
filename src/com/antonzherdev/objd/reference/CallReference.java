@@ -58,15 +58,15 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
                         return objDClass.getClassName();
                     }
                 })
-                .append(ObjDUtil.availableDefsInFile((ObjDFile) element.getContainingFile()))
-                .append(
+                .prepend(
                         ObjDUtil.getClass(element).map(new F<ObjDClassStatement, IChain<PsiNamedElement>>() {
                             @Override
                             public IChain<PsiNamedElement> f(ObjDClassStatement x) {
                                 return ObjDUtil.classFields(x);
                             }
                         }).getOrElse(Chain.<PsiNamedElement>empty()))
-                .append(vars(element))
+                .prepend(vars(element))
+                .append(ObjDUtil.availableDefsInFile((ObjDFile) element.getContainingFile()))
                 .map(PsiRef.APPLY);
     }
 
