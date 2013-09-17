@@ -88,7 +88,7 @@ case_item ::= case_cond ARROW expr_
 case_cond ::= (case_cond_unapply | case_cond_val | expr_string_const | case_cond_const) {extends = case_cond}
 case_cond_val ::= def_name case_cond_tp? {extends = case_cond}
 case_cond_unapply ::= data_type_ref? (OPEN_BRACKET case_cond (COMMA case_cond)* CLOSE_BRACKET) case_cond_tp?{extends = case_cond}
-case_cond_tp ::= COMMA data_type {extends = case_cond}
+case_cond_tp ::= COLON (data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self) {extends = case_cond}
 case_cond_const ::= (INT | FLOAT | W_NIL | W_TRUE | W_FALSE) {extends = case_cond}
 
 expr_string_const ::= STRING+ {extends = expr_}

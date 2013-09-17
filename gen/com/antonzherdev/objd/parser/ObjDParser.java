@@ -335,19 +335,39 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // COMMA data_type
+  // COLON (data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self)
   public static boolean case_cond_tp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "case_cond_tp")) return false;
-    if (!nextTokenIs(builder_, COMMA)) return false;
+    if (!nextTokenIs(builder_, COLON)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && data_type(builder_, level_ + 1);
+    result_ = consumeToken(builder_, COLON);
+    result_ = result_ && case_cond_tp_1(builder_, level_ + 1);
     if (result_) {
       marker_.done(CASE_COND_TP);
     }
     else {
       marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  // data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self
+  private static boolean case_cond_tp_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "case_cond_tp_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = data_type_option(builder_, level_ + 1);
+    if (!result_) result_ = data_type_collection(builder_, level_ + 1);
+    if (!result_) result_ = data_type_map(builder_, level_ + 1);
+    if (!result_) result_ = data_type_tuple(builder_, level_ + 1);
+    if (!result_) result_ = data_type_simple(builder_, level_ + 1);
+    if (!result_) result_ = data_type_self(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
     }
     return result_;
   }

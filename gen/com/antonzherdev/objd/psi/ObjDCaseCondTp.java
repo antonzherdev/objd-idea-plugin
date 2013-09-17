@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDCaseCondTp extends ObjDCaseCond {
 
-  @NotNull
+  @Nullable
   ObjDDataType getDataType();
+
+  @Nullable
+  ObjDDataTypeSelf getDataTypeSelf();
 
 }
