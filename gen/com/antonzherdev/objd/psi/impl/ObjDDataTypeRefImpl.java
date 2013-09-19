@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiReference;
+import com.intellij.navigation.ItemPresentation;
 
 public class ObjDDataTypeRefImpl extends ObjDNamedElementImpl implements ObjDDataTypeRef {
 
@@ -36,6 +37,10 @@ public class ObjDDataTypeRefImpl extends ObjDNamedElementImpl implements ObjDDat
 
   public PsiReference getReference() {
     return ObjDPsiImplUtil.getReference(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return ObjDPsiImplUtil.getPresentation(this);
   }
 
 }

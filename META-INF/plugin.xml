@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.antonzherdev.objd</id>
   <name>ObjD</name>
-  <version>0.11.3</version>
+  <version>0.12.0</version>
   <vendor email="support@antonzherdev.com" url="http://www.antonzherdev.com">YourCompany</vendor>
 
   <description><![CDATA[
@@ -49,6 +49,7 @@
       <lang.formatter language="ObjD" implementationClass="com.antonzherdev.objd.formatter.ObjDFormatter"/>
       <lang.braceMatcher language="ObjD" implementationClass="com.antonzherdev.objd.ObjDBraceMatcher"/>
       <codeInsight.lineMarkerProvider language="ObjD" implementationClass="com.antonzherdev.objd.markers.ClassChildrenProvider"/>
+      <gotoClassContributor implementation="com.antonzherdev.objd.choose.GotoClass"/>
     <!-- Add your extensions here -->
   </extensions>
 </idea-plugin>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
+import com.intellij.navigation.ItemPresentation;
 
 public interface ObjDPackPart extends ObjDNamedElement {
 
@@ -13,5 +14,7 @@ public interface ObjDPackPart extends ObjDNamedElement {
   PsiElement setName(String newName);
 
   PsiElement getNameIdentifier();
+
+  ItemPresentation getPresentation();
 
 }

@@ -5,11 +5,16 @@ import com.antonzherdev.objd.reference.DataTypeReference;
 import com.antonzherdev.objd.reference.ObjDImportReference;
 import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.tp.ObjDTp;
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,4 +70,27 @@ public class ObjDPsiImplUtil {
     public static List<ObjDClassExtends> getClassExtendsList(ObjDTypeStatement stm) {
         return Arrays.asList(stm.getClassExtends());
     }
+
+    public static ItemPresentation getPresentation(final PsiNamedElement element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                return element.getName();
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return element.getContainingFile().getName();
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return AllIcons.FileTypes.Custom;
+            }
+        };
+    }
 }
+

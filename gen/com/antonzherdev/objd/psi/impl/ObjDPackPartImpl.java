@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
+import com.intellij.navigation.ItemPresentation;
 
 public class ObjDPackPartImpl extends ObjDNamedElementImpl implements ObjDPackPart {
 
@@ -31,6 +32,10 @@ public class ObjDPackPartImpl extends ObjDNamedElementImpl implements ObjDPackPa
 
   public PsiElement getNameIdentifier() {
     return ObjDPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return ObjDPsiImplUtil.getPresentation(this);
   }
 
 }

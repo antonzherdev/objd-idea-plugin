@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
 import com.intellij.psi.PsiReference;
+import com.intellij.navigation.ItemPresentation;
 
 public interface ObjDCallName extends ObjDNamedElement {
 
@@ -16,5 +17,7 @@ public interface ObjDCallName extends ObjDNamedElement {
   PsiElement getNameIdentifier();
 
   PsiReference getReference();
+
+  ItemPresentation getPresentation();
 
 }
