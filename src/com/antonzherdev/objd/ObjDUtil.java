@@ -35,6 +35,15 @@ public class ObjDUtil {
         return getAllVirtualFiles(project).map(toObjDFileF(project));
     }
 
+    public static IChain<ObjDClass> getAllClasses(Project project) {
+        return getAllFiles(project).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
+            @Override
+            public Iterable<ObjDClass> f(ObjDFile objDFile) {
+                return getClassesInFile(objDFile);
+            }
+        });
+    }
+
 
     public static Option<ObjDClass> findClass(Project project, final Iterable<String> pack, final String name) {
         return getAllFiles(project).filter(new F<ObjDFile, Boolean>() {
