@@ -21,7 +21,7 @@ public class ClassChildrenProvider extends RelatedItemLineMarkerProvider {
         if(element instanceof ObjDClassStatement) {
             final ObjDClassName nmElement = ((ObjDClassStatement) element).getClassName();
             final String name = nmElement.getName();
-            List<ObjDClass> classes = ObjDUtil.getAllClasses(element.getProject())
+            List<ObjDClassName> classes = ObjDUtil.getAllClasses(element.getProject())
                     .filter(new F<ObjDClass, Boolean>() {
                         @Override
                         public Boolean f(ObjDClass objDClass) {
@@ -33,6 +33,12 @@ public class ClassChildrenProvider extends RelatedItemLineMarkerProvider {
                                             return name.equals(tp.getName()) && tp.getReference().resolve() == nmElement;
                                         }
                                     }).isDefined();
+                        }
+                    })
+                    .map(new F<ObjDClass,ObjDClassName>() {
+                        @Override
+                        public ObjDClassName f(ObjDClass objDClass) {
+                            return objDClass.getClassName();
                         }
                     }).list();
             if(!classes.isEmpty()) {
