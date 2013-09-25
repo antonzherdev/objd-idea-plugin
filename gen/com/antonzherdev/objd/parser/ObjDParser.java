@@ -1232,7 +1232,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (data_type_ref | TP_BOOL | TP_STRING | TP_ANY|
+  // (data_type_ref | TP_BOOL | TP_STRING | TP_ANY| TP_CHAR|
   //     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr?
   public static boolean data_type_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple")) return false;
@@ -1257,7 +1257,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // data_type_ref | TP_BOOL | TP_STRING | TP_ANY|
+  // data_type_ref | TP_BOOL | TP_STRING | TP_ANY| TP_CHAR|
   //     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID
   private static boolean data_type_simple_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple_0")) return false;
@@ -1267,6 +1267,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, TP_BOOL);
     if (!result_) result_ = consumeToken(builder_, TP_STRING);
     if (!result_) result_ = consumeToken(builder_, TP_ANY);
+    if (!result_) result_ = consumeToken(builder_, TP_CHAR);
     if (!result_) result_ = consumeToken(builder_, TP_INT4);
     if (!result_) result_ = consumeToken(builder_, TP_UINT4);
     if (!result_) result_ = consumeToken(builder_, TP_INT8);

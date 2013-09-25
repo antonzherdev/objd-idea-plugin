@@ -80,6 +80,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
     "uint8" {return ObjDTypes.TP_UINT8; }
     "void" {return ObjDTypes.TP_VOID; }
     "any" {return ObjDTypes.TP_ANY; }
+    "char" {return ObjDTypes.TP_CHAR; }
 
     {IDENT_CHAR}+ {return ObjDTypes.IDENT; }
 

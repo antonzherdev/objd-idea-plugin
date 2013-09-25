@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
 import com.intellij.psi.PsiReference;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiNamedElement;
 
 public interface ObjDDataTypeRef extends ObjDNamedElement {
 

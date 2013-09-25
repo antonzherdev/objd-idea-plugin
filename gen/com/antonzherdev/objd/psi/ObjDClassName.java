@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiNamedElement;
 
 public interface ObjDClassName extends ObjDNamedElement {
 

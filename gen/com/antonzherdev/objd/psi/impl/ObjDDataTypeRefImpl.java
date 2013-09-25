@@ -11,6 +11,7 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiReference;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiNamedElement;
 
 public class ObjDDataTypeRefImpl extends ObjDNamedElementImpl implements ObjDDataTypeRef {
 

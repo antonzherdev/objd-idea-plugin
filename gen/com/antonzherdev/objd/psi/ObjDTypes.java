@@ -117,6 +117,7 @@ public interface ObjDTypes {
   IElementType TP_ANY = new ObjDTokenType("TP_ANY");
   IElementType TP_BOOL = new ObjDTokenType("TP_BOOL");
   IElementType TP_BYTE = new ObjDTokenType("TP_BYTE");
+  IElementType TP_CHAR = new ObjDTokenType("TP_CHAR");
   IElementType TP_FLOAT = new ObjDTokenType("TP_FLOAT");
   IElementType TP_FLOAT4 = new ObjDTokenType("TP_FLOAT4");
   IElementType TP_FLOAT8 = new ObjDTokenType("TP_FLOAT8");

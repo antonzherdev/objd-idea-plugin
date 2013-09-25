@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiNamedElement;
 
 public class ObjDClassNameImpl extends ObjDNamedElementImpl implements ObjDClassName {
 
