@@ -54,11 +54,12 @@ enum_item ::= def_name expr_call_params?
 
 field_statement ::= (mods (W_VAR | W_VAL)? def_name (COLON data_type)? (SET expr_)?)  {methods = [isStatic]}
 mods ::= mod*
-private mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod
+private mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod
 private lazy_mod ::= W_LAZY {extends = mod}
 private protected_mod ::= W_PROTECTED {extends = mod}
 private static_mod ::= W_STATIC {extends = mod}
 private weak_mod ::= W_WEAK {extends = mod}
+private pure_mod ::= W_PURE {extends = mod}
 private private_mod ::= W_PRIVATE {extends = mod}
 
 def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? (SET expr_ | expr_braces)?) {methods = [isStatic]}
@@ -123,7 +124,7 @@ expr_call_params ::= OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOS
 expr_call_param ::= (def_name SET)? expr_
 expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE) {extends = expr_}
 expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET  {extends = expr_}
-expr_val ::= (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)? {extends = expr_}
+expr_val ::= (W_WEAK)* (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)? {extends = expr_}
 expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_ {extends = expr_}
 private lambda_pars ::= OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
 

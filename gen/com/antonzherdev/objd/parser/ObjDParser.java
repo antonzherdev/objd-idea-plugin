@@ -2929,18 +2929,17 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
+  // (W_WEAK)* (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
   public static boolean expr_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val")) return false;
-    if (!nextTokenIs(builder_, W_VAL) && !nextTokenIs(builder_, W_VAR)
-        && replaceVariants(builder_, 2, "<expr val>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr val>");
     result_ = expr_val_0(builder_, level_ + 1);
+    result_ = result_ && expr_val_1(builder_, level_ + 1);
     result_ = result_ && def_name(builder_, level_ + 1);
-    result_ = result_ && expr_val_2(builder_, level_ + 1);
     result_ = result_ && expr_val_3(builder_, level_ + 1);
+    result_ = result_ && expr_val_4(builder_, level_ + 1);
     if (result_) {
       marker_.done(EXPR_VAL);
     }
@@ -2951,9 +2950,40 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // W_VAL | W_VAR
+  // (W_WEAK)*
   private static boolean expr_val_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val_0")) return false;
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!expr_val_0_0(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "expr_val_0");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    return true;
+  }
+
+  // (W_WEAK)
+  private static boolean expr_val_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_val_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_WEAK);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // W_VAL | W_VAR
+  private static boolean expr_val_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_val_1")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, W_VAL);
@@ -2968,15 +2998,15 @@ public class ObjDParser implements PsiParser {
   }
 
   // (COLON data_type)?
-  private static boolean expr_val_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_val_2")) return false;
-    expr_val_2_0(builder_, level_ + 1);
+  private static boolean expr_val_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_val_3")) return false;
+    expr_val_3_0(builder_, level_ + 1);
     return true;
   }
 
   // COLON data_type
-  private static boolean expr_val_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_val_2_0")) return false;
+  private static boolean expr_val_3_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_val_3_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COLON);
@@ -2991,15 +3021,15 @@ public class ObjDParser implements PsiParser {
   }
 
   // (SET expr_)?
-  private static boolean expr_val_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_val_3")) return false;
-    expr_val_3_0(builder_, level_ + 1);
+  private static boolean expr_val_4(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_val_4")) return false;
+    expr_val_4_0(builder_, level_ + 1);
     return true;
   }
 
   // SET expr_
-  private static boolean expr_val_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_val_3_0")) return false;
+  private static boolean expr_val_4_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_val_4_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, SET);
@@ -3354,7 +3384,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod
+  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod
   static boolean mod(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mod")) return false;
     boolean result_ = false;
@@ -3364,6 +3394,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = private_mod(builder_, level_ + 1);
     if (!result_) result_ = protected_mod(builder_, level_ + 1);
     if (!result_) result_ = lazy_mod(builder_, level_ + 1);
+    if (!result_) result_ = pure_mod(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -3490,6 +3521,12 @@ public class ObjDParser implements PsiParser {
   // W_PROTECTED
   static boolean protected_mod(PsiBuilder builder_, int level_) {
     return consumeToken(builder_, W_PROTECTED);
+  }
+
+  /* ********************************************************** */
+  // W_PURE
+  static boolean pure_mod(PsiBuilder builder_, int level_) {
+    return consumeToken(builder_, W_PURE);
   }
 
   /* ********************************************************** */

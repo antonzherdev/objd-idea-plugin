@@ -148,6 +148,7 @@ public interface ObjDTypes {
   IElementType W_PACKAGE = new ObjDTokenType("W_PACKAGE");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
   IElementType W_PROTECTED = new ObjDTokenType("W_PROTECTED");
+  IElementType W_PURE = new ObjDTokenType("W_PURE");
   IElementType W_RETURN = new ObjDTokenType("W_RETURN");
   IElementType W_SELF = new ObjDTokenType("W_SELF");
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
