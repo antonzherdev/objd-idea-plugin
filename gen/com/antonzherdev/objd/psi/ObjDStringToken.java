@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDExprStringConst extends ObjDExpr {
+public interface ObjDStringToken extends PsiElement {
 
-  @NotNull
-  List<ObjDStringToken> getStringTokenList();
+  @Nullable
+  ObjDExpr getExpr();
 
 }

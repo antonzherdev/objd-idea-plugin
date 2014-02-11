@@ -92,7 +92,7 @@ case_cond_unapply ::= data_type_ref? (OPEN_BRACKET case_cond (COMMA case_cond)* 
 case_cond_tp ::= COLON (data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self) {extends = case_cond}
 case_cond_const ::= (INT | FLOAT | W_NIL | W_TRUE | W_FALSE) {extends = case_cond}
 
-expr_string_const ::= STRING+ {extends = expr_}
+expr_string_const ::= string_token+ {extends = expr_}
 expr_while ::= W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_}
 expr_do ::= W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET {extends = expr_}
 expr_return ::= W_RETURN expr_
@@ -129,3 +129,10 @@ expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_ {extends = expr_}
 private lambda_pars ::= OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
 
 lambda_par ::= def_name (COLON data_type)?
+
+string_token ::= STRING+ |
+    STRING_EXPR (
+        W_IF OPEN_BRACKET expr_ CLOSE_BRACKET |
+        W_WHEN OPEN_BRACKET expr_ CLOSE_BRACKET |
+        W_ELSE | W_ENDIF |
+        expr_)

@@ -1,7 +1,6 @@
 package com.antonzherdev.chain;
 
 import com.antonzherdev.chain.links.*;
-import com.google.common.base.Objects;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -595,9 +594,13 @@ public class Chain<X> implements IChain<X> {
 
         @Override
         public YieldResult yield(X item) {
-            ret = i.hasNext() && Objects.equal(i.next(), item);
+            ret = i.hasNext() && equal(i.next(), item);
             return ret ? YieldResult.Continue : YieldResult.Break;
         }
+    }
+
+    public static boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
     }
 
     @Override
@@ -615,7 +618,7 @@ public class Chain<X> implements IChain<X> {
 
         @Override
         public YieldResult yield(X item) {
-            ret = Objects.equal(i.next(), item);
+            ret = equal(i.next(), item);
             return ret && i.hasNext() ? YieldResult.Continue : YieldResult.Break;
         }
     }

@@ -221,6 +221,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == PACK_STATEMENT) {
       result_ = pack_statement(builder_, level_ + 1);
     }
+    else if (root_ == STRING_TOKEN) {
+      result_ = string_token(builder_, level_ + 1);
+    }
     else if (root_ == TERM) {
       result_ = term_(builder_, level_ + 1);
     }
@@ -2884,16 +2887,18 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // STRING+
+  // string_token+
   public static boolean expr_string_const(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_string_const")) return false;
-    if (!nextTokenIs(builder_, STRING)) return false;
+    if (!nextTokenIs(builder_, STRING) && !nextTokenIs(builder_, STRING_EXPR)
+        && replaceVariants(builder_, 2, "<expr string const>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, STRING);
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr string const>");
+    result_ = string_token(builder_, level_ + 1);
     int offset_ = builder_.getCurrentOffset();
     while (result_) {
-      if (!consumeToken(builder_, STRING)) break;
+      if (!string_token(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
         empty_element_parsed_guard_(builder_, offset_, "expr_string_const");
@@ -2907,6 +2912,7 @@ public class ObjDParser implements PsiParser {
     else {
       marker_.rollbackTo();
     }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -3609,6 +3615,133 @@ public class ObjDParser implements PsiParser {
   // W_STATIC
   static boolean static_mod(PsiBuilder builder_, int level_) {
     return consumeToken(builder_, W_STATIC);
+  }
+
+  /* ********************************************************** */
+  // STRING+ |
+  //     STRING_EXPR (
+  //         W_IF OPEN_BRACKET expr_ CLOSE_BRACKET |
+  //         W_WHEN OPEN_BRACKET expr_ CLOSE_BRACKET |
+  //         W_ELSE | W_ENDIF |
+  //         expr_)
+  public static boolean string_token(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_token")) return false;
+    if (!nextTokenIs(builder_, STRING) && !nextTokenIs(builder_, STRING_EXPR)
+        && replaceVariants(builder_, 2, "<string token>")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<string token>");
+    result_ = string_token_0(builder_, level_ + 1);
+    if (!result_) result_ = string_token_1(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(STRING_TOKEN);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  // STRING+
+  private static boolean string_token_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_token_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, STRING);
+    int offset_ = builder_.getCurrentOffset();
+    while (result_) {
+      if (!consumeToken(builder_, STRING)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "string_token_0");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // STRING_EXPR (
+  //         W_IF OPEN_BRACKET expr_ CLOSE_BRACKET |
+  //         W_WHEN OPEN_BRACKET expr_ CLOSE_BRACKET |
+  //         W_ELSE | W_ENDIF |
+  //         expr_)
+  private static boolean string_token_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_token_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, STRING_EXPR);
+    result_ = result_ && string_token_1_1(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // W_IF OPEN_BRACKET expr_ CLOSE_BRACKET |
+  //         W_WHEN OPEN_BRACKET expr_ CLOSE_BRACKET |
+  //         W_ELSE | W_ENDIF |
+  //         expr_
+  private static boolean string_token_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_token_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = string_token_1_1_0(builder_, level_ + 1);
+    if (!result_) result_ = string_token_1_1_1(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, W_ELSE);
+    if (!result_) result_ = consumeToken(builder_, W_ENDIF);
+    if (!result_) result_ = expr_(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // W_IF OPEN_BRACKET expr_ CLOSE_BRACKET
+  private static boolean string_token_1_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_token_1_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, W_IF, OPEN_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // W_WHEN OPEN_BRACKET expr_ CLOSE_BRACKET
+  private static boolean string_token_1_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "string_token_1_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, W_WHEN, OPEN_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
   }
 
   /* ********************************************************** */

@@ -8,22 +8,23 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprStringConstImpl extends ObjDExprImpl implements ObjDExprStringConst {
+public class ObjDStringTokenImpl extends ASTWrapperPsiElement implements ObjDStringToken {
 
-  public ObjDExprStringConstImpl(ASTNode node) {
+  public ObjDStringTokenImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @NotNull
-  public List<ObjDStringToken> getStringTokenList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDStringToken.class);
+  @Nullable
+  public ObjDExpr getExpr() {
+    return findChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprStringConst(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitStringToken(this);
     else super.accept(visitor);
   }
 

@@ -74,6 +74,7 @@ public interface ObjDTypes {
   IElementType MODS = new ObjDElementType("MODS");
   IElementType PACK_PART = new ObjDElementType("PACK_PART");
   IElementType PACK_STATEMENT = new ObjDElementType("PACK_STATEMENT");
+  IElementType STRING_TOKEN = new ObjDElementType("STRING_TOKEN");
   IElementType TERM = new ObjDElementType("TERM");
   IElementType TYPE_STATEMENT = new ObjDElementType("TYPE_STATEMENT");
 
@@ -114,6 +115,7 @@ public interface ObjDTypes {
   IElementType PLUS_SET = new ObjDTokenType("PLUS_SET");
   IElementType SET = new ObjDTokenType("SET");
   IElementType STRING = new ObjDTokenType("STRING");
+  IElementType STRING_EXPR = new ObjDTokenType("STRING_EXPR");
   IElementType TP_ANY = new ObjDTokenType("TP_ANY");
   IElementType TP_BOOL = new ObjDTokenType("TP_BOOL");
   IElementType TP_BYTE = new ObjDTokenType("TP_BYTE");
@@ -137,6 +139,7 @@ public interface ObjDTypes {
   IElementType W_DEF = new ObjDTokenType("W_DEF");
   IElementType W_DO = new ObjDTokenType("W_DO");
   IElementType W_ELSE = new ObjDTokenType("W_ELSE");
+  IElementType W_ENDIF = new ObjDTokenType("W_ENDIF");
   IElementType W_ENUM = new ObjDTokenType("W_ENUM");
   IElementType W_EXTENDS = new ObjDTokenType("W_EXTENDS");
   IElementType W_FALSE = new ObjDTokenType("W_FALSE");
@@ -161,6 +164,7 @@ public interface ObjDTypes {
   IElementType W_VAL = new ObjDTokenType("W_VAL");
   IElementType W_VAR = new ObjDTokenType("W_VAR");
   IElementType W_WEAK = new ObjDTokenType("W_WEAK");
+  IElementType W_WHEN = new ObjDTokenType("W_WHEN");
   IElementType W_WHILE = new ObjDTokenType("W_WHILE");
   IElementType W_WITH = new ObjDTokenType("W_WITH");
 
@@ -364,6 +368,9 @@ public interface ObjDTypes {
       }
       else if (type == PACK_STATEMENT) {
         return new ObjDPackStatementImpl(node);
+      }
+      else if (type == STRING_TOKEN) {
+        return new ObjDStringTokenImpl(node);
       }
       else if (type == TERM) {
         return new ObjDTermImpl(node);
