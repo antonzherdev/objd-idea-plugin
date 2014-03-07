@@ -39,6 +39,10 @@ public class ObjDBlock extends AbstractBlock {
                 indent = Indent.getNormalIndent();
             } else if (parentType == ObjDTypes.EXPR_BRACES && childType != ObjDTypes.OPEN_BRACE &&  childType != ObjDTypes.CLOSE_BRACE) {
                 indent = Indent.getNormalIndent();
+            } else if (parentType == ObjDTypes.EXPR_CALL_POST_LAMBDA && childType != ObjDTypes.OPEN_BRACE &&  childType != ObjDTypes.CLOSE_BRACE) {
+                indent = Indent.getNormalIndent();
+            } else if(parentType == ObjDTypes.DEF_STATEMENT && childType != ObjDTypes.EXPR_BRACES  && childType != ObjDTypes.W_DEF && childType != ObjDTypes.MODS) {
+                indent = Indent.getNormalIndent();
             }
             blocks.add(new ObjDBlock(child, indent, wrap, null, spacingBuilder));
         }
@@ -65,7 +69,7 @@ public class ObjDBlock extends AbstractBlock {
     @Override
     protected Indent getChildIndent() {
         IElementType tp = getNode().getElementType();
-        if(tp == ObjDTypes.CLASS_BODY || tp == ObjDTypes.EXPR_BRACES) return Indent.getNormalIndent();
+        if(tp == ObjDTypes.CLASS_BODY || tp == ObjDTypes.EXPR_BRACES || tp == ObjDTypes.EXPR_CALL_POST_LAMBDA) return Indent.getNormalIndent();
         if(tp == ObjDTypes.EXPR_STRING_CONST) return Indent.getSpaceIndent(1);
         if(tp == ObjDTypes.CLASS_STATEMENT) return Indent.getNormalIndent();
         return Indent.getNoneIndent();
