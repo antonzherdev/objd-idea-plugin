@@ -188,6 +188,12 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_STRING_CONST) {
       result_ = expr_string_const(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_SUPER) {
+      result_ = expr_super(builder_, level_ + 1);
+    }
+    else if (root_ == EXPR_SYNC) {
+      result_ = expr_sync(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_THROW) {
       result_ = expr_throw(builder_, level_ + 1);
     }
@@ -254,7 +260,8 @@ public class ObjDParser implements PsiParser {
       EXPR_COMP, EXPR_DO, EXPR_DOT, EXPR_IF,
       EXPR_INDEX, EXPR_LAMBDA, EXPR_MD, EXPR_MINUS,
       EXPR_NOT, EXPR_PM, EXPR_SELF, EXPR_STRING_CONST,
-      EXPR_THROW, EXPR_VAL, EXPR_WHILE, TERM),
+      EXPR_SUPER, EXPR_SYNC, EXPR_THROW, EXPR_VAL,
+      EXPR_WHILE, TERM),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -2917,6 +2924,43 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_SUPER
+  public static boolean expr_super(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_super")) return false;
+    if (!nextTokenIs(builder_, W_SUPER)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_SUPER);
+    if (result_) {
+      marker_.done(EXPR_SUPER);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // W_SYNC OPEN_BRACKET expr_ CLOSE_BRACKET expr_
+  public static boolean expr_sync(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_sync")) return false;
+    if (!nextTokenIs(builder_, W_SYNC)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeTokens(builder_, 0, W_SYNC, OPEN_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(EXPR_SYNC);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // W_THROW expr_
   public static boolean expr_throw(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_throw")) return false;
@@ -3746,7 +3790,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_while | expr_do | W_BREAK | expr_return
+  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_do | W_BREAK | expr_return
   public static boolean term_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "term_")) return false;
     boolean result_ = false;
@@ -3770,7 +3814,9 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, INT);
     if (!result_) result_ = consumeToken(builder_, FLOAT);
     if (!result_) result_ = expr_self(builder_, level_ + 1);
+    if (!result_) result_ = expr_super(builder_, level_ + 1);
     if (!result_) result_ = expr_while(builder_, level_ + 1);
+    if (!result_) result_ = expr_sync(builder_, level_ + 1);
     if (!result_) result_ = expr_do(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, W_BREAK);
     if (!result_) result_ = expr_return(builder_, level_ + 1);

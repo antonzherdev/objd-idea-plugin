@@ -63,6 +63,8 @@ public interface ObjDTypes {
   IElementType EXPR_SELF = new ObjDElementType("EXPR_SELF");
   IElementType EXPR_SET = new ObjDElementType("EXPR_SET");
   IElementType EXPR_STRING_CONST = new ObjDElementType("EXPR_STRING_CONST");
+  IElementType EXPR_SUPER = new ObjDElementType("EXPR_SUPER");
+  IElementType EXPR_SYNC = new ObjDElementType("EXPR_SYNC");
   IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
@@ -157,6 +159,8 @@ public interface ObjDTypes {
   IElementType W_STATIC = new ObjDTokenType("W_STATIC");
   IElementType W_STRUCT = new ObjDTokenType("W_STRUCT");
   IElementType W_STUB = new ObjDTokenType("W_STUB");
+  IElementType W_SUPER = new ObjDTokenType("W_SUPER");
+  IElementType W_SYNC = new ObjDTokenType("W_SYNC");
   IElementType W_THROW = new ObjDTokenType("W_THROW");
   IElementType W_TRAIT = new ObjDTokenType("W_TRAIT");
   IElementType W_TRUE = new ObjDTokenType("W_TRUE");
@@ -335,6 +339,12 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_STRING_CONST) {
         return new ObjDExprStringConstImpl(node);
+      }
+      else if (type == EXPR_SUPER) {
+        return new ObjDExprSuperImpl(node);
+      }
+      else if (type == EXPR_SYNC) {
+        return new ObjDExprSyncImpl(node);
       }
       else if (type == EXPR_THROW) {
         return new ObjDExprThrowImpl(node);

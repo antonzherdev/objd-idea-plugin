@@ -119,8 +119,10 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "enum" {return ObjDTypes.W_ENUM; }
 "weak" {return ObjDTypes.W_WEAK; }
 "self" {return ObjDTypes.W_SELF; }
+"super" {return ObjDTypes.W_SUPER; }
 "throw" {return ObjDTypes.W_THROW; }
 "while" {return ObjDTypes.W_WHILE; }
+"synchronized" {return ObjDTypes.W_SYNC; }
 "do" {return ObjDTypes.W_DO; }
 "break" {return ObjDTypes.W_BREAK; }
 "return" {return ObjDTypes.W_RETURN; }

@@ -39,6 +39,19 @@ public abstract class ObjDTp {
                     return new Class(x);
                 }
             }).getOrElse(NO_SELF);
+        } else if(expr instanceof ObjDExprSuper) {
+            return ObjDUtil.getClass(expr).map(new F<ObjDClassStatement, ObjDTp>() {
+                @Override
+                public ObjDTp f(ObjDClassStatement x) {
+                    List<ObjDClassExtends> extList = x.getClassExtendsList();
+                    if(extList == null || extList.isEmpty()) {
+                        return new Class(ObjDUtil.findKernelClass(x.getProject(), "Object").getOrNull());
+                    }
+                    PsiElement resolve = extList.get(0).getDataTypeRef().getReference().resolve();
+                    if (resolve == null) return new Unknown("Wrong super");
+                    return new Class((ObjDClassStatement) resolve.getParent());
+                }
+            }).getOrElse(NO_SELF);
         } else if(expr instanceof ObjDExprDot) {
             List<ObjDExpr> exprList = ((ObjDExprDot) expr).getExprList();
             return exprList.get(exprList.size() - 1).getTp();

@@ -61,11 +61,14 @@ public class ObjDCompletionContributor extends CompletionContributor {
                                 resultSet.addElement(create("val "));
                                 resultSet.addElement(create("var "));
                                 resultSet.addElement(create("if"));
+                                resultSet.addElement(create("while"));
+                                resultSet.addElement(create("synchronized"));
                                 resultSet.addElement(create("else "));
                                 resultSet.addElement(create("throw "));
                                 resultSet.addElement(create("true"));
                                 resultSet.addElement(create("false"));
                                 resultSet.addElement(create("self"));
+                                resultSet.addElement(create("super"));
                             }
                             CallReference.getRefsChain(parent).foreach(new P<PsiRef>() {
                                 @Override
