@@ -220,7 +220,7 @@ public class ObjDVisitor extends PsiElementVisitor {
   }
 
   public void visitExprSet(@NotNull ObjDExprSet o) {
-    visitPsiElement(o);
+    visitExpr(o);
   }
 
   public void visitExprStringConst(@NotNull ObjDExprStringConst o) {

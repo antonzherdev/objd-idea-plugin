@@ -17,15 +17,9 @@ public class ObjDExprBindImpl extends ObjDExprImpl implements ObjDExprBind {
   }
 
   @Override
-  @Nullable
-  public ObjDExprBind getExprBind() {
-    return findChildByClass(ObjDExprBind.class);
-  }
-
-  @Override
   @NotNull
-  public ObjDExprSet getExprSet() {
-    return findNotNullChildByClass(ObjDExprSet.class);
+  public List<ObjDExpr> getExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

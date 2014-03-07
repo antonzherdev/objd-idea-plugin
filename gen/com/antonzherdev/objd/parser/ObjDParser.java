@@ -259,9 +259,9 @@ public class ObjDParser implements PsiParser {
       EXPR_BRACES, EXPR_BRACKETS, EXPR_CALL, EXPR_CLUE,
       EXPR_COMP, EXPR_DO, EXPR_DOT, EXPR_IF,
       EXPR_INDEX, EXPR_LAMBDA, EXPR_MD, EXPR_MINUS,
-      EXPR_NOT, EXPR_PM, EXPR_SELF, EXPR_STRING_CONST,
-      EXPR_SUPER, EXPR_SYNC, EXPR_THROW, EXPR_VAL,
-      EXPR_WHILE, TERM),
+      EXPR_NOT, EXPR_PM, EXPR_SELF, EXPR_SET,
+      EXPR_STRING_CONST, EXPR_SUPER, EXPR_SYNC, EXPR_THROW,
+      EXPR_VAL, EXPR_WHILE, TERM),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -1732,11 +1732,16 @@ public class ObjDParser implements PsiParser {
   public static boolean expr_bind(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bind")) return false;
     boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr bind>");
     result_ = expr_set(builder_, level_ + 1);
     result_ = result_ && expr_bind_1(builder_, level_ + 1);
-    if (result_) {
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), EXPR_BIND)) {
+      marker_.drop();
+    }
+    else if (result_) {
       marker_.done(EXPR_BIND);
     }
     else {
@@ -2837,11 +2842,16 @@ public class ObjDParser implements PsiParser {
   public static boolean expr_set(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_set")) return false;
     boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr set>");
     result_ = expr_bool(builder_, level_ + 1);
     result_ = result_ && expr_set_1(builder_, level_ + 1);
-    if (result_) {
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), EXPR_SET)) {
+      marker_.drop();
+    }
+    else if (result_) {
       marker_.done(EXPR_SET);
     }
     else {

@@ -55,6 +55,14 @@ public abstract class ObjDTp {
         } else if(expr instanceof ObjDExprDot) {
             List<ObjDExpr> exprList = ((ObjDExprDot) expr).getExprList();
             return exprList.get(exprList.size() - 1).getTp();
+        } else if(expr instanceof ObjDExprBind) {
+            if(((ObjDExprBind) expr).getExprList().size() == 1) {
+                return getTpForExpression(((ObjDExprBind) expr).getExprList().get(0));
+            }
+        }else if(expr instanceof ObjDExprSet) {
+            if(((ObjDExprSet) expr).getExprList().size() == 1) {
+                return getTpForExpression(((ObjDExprSet) expr).getExprList().get(0));
+            }
         }
 
         return new Unknown("Unknown class " + expr.getClass().getName());
@@ -98,7 +106,7 @@ public abstract class ObjDTp {
                     return ((ObjDClassConstructorField) def).getExpr().getTp();
                 }
             };
-        }   else {
+        } else {
             return new Unknown("Unknown def class " + def.getClass().getName());
         }
 

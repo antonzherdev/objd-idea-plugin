@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDExprSetImpl extends ASTWrapperPsiElement implements ObjDExprSet {
+public class ObjDExprSetImpl extends ObjDExprImpl implements ObjDExprSet {
 
   public ObjDExprSetImpl(ASTNode node) {
     super(node);
