@@ -3386,14 +3386,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_BRACKET lambda_par (COMMA lambda_par)* CLOSE_BRACKET
+  // OPEN_BRACKET lambda_par? (COMMA lambda_par)* CLOSE_BRACKET
   static boolean lambda_pars(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "lambda_pars")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, OPEN_BRACKET);
-    result_ = result_ && lambda_par(builder_, level_ + 1);
+    result_ = result_ && lambda_pars_1(builder_, level_ + 1);
     result_ = result_ && lambda_pars_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
     if (!result_) {
@@ -3403,6 +3403,13 @@ public class ObjDParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  // lambda_par?
+  private static boolean lambda_pars_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "lambda_pars_1")) return false;
+    lambda_par(builder_, level_ + 1);
+    return true;
   }
 
   // (COMMA lambda_par)*
