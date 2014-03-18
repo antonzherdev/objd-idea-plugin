@@ -16,4 +16,7 @@ public interface ObjDDefParameter extends PsiElement {
   @Nullable
   ObjDExpr getExpr();
 
+  @NotNull
+  ObjDParMods getParMods();
+
 }

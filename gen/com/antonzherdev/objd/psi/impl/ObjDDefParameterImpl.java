@@ -35,6 +35,12 @@ public class ObjDDefParameterImpl extends ASTWrapperPsiElement implements ObjDDe
     return findChildByClass(ObjDExpr.class);
   }
 
+  @Override
+  @NotNull
+  public ObjDParMods getParMods() {
+    return findNotNullChildByClass(ObjDParMods.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefParameter(this);
     else super.accept(visitor);

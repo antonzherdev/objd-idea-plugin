@@ -78,6 +78,7 @@ public interface ObjDTypes {
   IElementType MODS = new ObjDElementType("MODS");
   IElementType PACK_PART = new ObjDElementType("PACK_PART");
   IElementType PACK_STATEMENT = new ObjDElementType("PACK_STATEMENT");
+  IElementType PAR_MODS = new ObjDElementType("PAR_MODS");
   IElementType STRING_TOKEN = new ObjDElementType("STRING_TOKEN");
   IElementType TERM = new ObjDElementType("TERM");
   IElementType TYPE_STATEMENT = new ObjDElementType("TYPE_STATEMENT");
@@ -388,6 +389,9 @@ public interface ObjDTypes {
       }
       else if (type == PACK_STATEMENT) {
         return new ObjDPackStatementImpl(node);
+      }
+      else if (type == PAR_MODS) {
+        return new ObjDParModsImpl(node);
       }
       else if (type == STRING_TOKEN) {
         return new ObjDStringTokenImpl(node);
