@@ -169,6 +169,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "<" {return ObjDTypes.LESS;}
 ">" {return ObjDTypes.MORE;}
 ">=" {return ObjDTypes.MOREEQ;}
+"===" {return ObjDTypes.EXACT_EQ;}
 "==" {return ObjDTypes.EQ;}
 "=" {return ObjDTypes.SET;}
 "||" {return ObjDTypes.OR;}
@@ -185,6 +186,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "/=" {return ObjDTypes.DIV_SET;}
 "/" {return ObjDTypes.DIV;}
 "?" {return ObjDTypes.WHAT;}
+"!==" {return ObjDTypes.EXACT_NOT_EQ;}
 "!=" {return ObjDTypes.NOT_EQ;}
 "!" {return ObjDTypes.EXCLAMATION;}
 }

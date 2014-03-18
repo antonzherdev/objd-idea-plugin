@@ -2434,7 +2434,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
+  // expr_pm ((EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
   public static boolean expr_comp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp")) return false;
     boolean result_ = false;
@@ -2457,14 +2457,14 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
+  // ((EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
   private static boolean expr_comp_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp_1")) return false;
     expr_comp_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // (EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm
+  // (EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm
   private static boolean expr_comp_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp_1_0")) return false;
     boolean result_ = false;
@@ -2480,12 +2480,14 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ
+  // EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ
   private static boolean expr_comp_1_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp_1_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, EQ);
+    result_ = consumeToken(builder_, EXACT_EQ);
+    if (!result_) result_ = consumeToken(builder_, EXACT_NOT_EQ);
+    if (!result_) result_ = consumeToken(builder_, EQ);
     if (!result_) result_ = consumeToken(builder_, MORE);
     if (!result_) result_ = consumeToken(builder_, LESS);
     if (!result_) result_ = consumeToken(builder_, MOREEQ);

@@ -97,6 +97,8 @@ public interface ObjDTypes {
   IElementType DIV_SET = new ObjDTokenType("DIV_SET");
   IElementType DOT = new ObjDTokenType("DOT");
   IElementType EQ = new ObjDTokenType("EQ");
+  IElementType EXACT_EQ = new ObjDTokenType("EXACT_EQ");
+  IElementType EXACT_NOT_EQ = new ObjDTokenType("EXACT_NOT_EQ");
   IElementType EXCLAMATION = new ObjDTokenType("EXCLAMATION");
   IElementType FLOAT = new ObjDTokenType("FLOAT");
   IElementType IDENT = new ObjDTokenType("IDENT");

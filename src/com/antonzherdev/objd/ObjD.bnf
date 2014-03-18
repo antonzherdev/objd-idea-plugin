@@ -114,7 +114,7 @@ expr_clue ::= expr_bind ((CLUE | CLONE) expr_clue)? post_op? {extends = expr_}
 expr_bind ::= expr_set (MORE MORE expr_bind)? {extends = expr_}
 expr_set ::= expr_bool ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)? {extends = expr_}
 expr_bool ::= expr_comp ((AND | OR) expr_bool)? {extends = expr_}
-expr_comp ::= expr_pm ((EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}
+expr_comp ::= expr_pm ((EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}
 expr_pm ::= expr_md ((PLUS | MINUS) expr_pm)? {extends = expr_}
 expr_md ::= expr_dot ((MUL | DIV) expr_md)? {extends = expr_}
 expr_dot ::= expr_index (DOT expr_index)* {extends = expr_}
