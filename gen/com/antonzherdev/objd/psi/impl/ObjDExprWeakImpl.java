@@ -8,34 +8,23 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDTermImpl extends ObjDExprImpl implements ObjDTerm {
+public class ObjDExprWeakImpl extends ASTWrapperPsiElement implements ObjDExprWeak {
 
-  public ObjDTermImpl(ASTNode node) {
+  public ObjDExprWeakImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @Nullable
-  public ObjDExprCase getExprCase() {
-    return findChildByClass(ObjDExprCase.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprReturn getExprReturn() {
-    return findChildByClass(ObjDExprReturn.class);
-  }
-
-  @Override
-  @Nullable
-  public ObjDExprWeak getExprWeak() {
-    return findChildByClass(ObjDExprWeak.class);
+  @NotNull
+  public ObjDExpr getExpr() {
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTerm(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprWeak(this);
     else super.accept(visitor);
   }
 

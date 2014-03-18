@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDTerm extends ObjDExpr {
+public interface ObjDExprWeak extends PsiElement {
 
-  @Nullable
-  ObjDExprCase getExprCase();
-
-  @Nullable
-  ObjDExprReturn getExprReturn();
-
-  @Nullable
-  ObjDExprWeak getExprWeak();
+  @NotNull
+  ObjDExpr getExpr();
 
 }

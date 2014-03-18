@@ -247,6 +247,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitExprWeak(@NotNull ObjDExprWeak o) {
+    visitPsiElement(o);
+  }
+
   public void visitExprWhile(@NotNull ObjDExprWhile o) {
     visitExpr(o);
   }

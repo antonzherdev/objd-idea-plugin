@@ -84,7 +84,7 @@ data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 
 expr_ ::= (expr_val | expr_clue) {extends = expr_ methods = [getTp]}
 term_ ::= expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-    expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_do | W_BREAK | expr_return
+    expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_do | W_BREAK | expr_return | expr_weak
     {extends = expr_}
 expr_case ::= W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET ((OPEN_BRACE case_item+ CLOSE_BRACE) | case_item+)
 case_item ::= case_cond ARROW expr_
@@ -99,6 +99,7 @@ expr_while ::= W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_}
 expr_sync ::= W_SYNC OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_}
 expr_do ::= W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET {extends = expr_}
 expr_return ::= W_RETURN expr_
+expr_weak ::= W_WEAK expr_
 expr_self ::= W_SELF {extends = expr_}
 expr_super ::= W_SUPER {extends = expr_}
 expr_throw ::= W_THROW expr_  {extends = expr_}

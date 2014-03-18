@@ -68,6 +68,7 @@ public interface ObjDTypes {
   IElementType EXPR_SYNC = new ObjDElementType("EXPR_SYNC");
   IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
+  IElementType EXPR_WEAK = new ObjDElementType("EXPR_WEAK");
   IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_PART = new ObjDElementType("IMPORT_PART");
@@ -357,6 +358,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_VAL) {
         return new ObjDExprValImpl(node);
+      }
+      else if (type == EXPR_WEAK) {
+        return new ObjDExprWeakImpl(node);
       }
       else if (type == EXPR_WHILE) {
         return new ObjDExprWhileImpl(node);

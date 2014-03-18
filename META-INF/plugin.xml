@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.antonzherdev.objd</id>
   <name>ObjD</name>
-  <version>0.14.2</version>
+  <version>0.14.3</version>
   <vendor email="support@antonzherdev.com" url="http://www.antonzherdev.com">YourCompany</vendor>
 
   <description><![CDATA[

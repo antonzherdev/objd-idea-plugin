@@ -62,6 +62,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             if(!ObjDUtil.isAfterDot(parent)) {
                                 resultSet.addElement(create("val "));
                                 resultSet.addElement(create("var "));
+                                resultSet.addElement(create("weak "));
                                 resultSet.addElement(create("if"));
                                 resultSet.addElement(create("while"));
                                 resultSet.addElement(create("synchronized"));

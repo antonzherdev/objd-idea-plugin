@@ -203,6 +203,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_VAL) {
       result_ = expr_val(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_WEAK) {
+      result_ = expr_weak(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_WHILE) {
       result_ = expr_while(builder_, level_ + 1);
     }
@@ -3145,6 +3148,24 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_WEAK expr_
+  public static boolean expr_weak(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_weak")) return false;
+    if (!nextTokenIs(builder_, W_WEAK)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_WEAK);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(EXPR_WEAK);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_
   public static boolean expr_while(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_while")) return false;
@@ -3807,7 +3828,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_do | W_BREAK | expr_return
+  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_do | W_BREAK | expr_return | expr_weak
   public static boolean term_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "term_")) return false;
     boolean result_ = false;
@@ -3837,6 +3858,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = expr_do(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, W_BREAK);
     if (!result_) result_ = expr_return(builder_, level_ + 1);
+    if (!result_) result_ = expr_weak(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), TERM)) {
       marker_.drop();
