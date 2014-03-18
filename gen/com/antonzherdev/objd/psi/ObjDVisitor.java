@@ -55,6 +55,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassMods(@NotNull ObjDClassMods o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassName(@NotNull ObjDClassName o) {
     visitNamedElement(o);
   }

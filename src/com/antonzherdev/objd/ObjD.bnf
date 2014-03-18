@@ -21,7 +21,9 @@ pack_statement ::= W_PACKAGE pack_part (DOT pack_part)*
 pack_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                         methods=[getName setName getNameIdentifier getPresentation]}
 
-private statement_ ::= (W_STUB? class_statement | W_STUB def_statement | W_STUB field_statement | type_statement | import_statement |COMMENT)
+private statement_ ::= (class_mods class_statement | type_statement | import_statement |COMMENT)
+
+class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL)*
 
 import_statement ::= W_IMPORT import_part (DOT import_part)*
 import_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"

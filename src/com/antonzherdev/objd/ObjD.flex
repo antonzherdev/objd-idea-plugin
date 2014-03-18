@@ -114,6 +114,8 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "if" {return ObjDTypes.W_IF; }
 "else" {return ObjDTypes.W_ELSE; }
 "stub" {return ObjDTypes.W_STUB; }
+"final" {return ObjDTypes.W_FINAL; }
+"abstract" {return ObjDTypes.W_ABSTRACT; }
 "trait" {return ObjDTypes.W_TRAIT; }
 "struct" {return ObjDTypes.W_STRUCT; }
 "enum" {return ObjDTypes.W_ENUM; }

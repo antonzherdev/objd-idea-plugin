@@ -20,6 +20,7 @@ public interface ObjDTypes {
   IElementType CLASS_EXTENDS = new ObjDElementType("CLASS_EXTENDS");
   IElementType CLASS_GENERIC = new ObjDElementType("CLASS_GENERIC");
   IElementType CLASS_GENERICS = new ObjDElementType("CLASS_GENERICS");
+  IElementType CLASS_MODS = new ObjDElementType("CLASS_MODS");
   IElementType CLASS_NAME = new ObjDElementType("CLASS_NAME");
   IElementType CLASS_STATEMENT = new ObjDElementType("CLASS_STATEMENT");
   IElementType CLASS_TYPE = new ObjDElementType("CLASS_TYPE");
@@ -135,6 +136,7 @@ public interface ObjDTypes {
   IElementType TP_UINT8 = new ObjDTokenType("TP_UINT8");
   IElementType TP_VOID = new ObjDTokenType("TP_VOID");
   IElementType WHAT = new ObjDTokenType("WHAT");
+  IElementType W_ABSTRACT = new ObjDTokenType("W_ABSTRACT");
   IElementType W_BREAK = new ObjDTokenType("W_BREAK");
   IElementType W_CASE = new ObjDTokenType("W_CASE");
   IElementType W_CLASS = new ObjDTokenType("W_CLASS");
@@ -145,6 +147,7 @@ public interface ObjDTypes {
   IElementType W_ENUM = new ObjDTokenType("W_ENUM");
   IElementType W_EXTENDS = new ObjDTokenType("W_EXTENDS");
   IElementType W_FALSE = new ObjDTokenType("W_FALSE");
+  IElementType W_FINAL = new ObjDTokenType("W_FINAL");
   IElementType W_IF = new ObjDTokenType("W_IF");
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
   IElementType W_LAZY = new ObjDTokenType("W_LAZY");
@@ -210,6 +213,9 @@ public interface ObjDTypes {
       }
       else if (type == CLASS_GENERICS) {
         return new ObjDClassGenericsImpl(node);
+      }
+      else if (type == CLASS_MODS) {
+        return new ObjDClassModsImpl(node);
       }
       else if (type == CLASS_NAME) {
         return new ObjDClassNameImpl(node);
