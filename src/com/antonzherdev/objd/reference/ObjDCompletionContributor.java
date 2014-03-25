@@ -54,6 +54,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(create("stub "));
                             resultSet.addElement(create("abstract "));
                             resultSet.addElement(create("final "));
+                            resultSet.addElement(create("case "));
                             resultSet.addElement(create("class "));
                             resultSet.addElement(create("struct "));
                             resultSet.addElement(create("enum "));

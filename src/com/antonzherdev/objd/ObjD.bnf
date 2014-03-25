@@ -23,7 +23,7 @@ pack_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl"
 
 private statement_ ::= (class_mods class_statement | type_statement | import_statement |COMMENT)
 
-class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL)*
+class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL | W_CASE)*
 
 import_statement ::= W_IMPORT import_part (DOT import_part)*
 import_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
