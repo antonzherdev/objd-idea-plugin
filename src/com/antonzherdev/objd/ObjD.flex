@@ -134,6 +134,8 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "lazy" {return ObjDTypes.W_LAZY; }
 "pure" {return ObjDTypes.W_PURE; }
 "object" {return ObjDTypes.W_OBJECT; }
+"try" {return ObjDTypes.W_TRY; }
+"finally" {return ObjDTypes.W_FINALLY; }
 
 "bool" {return ObjDTypes.TP_BOOL; }
 "float" {return ObjDTypes.TP_FLOAT; }
