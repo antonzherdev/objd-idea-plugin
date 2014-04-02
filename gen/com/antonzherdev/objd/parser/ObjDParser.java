@@ -1110,7 +1110,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LESS data_type (COMMA data_type)* MORE
+  // LESS data_type (COMMA data_type)* (MORE | NULLMAP)
   public static boolean data_type_generics(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_generics")) return false;
     if (!nextTokenIs(builder_, LESS)) return false;
@@ -1119,7 +1119,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, LESS);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && data_type_generics_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, MORE);
+    result_ = result_ && data_type_generics_3(builder_, level_ + 1);
     if (result_) {
       marker_.done(DATA_TYPE_GENERICS);
     }
@@ -1152,6 +1152,22 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
     result_ = result_ && data_type(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // MORE | NULLMAP
+  private static boolean data_type_generics_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_generics_3")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, MORE);
+    if (!result_) result_ = consumeToken(builder_, NULLMAP);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -1766,8 +1782,6 @@ public class ObjDParser implements PsiParser {
   // dot_type dot_right
   public static boolean dot_part_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_part_simple")) return false;
-    if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
-        && replaceVariants(builder_, 2, "<dot part simple>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot part simple>");
@@ -1825,16 +1839,15 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // DOT | NULLDOT
+  // DOT | NULLDOT | DANGERDOT
   public static boolean dot_type(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_type")) return false;
-    if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
-        && replaceVariants(builder_, 2, "<dot type>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot type>");
     result_ = consumeToken(builder_, DOT);
     if (!result_) result_ = consumeToken(builder_, NULLDOT);
+    if (!result_) result_ = consumeToken(builder_, DANGERDOT);
     if (result_) {
       marker_.done(DOT_TYPE);
     }
@@ -2194,7 +2207,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LESS data_type (COMMA data_type)* MORE
+  // LESS data_type (COMMA data_type)* (MORE | NULLMAP)
   static boolean expr_call_generics(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call_generics")) return false;
     if (!nextTokenIs(builder_, LESS)) return false;
@@ -2203,7 +2216,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, LESS);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && expr_call_generics_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, MORE);
+    result_ = result_ && expr_call_generics_3(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -2236,6 +2249,22 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
     result_ = result_ && data_type(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // MORE | NULLMAP
+  private static boolean expr_call_generics_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_generics_3")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, MORE);
+    if (!result_) result_ = consumeToken(builder_, NULLMAP);
     if (!result_) {
       marker_.rollbackTo();
     }

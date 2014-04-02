@@ -94,7 +94,7 @@ public class ObjDPsiImplUtil {
     }
 
     public static boolean isNullSafe(final ObjDDotType dotType) {
-        return dotType.getNode().findChildByType(ObjDTypes.NULLDOT) != null;
+        return dotType.getNode().findChildByType(ObjDTypes.DOT) == null;
     }
 }
 

@@ -102,6 +102,7 @@ public interface ObjDTypes {
   IElementType COLON = new ObjDTokenType("COLON");
   IElementType COMMA = new ObjDTokenType("COMMA");
   IElementType COMMENT = new ObjDTokenType("COMMENT");
+  IElementType DANGERDOT = new ObjDTokenType("DANGERDOT");
   IElementType DIV = new ObjDTokenType("DIV");
   IElementType DIV_SET = new ObjDTokenType("DIV_SET");
   IElementType DOT = new ObjDTokenType("DOT");
