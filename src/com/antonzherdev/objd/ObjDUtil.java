@@ -3,6 +3,7 @@ package com.antonzherdev.objd;
 import com.antonzherdev.chain.*;
 import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.tp.ObjDTp;
+import com.antonzherdev.objd.tp.PsiRef;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -331,16 +332,31 @@ public class ObjDUtil {
                 @Override
                 public Left getLeft() {
                     return new Left() {
+                        Lazy<Tuple<ObjDTp, Boolean>> l = new Lazy<Tuple<ObjDTp, Boolean>>() {
+                            @Override
+                            protected Tuple<ObjDTp, Boolean> create() {
+                                Iterator<ObjDExpr> i = dot.getExprList().iterator();
+                                ObjDExpr prev = null;
+                                int n = 0;
+                                while (i.hasNext()) {
+                                    ObjDExpr next = i.next();
+                                    if(next == par) return new Tuple<ObjDTp, Boolean>(prev.getTp(), dot.getDotTypeList().get(n - 1).isNullSafe());
+                                    prev = next;
+                                    n++;
+                                }
+                                return new Tuple<ObjDTp, Boolean>(new ObjDTp.Unknown("Error in dot"), false);
+                            }
+                        };
+
                         @Override
                         public ObjDTp getTp() {
-                            Iterator<ObjDExpr> i = dot.getExprList().iterator();
-                            ObjDExpr prev = null;
-                            while (i.hasNext()) {
-                                ObjDExpr next = i.next();
-                                if(next == par) return prev.getTp();
-                                prev = next;
-                            }
-                            return new ObjDTp.Unknown("Error in dot");
+                            return l.get()._1;
+                        }
+
+                        @Override
+                        public IChain<PsiRef> getRefsChain() {
+                            Tuple<ObjDTp, Boolean> v = l.get();
+                            return v._2 ? v._1.getNullSafeRefsChain() : v._1.getRefsChain();
                         }
                     };
                 }

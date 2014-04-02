@@ -110,6 +110,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == DEF_STATEMENT) {
       result_ = def_statement(builder_, level_ + 1);
     }
+    else if (root_ == DOT_TYPE) {
+      result_ = dot_type(builder_, level_ + 1);
+    }
     else if (root_ == ENUM_ITEM) {
       result_ = enum_item(builder_, level_ + 1);
     }
@@ -1668,6 +1671,27 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // DOT | NULLDOT
+  public static boolean dot_type(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "dot_type")) return false;
+    if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
+        && replaceVariants(builder_, 2, "<dot type>")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot type>");
+    result_ = consumeToken(builder_, DOT);
+    if (!result_) result_ = consumeToken(builder_, NULLDOT);
+    if (result_) {
+      marker_.done(DOT_TYPE);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // def_name expr_call_params?
   public static boolean enum_item(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "enum_item")) return false;
@@ -2525,7 +2549,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_index (DOT expr_index)*
+  // expr_index (dot_type expr_index)*
   public static boolean expr_dot(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_dot")) return false;
     boolean result_ = false;
@@ -2548,7 +2572,7 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (DOT expr_index)*
+  // (dot_type expr_index)*
   private static boolean expr_dot_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_dot_1")) return false;
     int offset_ = builder_.getCurrentOffset();
@@ -2564,12 +2588,12 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // DOT expr_index
+  // dot_type expr_index
   private static boolean expr_dot_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_dot_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, DOT);
+    result_ = dot_type(builder_, level_ + 1);
     result_ = result_ && expr_index(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();

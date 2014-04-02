@@ -5,12 +5,8 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDExprDot extends ObjDExpr {
+public interface ObjDDotType extends PsiElement {
 
-  @NotNull
-  List<ObjDDotType> getDotTypeList();
-
-  @NotNull
-  List<ObjDExpr> getExprList();
+  boolean isNullSafe();
 
 }

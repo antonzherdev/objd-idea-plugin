@@ -37,6 +37,7 @@ public interface ObjDTypes {
   IElementType DEF_NAME = new ObjDElementType("DEF_NAME");
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
+  IElementType DOT_TYPE = new ObjDElementType("DOT_TYPE");
   IElementType ENUM_ITEM = new ObjDElementType("ENUM_ITEM");
   IElementType EXPR = new ObjDElementType("EXPR");
   IElementType EXPR_ARR = new ObjDElementType("EXPR_ARR");
@@ -113,6 +114,7 @@ public interface ObjDTypes {
   IElementType MUL = new ObjDTokenType("MUL");
   IElementType MUL_SET = new ObjDTokenType("MUL_SET");
   IElementType NOT_EQ = new ObjDTokenType("NOT_EQ");
+  IElementType NULLDOT = new ObjDTokenType("NULLDOT");
   IElementType OPEN_BRACE = new ObjDTokenType("OPEN_BRACE");
   IElementType OPEN_BRACKET = new ObjDTokenType("OPEN_BRACKET");
   IElementType OPEN_SQUARE_BRACKET = new ObjDTokenType("OPEN_SQUARE_BRACKET");
@@ -268,6 +270,9 @@ public interface ObjDTypes {
       }
       else if (type == DEF_STATEMENT) {
         return new ObjDDefStatementImpl(node);
+      }
+      else if (type == DOT_TYPE) {
+        return new ObjDDotTypeImpl(node);
       }
       else if (type == ENUM_ITEM) {
         return new ObjDEnumItemImpl(node);

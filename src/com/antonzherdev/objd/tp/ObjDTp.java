@@ -25,7 +25,7 @@ public abstract class ObjDTp {
             ObjDExprCall call = (ObjDExprCall) expr;
             PsiElement ref = call.getCallName().getReference().resolve();
             if(ref instanceof ObjDClassName) {
-                ObjDExprCallParams pars = call.getExprCallParams();
+//                ObjDExprCallParams pars = call.getExprCallParams();
                 return new Class((ObjDClass) ref.getParent());
             } else if (ref instanceof ObjDDefName) {
                 return getTpForDef(ref.getParent());
@@ -137,7 +137,7 @@ public abstract class ObjDTp {
                 return new Unknown("Unknown data type class ref " + ref.getClass());
             }
         } else if(dataType instanceof ObjDDataTypeOption) {
-            return getKernelClassTp(dataType, "CNOption");
+            return new Opt(getTpForDataType(((ObjDDataTypeOption) dataType).getDataType()));
         } else if(dataType instanceof ObjDDataTypeCollection) {
             return getKernelClassTp(dataType, "CNSeq");
         } else if(dataType instanceof ObjDDataTypeMap) {
@@ -157,6 +157,7 @@ public abstract class ObjDTp {
     }
 
     public abstract IChain<PsiRef> getRefsChain();
+    public abstract IChain<PsiRef> getNullSafeRefsChain();
 
     public boolean isDefined() {
         return true;
@@ -171,6 +172,11 @@ public abstract class ObjDTp {
 
         @Override
         public IChain<PsiRef> getRefsChain() {
+            return chain();
+        }
+
+        @Override
+        public IChain<PsiRef> getNullSafeRefsChain() {
             return chain();
         }
 
@@ -235,7 +241,10 @@ public abstract class ObjDTp {
                             }).map(DEF_NAME).map(PsiRef.APPLY)
                             : Chain.<PsiRef>empty());
         }
-
+        @Override
+        public IChain<PsiRef> getNullSafeRefsChain() {
+            return chain();
+        }
     }
 
     public static class Class extends ObjDTp {
@@ -249,6 +258,32 @@ public abstract class ObjDTp {
         public IChain<PsiRef> getRefsChain() {
             return ObjDUtil.classFields(classStatement).map(PsiRef.APPLY);
         }
+        @Override
+        public IChain<PsiRef> getNullSafeRefsChain() {
+            return chain();
+        }
+    }
+
+    public static class Opt extends ObjDTp {
+        private final ObjDTp tp;
+
+        public Opt(ObjDTp tp) {
+            this.tp = tp;
+        }
+
+        @Override
+        public IChain<PsiRef> getRefsChain() {
+            return chain();
+        }
+
+        @Override
+        public IChain<PsiRef> getNullSafeRefsChain() {
+            return tp.getRefsChain();
+        }
+
+        public ObjDTp getTp() {
+            return tp;
+        }
     }
 
     public static class Generic extends ObjDTp {
@@ -261,6 +296,10 @@ public abstract class ObjDTp {
         @Override
         public IChain<PsiRef> getRefsChain() {
             return empty();
+        }
+        @Override
+        public IChain<PsiRef> getNullSafeRefsChain() {
+            return chain();
         }
 
         public boolean isDefined() {

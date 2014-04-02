@@ -123,6 +123,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDotType(@NotNull ObjDDotType o) {
+    visitPsiElement(o);
+  }
+
   public void visitEnumItem(@NotNull ObjDEnumItem o) {
     visitPsiElement(o);
   }

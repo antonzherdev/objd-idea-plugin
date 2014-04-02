@@ -49,7 +49,7 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     public static IChain<PsiRef> getRefsChain(PsiElement element) {
         Option<Dot> dot = ObjDUtil.getDot(element);
         if(dot.isDefined()) {
-            return dot.get().getLeft().getTp().getRefsChain();
+            return dot.get().getLeft().getRefsChain();
         }
         return ObjDUtil.availableClassesInFile((ObjDFile) element.getContainingFile())
                 .map(new F<ObjDClass, PsiNamedElement>() {

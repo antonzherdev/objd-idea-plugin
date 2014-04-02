@@ -1,5 +1,6 @@
 {
   parserClass="com.antonzherdev.objd.parser.ObjDParser"
+  parserUtilClass="com.antonzherdev.objd.parser.ParserUtil"
   stubParserClass="com.antonzherdev.objd.parser.GeneratedParserUtilBase"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
@@ -117,7 +118,12 @@ expr_bool ::= expr_comp ((AND | OR) expr_bool)? {extends = expr_}
 expr_comp ::= expr_pm ((EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)? {extends = expr_}
 expr_pm ::= expr_md ((PLUS | MINUS) expr_pm)? {extends = expr_}
 expr_md ::= expr_dot ((MUL | DIV) expr_md)? {extends = expr_}
-expr_dot ::= expr_index (DOT expr_index)* {extends = expr_}
+//external expr_dot ::= parseDot expr_index {extends = expr_}
+//expr_dot ::= expr_index dot_type expr_dot {extends = expr_}
+expr_dot ::= expr_index (dot_type expr_index)* {extends = expr_}
+dot_type ::= DOT | NULLDOT {
+ methods=[isNullSafe]
+}
 expr_index ::=term_ index_op? {extends = expr_}
 index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op?
 
