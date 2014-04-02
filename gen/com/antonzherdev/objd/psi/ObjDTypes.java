@@ -74,6 +74,7 @@ public interface ObjDTypes {
   IElementType EXPR_SUPER = new ObjDElementType("EXPR_SUPER");
   IElementType EXPR_SYNC = new ObjDElementType("EXPR_SYNC");
   IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
+  IElementType EXPR_TRY = new ObjDElementType("EXPR_TRY");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType EXPR_WEAK = new ObjDElementType("EXPR_WEAK");
   IElementType EXPR_WHAT = new ObjDElementType("EXPR_WHAT");
@@ -163,6 +164,7 @@ public interface ObjDTypes {
   IElementType W_EXTENDS = new ObjDTokenType("W_EXTENDS");
   IElementType W_FALSE = new ObjDTokenType("W_FALSE");
   IElementType W_FINAL = new ObjDTokenType("W_FINAL");
+  IElementType W_FINALLY = new ObjDTokenType("W_FINALLY");
   IElementType W_IF = new ObjDTokenType("W_IF");
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
   IElementType W_LAZY = new ObjDTokenType("W_LAZY");
@@ -182,6 +184,7 @@ public interface ObjDTypes {
   IElementType W_THROW = new ObjDTokenType("W_THROW");
   IElementType W_TRAIT = new ObjDTokenType("W_TRAIT");
   IElementType W_TRUE = new ObjDTokenType("W_TRUE");
+  IElementType W_TRY = new ObjDTokenType("W_TRY");
   IElementType W_TYPE = new ObjDTokenType("W_TYPE");
   IElementType W_VAL = new ObjDTokenType("W_VAL");
   IElementType W_VAR = new ObjDTokenType("W_VAR");
@@ -390,6 +393,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_THROW) {
         return new ObjDExprThrowImpl(node);
+      }
+      else if (type == EXPR_TRY) {
+        return new ObjDExprTryImpl(node);
       }
       else if (type == EXPR_VAL) {
         return new ObjDExprValImpl(node);

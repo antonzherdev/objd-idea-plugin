@@ -221,6 +221,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_THROW) {
       result_ = expr_throw(builder_, level_ + 1);
     }
+    else if (root_ == EXPR_TRY) {
+      result_ = expr_try(builder_, level_ + 1);
+    }
     else if (root_ == EXPR_VAL) {
       result_ = expr_val(builder_, level_ + 1);
     }
@@ -295,8 +298,8 @@ public class ObjDParser implements PsiParser {
       EXPR_DOT, EXPR_IF, EXPR_INDEX, EXPR_LAMBDA,
       EXPR_MD, EXPR_MINUS, EXPR_NOT, EXPR_PM,
       EXPR_SELF, EXPR_SET, EXPR_STRING_CONST, EXPR_SUPER,
-      EXPR_SYNC, EXPR_THROW, EXPR_VAL, EXPR_WHAT,
-      EXPR_WHILE, TERM),
+      EXPR_SYNC, EXPR_THROW, EXPR_TRY, EXPR_VAL,
+      EXPR_WHAT, EXPR_WHILE, TERM),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -3207,6 +3210,26 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_TRY expr_ W_FINALLY expr_
+  public static boolean expr_try(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_try")) return false;
+    if (!nextTokenIs(builder_, W_TRY)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_TRY);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, W_FINALLY);
+    result_ = result_ && expr_(builder_, level_ + 1);
+    if (result_) {
+      marker_.done(EXPR_TRY);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // (W_WEAK)* (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
   public static boolean expr_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val")) return false;
@@ -4081,7 +4104,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_do | W_BREAK | expr_return | expr_weak
+  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
   public static boolean term_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "term_")) return false;
     boolean result_ = false;
@@ -4108,6 +4131,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = expr_super(builder_, level_ + 1);
     if (!result_) result_ = expr_while(builder_, level_ + 1);
     if (!result_) result_ = expr_sync(builder_, level_ + 1);
+    if (!result_) result_ = expr_try(builder_, level_ + 1);
     if (!result_) result_ = expr_do(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, W_BREAK);
     if (!result_) result_ = expr_return(builder_, level_ + 1);

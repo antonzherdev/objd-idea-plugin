@@ -271,6 +271,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitExprTry(@NotNull ObjDExprTry o) {
+    visitExpr(o);
+  }
+
   public void visitExprVal(@NotNull ObjDExprVal o) {
     visitExpr(o);
   }
