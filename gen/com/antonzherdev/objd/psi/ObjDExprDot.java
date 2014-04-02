@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ObjDExprDot extends ObjDExpr {
 
   @NotNull
-  List<ObjDDotType> getDotTypeList();
+  List<ObjDDotPart> getDotPartList();
 
   @NotNull
-  List<ObjDExpr> getExprList();
+  ObjDExpr getExpr();
 
 }

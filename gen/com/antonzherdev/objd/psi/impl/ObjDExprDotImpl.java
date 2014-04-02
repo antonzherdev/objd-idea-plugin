@@ -18,14 +18,14 @@ public class ObjDExprDotImpl extends ObjDExprImpl implements ObjDExprDot {
 
   @Override
   @NotNull
-  public List<ObjDDotType> getDotTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDotType.class);
+  public List<ObjDDotPart> getDotPartList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDotPart.class);
   }
 
   @Override
   @NotNull
-  public List<ObjDExpr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
+  public ObjDExpr getExpr() {
+    return findNotNullChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

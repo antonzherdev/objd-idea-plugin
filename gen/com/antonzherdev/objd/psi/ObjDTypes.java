@@ -37,6 +37,12 @@ public interface ObjDTypes {
   IElementType DEF_NAME = new ObjDElementType("DEF_NAME");
   IElementType DEF_PARAMETER = new ObjDElementType("DEF_PARAMETER");
   IElementType DEF_STATEMENT = new ObjDElementType("DEF_STATEMENT");
+  IElementType DOT_LEFT = new ObjDElementType("DOT_LEFT");
+  IElementType DOT_PART = new ObjDElementType("DOT_PART");
+  IElementType DOT_PART_ELVIS = new ObjDElementType("DOT_PART_ELVIS");
+  IElementType DOT_PART_SIMPLE = new ObjDElementType("DOT_PART_SIMPLE");
+  IElementType DOT_PART_WHAT = new ObjDElementType("DOT_PART_WHAT");
+  IElementType DOT_RIGHT = new ObjDElementType("DOT_RIGHT");
   IElementType DOT_TYPE = new ObjDElementType("DOT_TYPE");
   IElementType ENUM_ITEM = new ObjDElementType("ENUM_ITEM");
   IElementType EXPR = new ObjDElementType("EXPR");
@@ -70,6 +76,7 @@ public interface ObjDTypes {
   IElementType EXPR_THROW = new ObjDElementType("EXPR_THROW");
   IElementType EXPR_VAL = new ObjDElementType("EXPR_VAL");
   IElementType EXPR_WEAK = new ObjDElementType("EXPR_WEAK");
+  IElementType EXPR_WHAT = new ObjDElementType("EXPR_WHAT");
   IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
   IElementType IMPORT_PART = new ObjDElementType("IMPORT_PART");
@@ -97,6 +104,7 @@ public interface ObjDTypes {
   IElementType DIV = new ObjDTokenType("DIV");
   IElementType DIV_SET = new ObjDTokenType("DIV_SET");
   IElementType DOT = new ObjDTokenType("DOT");
+  IElementType ELVIS = new ObjDTokenType("ELVIS");
   IElementType EQ = new ObjDTokenType("EQ");
   IElementType EXACT_EQ = new ObjDTokenType("EXACT_EQ");
   IElementType EXACT_NOT_EQ = new ObjDTokenType("EXACT_NOT_EQ");
@@ -141,6 +149,7 @@ public interface ObjDTypes {
   IElementType TP_UINT4 = new ObjDTokenType("TP_UINT4");
   IElementType TP_UINT8 = new ObjDTokenType("TP_UINT8");
   IElementType TP_VOID = new ObjDTokenType("TP_VOID");
+  IElementType UNSAFE = new ObjDTokenType("UNSAFE");
   IElementType WHAT = new ObjDTokenType("WHAT");
   IElementType W_ABSTRACT = new ObjDTokenType("W_ABSTRACT");
   IElementType W_BREAK = new ObjDTokenType("W_BREAK");
@@ -271,6 +280,24 @@ public interface ObjDTypes {
       else if (type == DEF_STATEMENT) {
         return new ObjDDefStatementImpl(node);
       }
+      else if (type == DOT_LEFT) {
+        return new ObjDDotLeftImpl(node);
+      }
+      else if (type == DOT_PART) {
+        return new ObjDDotPartImpl(node);
+      }
+      else if (type == DOT_PART_ELVIS) {
+        return new ObjDDotPartElvisImpl(node);
+      }
+      else if (type == DOT_PART_SIMPLE) {
+        return new ObjDDotPartSimpleImpl(node);
+      }
+      else if (type == DOT_PART_WHAT) {
+        return new ObjDDotPartWhatImpl(node);
+      }
+      else if (type == DOT_RIGHT) {
+        return new ObjDDotRightImpl(node);
+      }
       else if (type == DOT_TYPE) {
         return new ObjDDotTypeImpl(node);
       }
@@ -369,6 +396,9 @@ public interface ObjDTypes {
       }
       else if (type == EXPR_WEAK) {
         return new ObjDExprWeakImpl(node);
+      }
+      else if (type == EXPR_WHAT) {
+        return new ObjDExprWhatImpl(node);
       }
       else if (type == EXPR_WHILE) {
         return new ObjDExprWhileImpl(node);

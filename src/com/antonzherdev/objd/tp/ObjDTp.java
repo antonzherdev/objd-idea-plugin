@@ -53,8 +53,10 @@ public abstract class ObjDTp {
                 }
             }).getOrElse(NO_SELF);
         } else if(expr instanceof ObjDExprDot) {
-            List<ObjDExpr> exprList = ((ObjDExprDot) expr).getExprList();
-            return exprList.get(exprList.size() - 1).getTp();
+            List<ObjDDotPart> exprList = ((ObjDExprDot) expr).getDotPartList();
+            if(exprList.isEmpty()) return ((ObjDExprDot) expr).getExpr().getTp();
+            ObjDDotPart part = exprList.get(exprList.size() - 1);
+            return ObjDUtil.getTpForDotPart(part);
         } else if(expr instanceof ObjDExprBind) {
             if(((ObjDExprBind) expr).getExprList().size() == 1) {
                 return getTpForExpression(((ObjDExprBind) expr).getExprList().get(0));

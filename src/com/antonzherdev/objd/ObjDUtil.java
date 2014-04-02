@@ -325,9 +325,9 @@ public class ObjDUtil {
     public static Option<Dot> getDot(final PsiElement element) {
         final PsiElement par = removeIndex(element.getParent());
 
-        if(par.getParent() instanceof ObjDExprDot) {
-            final ObjDExprDot dot = (ObjDExprDot) par.getParent();
-            if(dot.getExprList().get(0) == par) return Option.none();
+        if(par.getParent() instanceof ObjDDotPartSimple) {
+            final ObjDExprDot dot = (ObjDExprDot) par.getParent().getParent();
+            if(dot.getExpr() == par) return Option.none();
             return Option.<Dot>some(new Dot() {
                 @Override
                 public Left getLeft() {
@@ -335,14 +335,14 @@ public class ObjDUtil {
                         Lazy<Tuple<ObjDTp, Boolean>> l = new Lazy<Tuple<ObjDTp, Boolean>>() {
                             @Override
                             protected Tuple<ObjDTp, Boolean> create() {
-                                Iterator<ObjDExpr> i = dot.getExprList().iterator();
-                                ObjDExpr prev = null;
-                                int n = 0;
+                                Iterator<ObjDDotPart> i = dot.getDotPartList().iterator();
+                                ObjDExpr prev = dot.getExpr();
                                 while (i.hasNext()) {
-                                    ObjDExpr next = i.next();
-                                    if(next == par) return new Tuple<ObjDTp, Boolean>(prev.getTp(), dot.getDotTypeList().get(n - 1).isNullSafe());
+                                    ObjDDotPart n = i.next();
+                                    ObjDExpr next = getExpForDotPart(n);
+                                    if(next == par) return new Tuple<ObjDTp, Boolean>(prev.getTp(),
+                                            n instanceof ObjDDotPartSimple && ((ObjDDotPartSimple) n).getDotType().isNullSafe());
                                     prev = next;
-                                    n++;
                                 }
                                 return new Tuple<ObjDTp, Boolean>(new ObjDTp.Unknown("Error in dot"), false);
                             }
@@ -392,5 +392,18 @@ public class ObjDUtil {
             element = element.getParent();
         }
         return ret;
+    }
+
+    public static ObjDTp getTpForDotPart(ObjDDotPart part) {
+        ObjDExpr e = getExpForDotPart(part);
+        return e == null ? new ObjDTp.Unknown("Unknown dot part") : e.getTp();
+    }
+
+    public static ObjDExpr getExpForDotPart(ObjDDotPart part) {
+        if(part instanceof ObjDDotPartSimple) {
+            return ((ObjDDotPartSimple) part).getExpr();
+        } else {
+            return null;
+        }
     }
 }
