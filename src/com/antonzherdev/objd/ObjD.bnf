@@ -126,7 +126,7 @@ dot_left ::= expr_index {extends = expr_}
 dot_right ::= expr_index {extends = expr_}
 dot_part ::= dot_part_simple | dot_part_what | dot_part_elvis
 dot_part_simple ::= dot_type dot_right {extends = dot_part}
-dot_part_what ::= WHAT expr_what {extends = dot_part}
+dot_part_what ::= NULLMAP expr_what {extends = dot_part}
 dot_part_elvis ::= ELVIS expr_ {extends = dot_part}
 expr_what ::= expr_call_post_lambda | OPEN_BRACKET expr_ CLOSE_BRACKET  {extends = expr_}
 dot_type ::= DOT | NULLDOT  {

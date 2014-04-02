@@ -1784,13 +1784,13 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // WHAT expr_what
+  // NULLMAP expr_what
   public static boolean dot_part_what(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_part_what")) return false;
-    if (!nextTokenIs(builder_, WHAT)) return false;
+    if (!nextTokenIs(builder_, NULLMAP)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, WHAT);
+    result_ = consumeToken(builder_, NULLMAP);
     result_ = result_ && expr_what(builder_, level_ + 1);
     if (result_) {
       marker_.done(DOT_PART_WHAT);

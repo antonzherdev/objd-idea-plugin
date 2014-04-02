@@ -190,6 +190,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "/" {return ObjDTypes.DIV;}
 "?!" {return ObjDTypes.UNSAFE;}
 "?:" {return ObjDTypes.ELVIS;}
+"?>" {return ObjDTypes.NULLMAP;}
 "?" {return ObjDTypes.WHAT;}
 "!==" {return ObjDTypes.EXACT_NOT_EQ;}
 "!=" {return ObjDTypes.NOT_EQ;}

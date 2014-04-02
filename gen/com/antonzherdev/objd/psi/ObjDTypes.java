@@ -124,6 +124,7 @@ public interface ObjDTypes {
   IElementType MUL_SET = new ObjDTokenType("MUL_SET");
   IElementType NOT_EQ = new ObjDTokenType("NOT_EQ");
   IElementType NULLDOT = new ObjDTokenType("NULLDOT");
+  IElementType NULLMAP = new ObjDTokenType("NULLMAP");
   IElementType OPEN_BRACE = new ObjDTokenType("OPEN_BRACE");
   IElementType OPEN_BRACKET = new ObjDTokenType("OPEN_BRACKET");
   IElementType OPEN_SQUARE_BRACKET = new ObjDTokenType("OPEN_SQUARE_BRACKET");
