@@ -86,7 +86,7 @@ data_type_generics ::= LESS data_type (COMMA data_type)* MORE
 
 expr_ ::= (expr_val | expr_clue) {extends = expr_ methods = [getTp]}
 term_ ::= expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-    expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
+    expr_minus | W_NIL | TP_VOID | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
     {extends = expr_}
 expr_case ::= W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET ((OPEN_BRACE case_item+ CLOSE_BRACE) | case_item+)
 case_item ::= case_cond ARROW expr_

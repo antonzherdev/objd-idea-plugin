@@ -4104,7 +4104,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-  //     expr_minus | W_NIL | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
+  //     expr_minus | W_NIL | TP_VOID | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
   public static boolean term_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "term_")) return false;
     boolean result_ = false;
@@ -4122,6 +4122,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = expr_brackets(builder_, level_ + 1);
     if (!result_) result_ = expr_minus(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, W_NIL);
+    if (!result_) result_ = consumeToken(builder_, TP_VOID);
     if (!result_) result_ = consumeToken(builder_, W_TRUE);
     if (!result_) result_ = consumeToken(builder_, W_FALSE);
     if (!result_) result_ = expr_string_const(builder_, level_ + 1);
