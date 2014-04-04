@@ -139,12 +139,16 @@ public abstract class ObjDTp {
                 return new Unknown("Unknown data type class ref " + ref.getClass());
             }
         } else if(dataType instanceof ObjDDataTypeOption) {
-            return new Opt(getTpForDataType(((ObjDDataTypeOption) dataType).getDataType()));
+            ObjDTp tp = getTpForDataType(((ObjDDataTypeOption) dataType).getDataType());
+            if(tp instanceof Unknown) return tp;
+            return new Opt(tp);
         } else if(dataType instanceof ObjDDataTypeCollection) {
-            return getKernelClassTp(dataType, "CNSeq");
+            return getKernelClassTp(dataType, "ImArray");
         } else if(dataType instanceof ObjDDataTypeMap) {
-            return getKernelClassTp(dataType, "CNMap");
-        }else {
+            return getKernelClassTp(dataType, "ImHashMap");
+        } else if(dataType instanceof ObjDDataTypeTuple) {
+            return getKernelClassTp(dataType, "Tuple" + ((ObjDDataTypeTuple) dataType).getDataTypeList().size());
+        } else {
             return new Unknown("Not simple type " + dataType.getClass());
         }
     }
