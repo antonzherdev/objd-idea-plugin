@@ -652,13 +652,13 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_WEAK? (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?
+  // mods (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?
   public static boolean class_constructor_field(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_constructor_field")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<class constructor field>");
-    result_ = class_constructor_field_0(builder_, level_ + 1);
+    result_ = mods(builder_, level_ + 1);
     result_ = result_ && class_constructor_field_1(builder_, level_ + 1);
     result_ = result_ && def_name(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
@@ -672,13 +672,6 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
-  }
-
-  // W_WEAK?
-  private static boolean class_constructor_field_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "class_constructor_field_0")) return false;
-    consumeToken(builder_, W_WEAK);
-    return true;
   }
 
   // (W_VAR | W_VAL)?

@@ -46,7 +46,7 @@ class_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl
                methods=[getName setName getNameIdentifier getPresentation]}
 
 private class_constructor_fields ::= (OPEN_BRACKET class_constructor_field (COMMA class_constructor_field)* CLOSE_BRACKET)
-class_constructor_field ::= (W_WEAK? (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?)
+class_constructor_field ::= (mods (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?)
 def_name ::= (IDENT | W_CLASS | W_TYPE)
     {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getPresentation]}

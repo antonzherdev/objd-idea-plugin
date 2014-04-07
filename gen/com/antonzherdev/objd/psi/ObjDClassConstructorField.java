@@ -16,4 +16,7 @@ public interface ObjDClassConstructorField extends PsiElement {
   @Nullable
   ObjDExpr getExpr();
 
+  @NotNull
+  ObjDMods getMods();
+
 }

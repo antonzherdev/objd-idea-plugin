@@ -35,6 +35,12 @@ public class ObjDClassConstructorFieldImpl extends ASTWrapperPsiElement implemen
     return findChildByClass(ObjDExpr.class);
   }
 
+  @Override
+  @NotNull
+  public ObjDMods getMods() {
+    return findNotNullChildByClass(ObjDMods.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassConstructorField(this);
     else super.accept(visitor);

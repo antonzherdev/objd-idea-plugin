@@ -1,8 +1,6 @@
 package com.antonzherdev.objd.markers;
 
-import com.antonzherdev.chain.F;
-import com.antonzherdev.chain.IChain;
-import com.antonzherdev.chain.Option;
+import com.antonzherdev.chain.*;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
@@ -60,24 +58,42 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                 }
             }
             if(PsiTreeUtil.findChildOfType(element, ObjDFinalMod.class) == null && PsiTreeUtil.findChildOfType(element, ObjDStaticMod.class) == null) {
+                final ObjDDefStatement def = (ObjDDefStatement) element;
                 final IChain<ObjDDefName> d = chain(ObjDUtil.getClass(element).get().getChildReference().resolveClasses()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
                     @Override
-                    public Option<ObjDDefName> f(ObjDClass x) {
+                    public Option<ObjDDefName> f(final ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();
                         ObjDClassBody cb = ((ObjDClassStatement) x).getClassBody();
-                        if(cb == null) return Option.none();
-                        return chain(cb.getDefStatementList())
-                                .find(new F<ObjDDefStatement, Boolean>() {
+                        return (cb == null
+                                ? Option.<ObjDDefName>none()
+                                : chain(cb.getDefStatementList())
+                                    .find(new F<ObjDDefStatement, Boolean>() {
+                                        @Override
+                                        public Boolean f(ObjDDefStatement s) {
+                                            return ObjDUtil.isDeclEquals(def, s);
+                                        }
+                                    }).map(new F<ObjDDefStatement, ObjDDefName>() {
+                                        @Override
+                                        public ObjDDefName f(ObjDDefStatement d) {
+                                            return d.getDefName();
+                                        }
+                                    })).orElse(new F0<Option<ObjDDefName>>() {
+                            @Override
+                            public Option<ObjDDefName> f() {
+                                if(!def.getDefParameterList().isEmpty()) return Option.none();
+                                return chain(((ObjDClassStatement) x).getClassConstructorFieldList()).find(new B<ObjDClassConstructorField>() {
                                     @Override
-                                    public Boolean f(ObjDDefStatement s) {
-                                        return ObjDUtil.isDeclEquals((ObjDDefStatement) element, s);
+                                    public Boolean f(ObjDClassConstructorField f) {
+                                        return Objects.equals(f.getDefName().getName(), def.getDefName().getName());
                                     }
-                                }).map(new F<ObjDDefStatement, ObjDDefName>() {
+                                }).map(new F<ObjDClassConstructorField, ObjDDefName>() {
                                     @Override
-                                    public ObjDDefName f(ObjDDefStatement d) {
-                                        return d.getDefName();
+                                    public ObjDDefName f(ObjDClassConstructorField f) {
+                                        return f.getDefName();
                                     }
                                 });
+                            }
+                        });
                     }
                 });
                 if(!d.isEmpty()) {
