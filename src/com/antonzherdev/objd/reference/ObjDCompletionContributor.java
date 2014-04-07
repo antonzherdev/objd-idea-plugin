@@ -87,6 +87,8 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(create("var "));
                             resultSet.addElement(create("private "));
                             resultSet.addElement(create("protected "));
+                            resultSet.addElement(create("final "));
+                            resultSet.addElement(create("override "));
                             resultSet.addElement(create("def "));
                             resultSet.addElement(create("static "));
                             resultSet.addElement(create("weak "));

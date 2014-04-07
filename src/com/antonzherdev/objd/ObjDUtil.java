@@ -45,7 +45,6 @@ public class ObjDUtil {
         });
     }
 
-
     public static Option<ObjDClass> findClass(Project project, final Iterable<String> pack, final String name) {
         return getAllFiles(project).filter(new F<ObjDFile, Boolean>() {
             @Override
@@ -405,5 +404,43 @@ public class ObjDUtil {
         } else {
             return null;
         }
+    }
+
+    public static IChain<ObjDClassName> getAllChildClasses(final ObjDClass cls) {
+        return getAllClasses(cls.getProject())
+                .filter(new F<ObjDClass, Boolean>() {
+                    @Override
+                    public Boolean f(ObjDClass objDClass) {
+                        return getAllParentClasses(objDClass)
+                                .find(new F<ObjDClass, Boolean>() {
+                                    @Override
+                                    public Boolean f(ObjDClass x) {
+                                        return x == cls;
+                                    }
+                                }).isDefined();
+                    }
+                })
+                .map(new F<ObjDClass, ObjDClassName>() {
+                    @Override
+                    public ObjDClassName f(ObjDClass objDClass) {
+                        return objDClass.getClassName();
+                    }
+                });
+    }
+
+    private static IChain<ObjDClass> getAllParentClasses(ObjDClass objDClass) {
+        return chain(objDClass).recursive(new F<ObjDClass, Iterable<ObjDClass>>() {
+            @Override
+            public Iterable<ObjDClass> f(ObjDClass objDClass) {
+                return chain(objDClass.getClassExtendsList()).flatMap(new F<ObjDClassExtends, Option<ObjDClass>>() {
+                    @Override
+                    public Option<ObjDClass> f(ObjDClassExtends objDClassExtends) {
+                        ObjDClassName clsName = (ObjDClassName) objDClassExtends.getDataTypeRef().getReference().resolve();
+                        return clsName == null ? Option.<ObjDClass>none() : Option.<ObjDClass>some((ObjDClass) clsName.getParent());
+
+                    }
+                });
+            }
+        });
     }
 }

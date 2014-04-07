@@ -84,6 +84,11 @@ public class Chain<X> implements IChain<X> {
     }
 
     @Override
+    public IChain<X> recursive(F<X, Iterable<X>> f) {
+        return link(new RecursiveChainLink(f));
+    }
+
+    @Override
     public <R> IChain<R> scan(R start, F2<R, X, R> f) {
         return link(new ScanChainLink<X, R>(start, f));
     }
@@ -610,6 +615,11 @@ public class Chain<X> implements IChain<X> {
         if(!yield.i.hasNext()) return true;
         apply(yield);
         return yield.ret && !yield.i.hasNext();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return first().isEmpty();
     }
 
     private static class StartsYield<X> extends Yield<X> {

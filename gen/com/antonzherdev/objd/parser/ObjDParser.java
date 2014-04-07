@@ -3580,6 +3580,12 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_FINAL
+  static boolean final_mod(PsiBuilder builder_, int level_) {
+    return consumeToken(builder_, W_FINAL);
+  }
+
+  /* ********************************************************** */
   // IDENT
   public static boolean import_part(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "import_part")) return false;
@@ -3782,7 +3788,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod
+  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod
   static boolean mod(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mod")) return false;
     boolean result_ = false;
@@ -3793,6 +3799,8 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = protected_mod(builder_, level_ + 1);
     if (!result_) result_ = lazy_mod(builder_, level_ + 1);
     if (!result_) result_ = pure_mod(builder_, level_ + 1);
+    if (!result_) result_ = final_mod(builder_, level_ + 1);
+    if (!result_) result_ = override_mod(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -3821,6 +3829,12 @@ public class ObjDParser implements PsiParser {
     marker_.done(MODS);
     exitErrorRecordingSection(builder_, level_, true, false, _SECTION_GENERAL_, null);
     return true;
+  }
+
+  /* ********************************************************** */
+  // W_OVERRIDE
+  static boolean override_mod(PsiBuilder builder_, int level_) {
+    return consumeToken(builder_, W_OVERRIDE);
   }
 
   /* ********************************************************** */

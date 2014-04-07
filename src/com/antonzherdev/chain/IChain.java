@@ -1,5 +1,6 @@
 package com.antonzherdev.chain;
 
+import com.antonzherdev.objd.psi.ObjDClass;
 import com.intellij.psi.PsiNamedElement;
 
 import java.util.*;
@@ -30,6 +31,8 @@ public interface IChain<X> extends Iterable<X> {
     IChain<X> mapFirst(F<? super X, X> f);
 
     IChain<X> mapLast(F<? super X, X> f);
+
+    IChain<X> recursive(F<X, Iterable<X>> f);
 
 /*************************************************************************************************
  * Scan
@@ -267,4 +270,6 @@ public interface IChain<X> extends Iterable<X> {
     void addAllTo(Collection<? super X> collection);
 
     boolean startsWith(Iterable<X> collection);
+
+    boolean isEmpty();
 }

@@ -36,6 +36,11 @@ public class ChainDelegate<X> implements IChain<X> {
     }
 
     @Override
+    public IChain<X> recursive(F<X, Iterable<X>> f) {
+        return base.recursive(f);
+    }
+
+    @Override
     public <R> IChain<R> scan(R start, F2<R, X, R> f) {
         return base.scan(start, f);
     }
@@ -173,6 +178,11 @@ public class ChainDelegate<X> implements IChain<X> {
     @Override
     public boolean startsWith(Iterable<X> collection) {
         return base.startsWith(collection);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return base.isEmpty();
     }
 
     @Override

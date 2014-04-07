@@ -172,6 +172,7 @@ public interface ObjDTypes {
   IElementType W_LAZY = new ObjDTokenType("W_LAZY");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
   IElementType W_OBJECT = new ObjDTokenType("W_OBJECT");
+  IElementType W_OVERRIDE = new ObjDTokenType("W_OVERRIDE");
   IElementType W_PACKAGE = new ObjDTokenType("W_PACKAGE");
   IElementType W_PRIVATE = new ObjDTokenType("W_PRIVATE");
   IElementType W_PROTECTED = new ObjDTokenType("W_PROTECTED");
