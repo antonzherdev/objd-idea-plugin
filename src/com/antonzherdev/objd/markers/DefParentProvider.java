@@ -31,7 +31,7 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
     protected void collectNavigationMarkers(@NotNull final PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if(element instanceof ObjDDefStatement) {
             if(PsiTreeUtil.findChildOfType(element, ObjDOverrideMod.class) != null) {
-                Option<ObjDDefName> d = ObjDUtil.getAllParentClasses(ObjDUtil.getClass(element).get()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
+                Option<ObjDDefName> d = chain(ObjDUtil.getClass(element).get().getParentReference().resolveClasses()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
                     @Override
                     public Option<ObjDDefName> f(ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();
@@ -58,7 +58,7 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                 }
             }
             if(PsiTreeUtil.findChildOfType(element, ObjDFinalMod.class) == null) {
-                final IChain<ObjDDefName> d = ObjDUtil.getAllChildClasses(ObjDUtil.getClass(element).get()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
+                final IChain<ObjDDefName> d = chain(ObjDUtil.getClass(element).get().getChildReference().resolveClasses()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
                     @Override
                     public Option<ObjDDefName> f(ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();

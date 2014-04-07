@@ -407,37 +407,6 @@ public class ObjDUtil {
         }
     }
 
-    public static IChain<ObjDClass> getAllChildClasses(final ObjDClass cls) {
-        return getAllClasses(cls.getProject())
-                .filter(new F<ObjDClass, Boolean>() {
-                    @Override
-                    public Boolean f(ObjDClass objDClass) {
-                        return getAllParentClasses(objDClass)
-                                .find(new F<ObjDClass, Boolean>() {
-                                    @Override
-                                    public Boolean f(ObjDClass x) {
-                                        return x == cls;
-                                    }
-                                }).isDefined();
-                    }
-                });
-    }
-
-    public static IChain<ObjDClass> getAllParentClasses(ObjDClass objDClass) {
-        return chain(objDClass).recursive(new F<ObjDClass, Iterable<ObjDClass>>() {
-            @Override
-            public Iterable<ObjDClass> f(ObjDClass objDClass) {
-                return chain(objDClass.getClassExtendsList()).flatMap(new F<ObjDClassExtends, Option<ObjDClass>>() {
-                    @Override
-                    public Option<ObjDClass> f(ObjDClassExtends objDClassExtends) {
-                        ObjDClassName clsName = (ObjDClassName) objDClassExtends.getDataTypeRef().getReference().resolve();
-                        return clsName == null ? Option.<ObjDClass>none() : Option.<ObjDClass>some((ObjDClass) clsName.getParent());
-
-                    }
-                });
-            }
-        });
-    }
 
     public static boolean isDeclEquals(ObjDDefStatement l, ObjDDefStatement r) {
         return l.getDefName().getName().equals(r.getDefName().getName()) &&

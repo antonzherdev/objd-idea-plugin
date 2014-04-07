@@ -20,7 +20,7 @@ public class ClassChildrenProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if(element instanceof ObjDClassStatement) {
-            final IChain<ObjDClassName> chain = ObjDUtil.getAllChildClasses((ObjDClass) element).map(new F<ObjDClass, ObjDClassName>() {
+            final IChain<ObjDClassName> chain = chain(((ObjDClass) element).getChildReference().resolveClasses()).map(new F<ObjDClass, ObjDClassName>() {
                 @Override
                 public ObjDClassName f(ObjDClass objDClass) {
                     return objDClass.getClassName();

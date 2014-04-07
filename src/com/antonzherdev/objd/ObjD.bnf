@@ -31,10 +31,12 @@ import_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImp
                                                            methods=[getName setName getNameIdentifier] }
 type_statement ::= (W_TYPE class_name class_generics? SET class_extends) {
     methods = [getClassExtendsList]
+    mixin="com.antonzherdev.objd.psi.impl.ObjDClassImpl"
     implements = "com.antonzherdev.objd.psi.ObjDClass"
 }
 class_statement ::= W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)* )? class_body? {
     methods = [isEnum]
+    mixin="com.antonzherdev.objd.psi.impl.ObjDClassImpl"
     implements = "com.antonzherdev.objd.psi.ObjDClass"
 }
 class_type ::= (W_CLASS | W_OBJECT | W_TRAIT | W_STRUCT | W_ENUM)

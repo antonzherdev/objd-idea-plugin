@@ -1,5 +1,7 @@
 package com.antonzherdev.objd.psi;
 
+import com.antonzherdev.objd.reference.ClassChildReference;
+import com.antonzherdev.objd.reference.ClassParentReference;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.psi.PsiElement;
@@ -17,4 +19,8 @@ public interface ObjDClass extends PsiElement {
 
     @Nullable
     List<ObjDClassExtends> getClassExtendsList();
+
+    ClassChildReference getChildReference();
+
+    ClassParentReference getParentReference();
 }
