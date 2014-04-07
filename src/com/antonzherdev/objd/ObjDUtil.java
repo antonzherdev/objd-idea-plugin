@@ -168,11 +168,11 @@ public class ObjDUtil {
                 }));
     }
 
-    public static IChain<PsiNamedElement> availableDefsInFile(final ObjDFile file) {
+    public static IChain<ObjDDefName> availableDefsInFile(final ObjDFile file) {
         return getAllImports(file)
-                .flatMap(new F<ObjDImportStatement, Iterable<PsiNamedElement>>() {
+                .flatMap(new F<ObjDImportStatement, Iterable<ObjDDefName>>() {
                     @Override
-                    public Iterable<PsiNamedElement> f(ObjDImportStatement imp) {
+                    public Iterable<ObjDDefName> f(ObjDImportStatement imp) {
                         final List<String> parts = chain(imp.getImportPartList())
                                 .map(new F<ObjDImportPart, String>() {
                                     @Override
@@ -203,9 +203,9 @@ public class ObjDUtil {
                                             });
                                         }
                                     })
-                                    .flatMap(new F<ObjDClass, Iterable<PsiNamedElement>>() {
+                                    .flatMap(new F<ObjDClass, Iterable<ObjDDefName>>() {
                                         @Override
-                                        public Iterable<PsiNamedElement> f(ObjDClass objDClass) {
+                                        public Iterable<ObjDDefName> f(ObjDClass objDClass) {
                                             return classFields(objDClass);
                                         }
                                     });
@@ -264,29 +264,29 @@ public class ObjDUtil {
         return Option.none();
     }
 
-    public static IChain<PsiNamedElement> classFields(ObjDClass cls) {
+    public static IChain<ObjDDefName> classFields(ObjDClass cls) {
         if(cls == null) return empty();
 
         if(cls instanceof ObjDClassStatement) {
             ObjDClassStatement stm = (ObjDClassStatement) cls;
-            return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, PsiNamedElement>() {
+            return chain(stm.getClassConstructorFieldList()).map(new F<ObjDClassConstructorField, ObjDDefName>() {
                 @Override
-                public PsiNamedElement f(ObjDClassConstructorField x) {
+                public ObjDDefName f(ObjDClassConstructorField x) {
                     return x.getDefName();
                 }
-            }).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, PsiNamedElement>() {
+            }).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getDefStatementList()).map(new F<ObjDDefStatement, ObjDDefName>() {
                 @Override
-                public PsiNamedElement f(ObjDDefStatement x) {
+                public ObjDDefName f(ObjDDefStatement x) {
                     return x.getDefName();
                 }
-            })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, PsiNamedElement>() {
+            })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getFieldStatementList()).map(new F<ObjDFieldStatement, ObjDDefName>() {
                 @Override
-                public PsiNamedElement f(ObjDFieldStatement x) {
+                public ObjDDefName f(ObjDFieldStatement x) {
                     return x.getDefName();
                 }
-            })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, PsiNamedElement>() {
+            })).append(chain(stm.getClassBody() == null ? null : stm.getClassBody().getEnumItemList()).map(new F<ObjDEnumItem, ObjDDefName>() {
                 @Override
-                public PsiNamedElement f(ObjDEnumItem x) {
+                public ObjDDefName f(ObjDEnumItem x) {
                     return x.getDefName();
                 }
             }))
@@ -297,20 +297,20 @@ public class ObjDUtil {
         }
     }
 
-    private static IChain<PsiNamedElement> enumSpecials(ObjDClassStatement stm) {
+    private static IChain<ObjDDefName> enumSpecials(ObjDClassStatement stm) {
         return stm.isEnum() ? classFields(findKernelClass(stm.getProject(), "Enum").getOrNull()) : null;
     }
 
-    private static IChain<PsiNamedElement> parentFields(ObjDClass stm) {
+    private static IChain<ObjDDefName> parentFields(ObjDClass stm) {
         List<ObjDClassExtends> classExtends = stm.getClassExtendsList();
         if(classExtends == null || classExtends.isEmpty()) {
             if(stm.getClassName().getName().equals("Object")) return empty();
             else return classFields(getBaseObject(stm.getProject()));
         }
 
-        return chain(classExtends).flatMap(new F<ObjDClassExtends,IChain<PsiNamedElement>>() {
+        return chain(classExtends).flatMap(new F<ObjDClassExtends,IChain<ObjDDefName>>() {
             @Override
-            public IChain<PsiNamedElement> f(ObjDClassExtends objDClassExtends) {
+            public IChain<ObjDDefName> f(ObjDClassExtends objDClassExtends) {
                 PsiElement resolve = objDClassExtends.getDataTypeRef().getReference().resolve();
                 if(resolve == null) return empty();
                 return classFields((ObjDClassStatement) resolve.getParent());

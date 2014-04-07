@@ -27,21 +27,29 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull final PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if(element instanceof ObjDDefStatement) {
+        if(element instanceof ObjDDefStatement || element instanceof ObjDFieldStatement) {
             if(PsiTreeUtil.findChildOfType(element, ObjDOverrideMod.class) != null) {
+                final F<ObjDDefStatement, Boolean> b = (element instanceof ObjDDefStatement) ? new F<ObjDDefStatement, Boolean>() {
+                    @Override
+                    public Boolean f(ObjDDefStatement s) {
+                        return ObjDUtil.isDeclEquals((ObjDDefStatement) element, s);
+                    }
+                } : new B<ObjDDefStatement>() {
+                    @Override
+                    public Boolean f(ObjDDefStatement s) {
+                        return Objects.equals(s.getDefName().getName(), ((ObjDFieldStatement)element).getDefName().getName());
+                    }
+                };
+
                 Option<ObjDDefName> d = chain(ObjDUtil.getClass(element).get().getParentReference().resolveClasses()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
                     @Override
                     public Option<ObjDDefName> f(ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();
                         ObjDClassBody classBody = ((ObjDClassStatement) x).getClassBody();
                         if(classBody == null) return Option.none();
+
                         return chain(classBody.getDefStatementList())
-                                .find(new F<ObjDDefStatement, Boolean>() {
-                                    @Override
-                                    public Boolean f(ObjDDefStatement s) {
-                                        return ObjDUtil.isDeclEquals((ObjDDefStatement) element, s);
-                                    }
-                                }).map(new F<ObjDDefStatement, ObjDDefName>() {
+                                .find(b).map(new F<ObjDDefStatement, ObjDDefName>() {
                                     @Override
                                     public ObjDDefName f(ObjDDefStatement d) {
                                         return d.getDefName();
@@ -57,16 +65,26 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }
+        }
+        if(element instanceof ObjDDefStatement) {
             if(PsiTreeUtil.findChildOfType(element, ObjDFinalMod.class) == null && PsiTreeUtil.findChildOfType(element, ObjDStaticMod.class) == null) {
                 final ObjDDefStatement def = (ObjDDefStatement) element;
                 final IChain<ObjDDefName> d = chain(ObjDUtil.getClass(element).get().getChildReference().resolveClasses()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
                     @Override
                     public Option<ObjDDefName> f(final ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();
-                        ObjDClassBody cb = ((ObjDClassStatement) x).getClassBody();
-                        return (cb == null
-                                ? Option.<ObjDDefName>none()
-                                : chain(cb.getDefStatementList())
+
+                        if(def.getDefParameterList().isEmpty()) {
+                            return ObjDUtil.classFields(x).find(new B<ObjDDefName>() {
+                                @Override
+                                public Boolean f(ObjDDefName objDDefName) {
+                                    return Objects.equals(def.getDefName().getName(), objDDefName.getName());
+                                }
+                            });
+                        } else {
+                            ObjDClassBody cb = ((ObjDClassStatement) x).getClassBody();
+                            if(cb == null) return Option.none();
+                            return chain(cb.getDefStatementList())
                                     .find(new F<ObjDDefStatement, Boolean>() {
                                         @Override
                                         public Boolean f(ObjDDefStatement s) {
@@ -77,23 +95,8 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                                         public ObjDDefName f(ObjDDefStatement d) {
                                             return d.getDefName();
                                         }
-                                    })).orElse(new F0<Option<ObjDDefName>>() {
-                            @Override
-                            public Option<ObjDDefName> f() {
-                                if(!def.getDefParameterList().isEmpty()) return Option.none();
-                                return chain(((ObjDClassStatement) x).getClassConstructorFieldList()).find(new B<ObjDClassConstructorField>() {
-                                    @Override
-                                    public Boolean f(ObjDClassConstructorField f) {
-                                        return Objects.equals(f.getDefName().getName(), def.getDefName().getName());
-                                    }
-                                }).map(new F<ObjDClassConstructorField, ObjDDefName>() {
-                                    @Override
-                                    public ObjDDefName f(ObjDClassConstructorField f) {
-                                        return f.getDefName();
-                                    }
-                                });
-                            }
-                        });
+                                    });
+                        }
                     }
                 });
                 if(!d.isEmpty()) {
