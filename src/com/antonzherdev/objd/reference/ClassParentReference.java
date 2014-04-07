@@ -3,9 +3,11 @@ package com.antonzherdev.objd.reference;
 
 import com.antonzherdev.chain.F;
 import com.antonzherdev.chain.Option;
+import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.ObjDClass;
 import com.antonzherdev.objd.psi.ObjDClassExtends;
 import com.antonzherdev.objd.psi.ObjDClassName;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -13,6 +15,7 @@ import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
@@ -32,7 +35,12 @@ public class ClassParentReference extends PsiReferenceBase<ObjDClass> {
                 return chain(cls).recursive(new F<ObjDClass, Iterable<ObjDClass>>() {
                     @Override
                     public Iterable<ObjDClass> f(ObjDClass objDClass) {
-                        return chain(objDClass.getClassExtendsList()).flatMap(new F<ObjDClassExtends, Option<ObjDClass>>() {
+                        List<ObjDClassExtends> exts = objDClass.getClassExtendsList();
+                        if(exts.isEmpty()) {
+                            if(objDClass.getClassName().getName().equals("Object")) return Arrays.asList();
+                            else return Arrays.asList(ObjDUtil.getBaseObject(objDClass.getProject()));
+                        }
+                        return chain(exts).flatMap(new F<ObjDClassExtends, Option<ObjDClass>>() {
                             @Override
                             public Option<ObjDClass> f(ObjDClassExtends objDClassExtends) {
                                 ObjDClassName clsName = (ObjDClassName) objDClassExtends.getDataTypeRef().getReference().resolve();

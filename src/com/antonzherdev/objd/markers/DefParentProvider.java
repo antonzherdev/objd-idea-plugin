@@ -35,7 +35,9 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                     @Override
                     public Option<ObjDDefName> f(ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();
-                        return chain(((ObjDClassStatement) x).getClassBody().getDefStatementList())
+                        ObjDClassBody classBody = ((ObjDClassStatement) x).getClassBody();
+                        if(classBody == null) return Option.none();
+                        return chain(classBody.getDefStatementList())
                                 .find(new F<ObjDDefStatement, Boolean>() {
                                     @Override
                                     public Boolean f(ObjDDefStatement s) {
@@ -57,7 +59,7 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }
-            if(PsiTreeUtil.findChildOfType(element, ObjDFinalMod.class) == null) {
+            if(PsiTreeUtil.findChildOfType(element, ObjDFinalMod.class) == null && PsiTreeUtil.findChildOfType(element, ObjDStaticMod.class) == null) {
                 final IChain<ObjDDefName> d = chain(ObjDUtil.getClass(element).get().getChildReference().resolveClasses()).flatMap(new F<ObjDClass, Option<ObjDDefName>>() {
                     @Override
                     public Option<ObjDDefName> f(ObjDClass x) {

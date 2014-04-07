@@ -305,7 +305,7 @@ public class ObjDUtil {
         List<ObjDClassExtends> classExtends = stm.getClassExtendsList();
         if(classExtends == null || classExtends.isEmpty()) {
             if(stm.getClassName().getName().equals("Object")) return empty();
-            else return classFields(findKernelClass(stm.getProject(), "Object").getOrNull());
+            else return classFields(getBaseObject(stm.getProject()));
         }
 
         return chain(classExtends).flatMap(new F<ObjDClassExtends,IChain<PsiNamedElement>>() {
@@ -316,6 +316,12 @@ public class ObjDUtil {
                 return classFields((ObjDClassStatement) resolve.getParent());
             }
         });
+    }
+
+    private static ObjDClass base;
+    public static ObjDClass getBaseObject(Project p) {
+        if(base == null) base = findKernelClass(p, "Object").getOrNull();
+        return base;
     }
 
     public static boolean isAfterDot(PsiElement element) {
@@ -416,7 +422,10 @@ public class ObjDUtil {
     private static boolean isDeclParametersEquals(List<ObjDDefParameter> l, List<ObjDDefParameter> r) {
         if(l.size() != r.size()) return false;
         for(int i = 0; i < l.size(); i++) {
-            if(!l.get(i).getDefName().getName().equals(r.get(i).getDefName().getName())) return false;
+            ObjDDefName ldn = l.get(i).getDefName();
+            ObjDDefName rdn = r.get(i).getDefName();
+            if(ldn == null || rdn == null) if(ldn == rdn) continue; else break;
+            if(!ldn.getName().equals(rdn.getName())) return false;
         }
         return true;
     }
