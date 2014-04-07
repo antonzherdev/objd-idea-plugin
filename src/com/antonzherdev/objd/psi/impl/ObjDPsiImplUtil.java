@@ -12,6 +12,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -39,17 +41,17 @@ public class ObjDPsiImplUtil {
         return keyNode != null ? keyNode.getPsi() : null;
     }
 
-    public static PsiReference getReference(ObjDImportPart element) {
-        return new ObjDImportReference(element, TextRange.from(0, element.getTextLength()));
-    }
-
-    public static PsiReference getReference(ObjDDataTypeRef element) {
-        return new DataTypeReference(element, TextRange.from(0, element.getTextLength()));
-    }
-
-    public static PsiReference getReference(ObjDCallName element) {
-        return new CallReference(element, TextRange.from(0, element.getTextLength()));
-    }
+//    public static PsiReference getReference(ObjDImportPart element) {
+//        return new ObjDImportReference(element, TextRange.from(0, element.getTextLength()));
+//    }
+//
+//    public static PsiReference getReference(ObjDDataTypeRef element) {
+//        return new DataTypeReference(element, TextRange.from(0, element.getTextLength()));
+//    }
+//
+//    public static PsiReference getReference(ObjDCallName element) {
+//        return new CallReference(element, TextRange.from(0, element.getTextLength()));
+//    }
 
     public static ObjDTp getTp(ObjDExpr expr) {
         return ObjDTp.getTpForExpression(expr);

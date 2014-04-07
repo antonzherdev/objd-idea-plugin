@@ -10,6 +10,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
@@ -19,10 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
-import static com.antonzherdev.chain.Chain.unionChain;
 
 public class CallReference extends PsiReferenceBase<ObjDCallName> {
-
     public CallReference(@NotNull ObjDCallName element, TextRange textRange) {
         super(element, textRange);
     }
@@ -32,15 +31,21 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     @Override
     public PsiElement resolve() {
         try {
-            return getRefsChain(getElement())
-                    .find(new B<PsiRef>() {
-                        @Override
-                        public Boolean f(PsiRef x) {
-                            return x.getName().equals(getElement().getName());
-                        }
-                    })
-                    .map(PsiRef.ELEMENT_F)
-                    .getOrNull();
+            return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<CallReference, PsiElement>() {
+                @Override
+                public PsiElement resolve(@NotNull CallReference callReference, boolean b) {
+                    return getRefsChain(getElement())
+                            .find(new B<PsiRef>() {
+                                @Override
+                                public Boolean f(PsiRef x) {
+                                    return x.getName().equals(getElement().getName());
+                                }
+                            })
+                            .map(PsiRef.ELEMENT_F)
+                            .getOrNull();
+                }
+            }, true, false);
+
         } catch (ProcessCanceledException e) {
             return null;
         }

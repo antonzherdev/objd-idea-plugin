@@ -7,6 +7,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,12 @@ public class ObjDImportReference extends PsiReferenceBase<ObjDImportPart> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        return ObjDUtil.findClass(getElement().getProject(), getPackName(), getElement().getName()).getOrNull();
+        return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<ObjDImportReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(@NotNull ObjDImportReference objDImportReference, boolean b) {
+                return ObjDUtil.findClass(getElement().getProject(), getPackName(), getElement().getName()).getOrNull();
+            }
+        }, true, false);
     }
 
     public List<String> getPackName() {

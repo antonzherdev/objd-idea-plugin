@@ -9,7 +9,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.antonzherdev.objd.psi.*;
-import com.intellij.psi.PsiReference;
 
 public class ObjDImportPartImpl extends ObjDNamedElementImpl implements ObjDImportPart {
 
@@ -32,10 +31,6 @@ public class ObjDImportPartImpl extends ObjDNamedElementImpl implements ObjDImpo
 
   public PsiElement getNameIdentifier() {
     return ObjDPsiImplUtil.getNameIdentifier(this);
-  }
-
-  public PsiReference getReference() {
-    return ObjDPsiImplUtil.getReference(this);
   }
 
 }

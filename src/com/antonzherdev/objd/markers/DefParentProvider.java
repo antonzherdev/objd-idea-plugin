@@ -62,7 +62,9 @@ public class DefParentProvider extends RelatedItemLineMarkerProvider {
                     @Override
                     public Option<ObjDDefName> f(ObjDClass x) {
                         if (!(x instanceof ObjDClassStatement)) return Option.none();
-                        return chain(((ObjDClassStatement) x).getClassBody().getDefStatementList())
+                        ObjDClassBody cb = ((ObjDClassStatement) x).getClassBody();
+                        if(cb == null) return Option.none();
+                        return chain(cb.getDefStatementList())
                                 .find(new F<ObjDDefStatement, Boolean>() {
                                     @Override
                                     public Boolean f(ObjDDefStatement s) {

@@ -8,6 +8,7 @@ import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
@@ -26,30 +27,35 @@ public class DataTypeReference extends PsiReferenceBase<ObjDDataTypeRef> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        ObjDFile file = (ObjDFile) getElement().getContainingFile();
-        try {
-            return ObjDUtil.availableClassesInFile(file)
-                    .map(new F<ObjDClass, ObjDClassName>() {
-                        @Override
-                        public ObjDClassName f(ObjDClass x) {
-                            return x.getClassName();
-                        }
-                    })
-                    .append(chain(ObjDUtil.getDeclaredGenerics(getElement())).map(new F<ObjDClassGeneric, ObjDClassName>() {
-                        @Override
-                        public ObjDClassName f(ObjDClassGeneric x) {
-                            return x.getClassName();
-                        }
-                    }))
-                    .find(new B<ObjDClassName>() {
-                        @Override
-                        public Boolean f(ObjDClassName className) {
-                            return className.getName().equals(getElement().getName());
-                        }
-                    }).getOrNull();
-        } catch (ProcessCanceledException e) {
-            return null;
-        }
+        return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<DataTypeReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(@NotNull DataTypeReference dataTypeReference, boolean b) {
+                ObjDFile file = (ObjDFile) getElement().getContainingFile();
+                try {
+                    return ObjDUtil.availableClassesInFile(file)
+                            .map(new F<ObjDClass, ObjDClassName>() {
+                                @Override
+                                public ObjDClassName f(ObjDClass x) {
+                                    return x.getClassName();
+                                }
+                            })
+                            .append(chain(ObjDUtil.getDeclaredGenerics(getElement())).map(new F<ObjDClassGeneric, ObjDClassName>() {
+                                @Override
+                                public ObjDClassName f(ObjDClassGeneric x) {
+                                    return x.getClassName();
+                                }
+                            }))
+                            .find(new B<ObjDClassName>() {
+                                @Override
+                                public Boolean f(ObjDClassName className) {
+                                    return className.getName().equals(getElement().getName());
+                                }
+                            }).getOrNull();
+                } catch (ProcessCanceledException e) {
+                    return null;
+                }
+            }
+        }, true, false);
     }
 
     @NotNull

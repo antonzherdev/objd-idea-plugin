@@ -51,6 +51,8 @@
       <codeInsight.lineMarkerProvider language="ObjD" implementationClass="com.antonzherdev.objd.markers.ClassChildrenProvider"/>
       <codeInsight.lineMarkerProvider language="ObjD" implementationClass="com.antonzherdev.objd.markers.DefParentProvider"/>
       <gotoClassContributor implementation="com.antonzherdev.objd.choose.GotoClass"/>
+
+      <psi.referenceContributor implementation="com.antonzherdev.objd.reference.ObjDReferenceContributor"/>
     <!-- Add your extensions here -->
   </extensions>
 </idea-plugin>
