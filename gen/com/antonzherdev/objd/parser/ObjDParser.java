@@ -239,6 +239,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == FIELD_STATEMENT) {
       result_ = field_statement(builder_, level_ + 1);
     }
+    else if (root_ == FINAL_MOD) {
+      result_ = final_mod(builder_, level_ + 1);
+    }
     else if (root_ == IMPORT_PART) {
       result_ = import_part(builder_, level_ + 1);
     }
@@ -251,8 +254,17 @@ public class ObjDParser implements PsiParser {
     else if (root_ == LAMBDA_PAR) {
       result_ = lambda_par(builder_, level_ + 1);
     }
+    else if (root_ == LAZY_MOD) {
+      result_ = lazy_mod(builder_, level_ + 1);
+    }
+    else if (root_ == MOD) {
+      result_ = mod(builder_, level_ + 1);
+    }
     else if (root_ == MODS) {
       result_ = mods(builder_, level_ + 1);
+    }
+    else if (root_ == OVERRIDE_MOD) {
+      result_ = override_mod(builder_, level_ + 1);
     }
     else if (root_ == PACK_PART) {
       result_ = pack_part(builder_, level_ + 1);
@@ -263,6 +275,18 @@ public class ObjDParser implements PsiParser {
     else if (root_ == PAR_MODS) {
       result_ = par_mods(builder_, level_ + 1);
     }
+    else if (root_ == PRIVATE_MOD) {
+      result_ = private_mod(builder_, level_ + 1);
+    }
+    else if (root_ == PROTECTED_MOD) {
+      result_ = protected_mod(builder_, level_ + 1);
+    }
+    else if (root_ == PURE_MOD) {
+      result_ = pure_mod(builder_, level_ + 1);
+    }
+    else if (root_ == STATIC_MOD) {
+      result_ = static_mod(builder_, level_ + 1);
+    }
     else if (root_ == STRING_TOKEN) {
       result_ = string_token(builder_, level_ + 1);
     }
@@ -271,6 +295,9 @@ public class ObjDParser implements PsiParser {
     }
     else if (root_ == TYPE_STATEMENT) {
       result_ = type_statement(builder_, level_ + 1);
+    }
+    else if (root_ == WEAK_MOD) {
+      result_ = weak_mod(builder_, level_ + 1);
     }
     else {
       Marker marker_ = builder_.mark();
@@ -300,6 +327,9 @@ public class ObjDParser implements PsiParser {
       EXPR_SELF, EXPR_SET, EXPR_STRING_CONST, EXPR_SUPER,
       EXPR_SYNC, EXPR_THROW, EXPR_TRY, EXPR_VAL,
       EXPR_WHAT, EXPR_WHILE, TERM),
+    TokenSet.create(FINAL_MOD, LAZY_MOD, MOD, OVERRIDE_MOD,
+      PRIVATE_MOD, PROTECTED_MOD, PURE_MOD, STATIC_MOD,
+      WEAK_MOD),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -3581,8 +3611,19 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // W_FINAL
-  static boolean final_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_FINAL);
+  public static boolean final_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "final_mod")) return false;
+    if (!nextTokenIs(builder_, W_FINAL)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_FINAL);
+    if (result_) {
+      marker_.done(FINAL_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -3783,16 +3824,29 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // W_LAZY
-  static boolean lazy_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_LAZY);
+  public static boolean lazy_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "lazy_mod")) return false;
+    if (!nextTokenIs(builder_, W_LAZY)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_LAZY);
+    if (result_) {
+      marker_.done(LAZY_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
   // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod
-  static boolean mod(PsiBuilder builder_, int level_) {
+  public static boolean mod(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mod")) return false;
     boolean result_ = false;
+    int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<mod>");
     result_ = static_mod(builder_, level_ + 1);
     if (!result_) result_ = weak_mod(builder_, level_ + 1);
     if (!result_) result_ = private_mod(builder_, level_ + 1);
@@ -3801,12 +3855,17 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = pure_mod(builder_, level_ + 1);
     if (!result_) result_ = final_mod(builder_, level_ + 1);
     if (!result_) result_ = override_mod(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
+    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
+    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), MOD)) {
       marker_.drop();
     }
+    else if (result_) {
+      marker_.done(MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
     return result_;
   }
 
@@ -3833,8 +3892,19 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // W_OVERRIDE
-  static boolean override_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_OVERRIDE);
+  public static boolean override_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "override_mod")) return false;
+    if (!nextTokenIs(builder_, W_OVERRIDE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_OVERRIDE);
+    if (result_) {
+      marker_.done(OVERRIDE_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -3961,20 +4031,53 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // W_PRIVATE
-  static boolean private_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_PRIVATE);
+  public static boolean private_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "private_mod")) return false;
+    if (!nextTokenIs(builder_, W_PRIVATE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_PRIVATE);
+    if (result_) {
+      marker_.done(PRIVATE_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
   // W_PROTECTED
-  static boolean protected_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_PROTECTED);
+  public static boolean protected_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "protected_mod")) return false;
+    if (!nextTokenIs(builder_, W_PROTECTED)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_PROTECTED);
+    if (result_) {
+      marker_.done(PROTECTED_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
   // W_PURE
-  static boolean pure_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_PURE);
+  public static boolean pure_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "pure_mod")) return false;
+    if (!nextTokenIs(builder_, W_PURE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_PURE);
+    if (result_) {
+      marker_.done(PURE_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -4014,8 +4117,19 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // W_STATIC
-  static boolean static_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_STATIC);
+  public static boolean static_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "static_mod")) return false;
+    if (!nextTokenIs(builder_, W_STATIC)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_STATIC);
+    if (result_) {
+      marker_.done(STATIC_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
@@ -4224,8 +4338,19 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // W_WEAK
-  static boolean weak_mod(PsiBuilder builder_, int level_) {
-    return consumeToken(builder_, W_WEAK);
+  public static boolean weak_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "weak_mod")) return false;
+    if (!nextTokenIs(builder_, W_WEAK)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_WEAK);
+    if (result_) {
+      marker_.done(WEAK_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
 }

@@ -1,5 +1,6 @@
 package com.antonzherdev.objd.markers;
 
+import com.antonzherdev.chain.F;
 import com.antonzherdev.chain.IChain;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
@@ -19,7 +20,12 @@ public class ClassChildrenProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if(element instanceof ObjDClassStatement) {
-            final IChain<ObjDClassName> chain = ObjDUtil.getAllChildClasses((ObjDClass) element);
+            final IChain<ObjDClassName> chain = ObjDUtil.getAllChildClasses((ObjDClass) element).map(new F<ObjDClass, ObjDClassName>() {
+                @Override
+                public ObjDClassName f(ObjDClass objDClass) {
+                    return objDClass.getClassName();
+                }
+            });
             if(!chain.isEmpty()) {
                 NavigationGutterIconBuilder<PsiElement> builder =
                         NavigationGutterIconBuilder.create(AllIcons.Gutter.ImplementedMethod).
@@ -29,8 +35,7 @@ public class ClassChildrenProvider extends RelatedItemLineMarkerProvider {
                                     protected Collection<? extends PsiElement> compute() {
                                         return chain.list();
                                     }
-                                }).
-                                setTooltipText("Is subclassed by");
+                                }).setTooltipText("Is subclassed by");
                 result.add(builder.createLineMarkerInfo(element));
             }
         }

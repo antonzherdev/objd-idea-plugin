@@ -295,6 +295,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFinalMod(@NotNull ObjDFinalMod o) {
+    visitMod(o);
+  }
+
   public void visitImportPart(@NotNull ObjDImportPart o) {
     visitNamedElement(o);
   }
@@ -311,8 +315,20 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLazyMod(@NotNull ObjDLazyMod o) {
+    visitMod(o);
+  }
+
+  public void visitMod(@NotNull ObjDMod o) {
+    visitPsiElement(o);
+  }
+
   public void visitMods(@NotNull ObjDMods o) {
     visitPsiElement(o);
+  }
+
+  public void visitOverrideMod(@NotNull ObjDOverrideMod o) {
+    visitMod(o);
   }
 
   public void visitPackPart(@NotNull ObjDPackPart o) {
@@ -327,6 +343,22 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitPrivateMod(@NotNull ObjDPrivateMod o) {
+    visitMod(o);
+  }
+
+  public void visitProtectedMod(@NotNull ObjDProtectedMod o) {
+    visitMod(o);
+  }
+
+  public void visitPureMod(@NotNull ObjDPureMod o) {
+    visitMod(o);
+  }
+
+  public void visitStaticMod(@NotNull ObjDStaticMod o) {
+    visitMod(o);
+  }
+
   public void visitStringToken(@NotNull ObjDStringToken o) {
     visitPsiElement(o);
   }
@@ -337,6 +369,10 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitTypeStatement(@NotNull ObjDTypeStatement o) {
     visitClass(o);
+  }
+
+  public void visitWeakMod(@NotNull ObjDWeakMod o) {
+    visitMod(o);
   }
 
   public void visitClass(@NotNull ObjDClass o) {

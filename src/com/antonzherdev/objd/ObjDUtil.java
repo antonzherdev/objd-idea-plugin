@@ -406,7 +406,7 @@ public class ObjDUtil {
         }
     }
 
-    public static IChain<ObjDClassName> getAllChildClasses(final ObjDClass cls) {
+    public static IChain<ObjDClass> getAllChildClasses(final ObjDClass cls) {
         return getAllClasses(cls.getProject())
                 .filter(new F<ObjDClass, Boolean>() {
                     @Override
@@ -419,16 +419,10 @@ public class ObjDUtil {
                                     }
                                 }).isDefined();
                     }
-                })
-                .map(new F<ObjDClass, ObjDClassName>() {
-                    @Override
-                    public ObjDClassName f(ObjDClass objDClass) {
-                        return objDClass.getClassName();
-                    }
                 });
     }
 
-    private static IChain<ObjDClass> getAllParentClasses(ObjDClass objDClass) {
+    public static IChain<ObjDClass> getAllParentClasses(ObjDClass objDClass) {
         return chain(objDClass).recursive(new F<ObjDClass, Iterable<ObjDClass>>() {
             @Override
             public Iterable<ObjDClass> f(ObjDClass objDClass) {
@@ -442,5 +436,18 @@ public class ObjDUtil {
                 });
             }
         });
+    }
+
+    public static boolean isDeclEquals(ObjDDefStatement l, ObjDDefStatement r) {
+        return l.getDefName().getName().equals(r.getDefName().getName()) &&
+                isDeclParametersEquals(l.getDefParameterList(), r.getDefParameterList());
+    }
+
+    private static boolean isDeclParametersEquals(List<ObjDDefParameter> l, List<ObjDDefParameter> r) {
+        if(l.size() != r.size()) return false;
+        for(int i = 0; i < l.size(); i++) {
+            if(!l.get(i).getDefName().getName().equals(r.get(i).getDefName().getName())) return false;
+        }
+        return true;
     }
 }

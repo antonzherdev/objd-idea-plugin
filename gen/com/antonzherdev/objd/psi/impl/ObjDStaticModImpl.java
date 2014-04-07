@@ -8,23 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDModsImpl extends ASTWrapperPsiElement implements ObjDMods {
+public class ObjDStaticModImpl extends ObjDModImpl implements ObjDStaticMod {
 
-  public ObjDModsImpl(ASTNode node) {
+  public ObjDStaticModImpl(ASTNode node) {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public List<ObjDMod> getModList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDMod.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMods(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitStaticMod(this);
     else super.accept(visitor);
   }
 

@@ -49,6 +49,7 @@
       <lang.formatter language="ObjD" implementationClass="com.antonzherdev.objd.formatter.ObjDFormatter"/>
       <lang.braceMatcher language="ObjD" implementationClass="com.antonzherdev.objd.ObjDBraceMatcher"/>
       <codeInsight.lineMarkerProvider language="ObjD" implementationClass="com.antonzherdev.objd.markers.ClassChildrenProvider"/>
+      <codeInsight.lineMarkerProvider language="ObjD" implementationClass="com.antonzherdev.objd.markers.DefParentProvider"/>
       <gotoClassContributor implementation="com.antonzherdev.objd.choose.GotoClass"/>
     <!-- Add your extensions here -->
   </extensions>

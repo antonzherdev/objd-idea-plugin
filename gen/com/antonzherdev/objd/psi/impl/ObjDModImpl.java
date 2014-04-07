@@ -11,20 +11,14 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDModsImpl extends ASTWrapperPsiElement implements ObjDMods {
+public class ObjDModImpl extends ASTWrapperPsiElement implements ObjDMod {
 
-  public ObjDModsImpl(ASTNode node) {
+  public ObjDModImpl(ASTNode node) {
     super(node);
   }
 
-  @Override
-  @NotNull
-  public List<ObjDMod> getModList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDMod.class);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMods(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMod(this);
     else super.accept(visitor);
   }
 

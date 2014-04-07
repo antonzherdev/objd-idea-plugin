@@ -80,17 +80,26 @@ public interface ObjDTypes {
   IElementType EXPR_WHAT = new ObjDElementType("EXPR_WHAT");
   IElementType EXPR_WHILE = new ObjDElementType("EXPR_WHILE");
   IElementType FIELD_STATEMENT = new ObjDElementType("FIELD_STATEMENT");
+  IElementType FINAL_MOD = new ObjDElementType("FINAL_MOD");
   IElementType IMPORT_PART = new ObjDElementType("IMPORT_PART");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
   IElementType INDEX_OP = new ObjDElementType("INDEX_OP");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
+  IElementType LAZY_MOD = new ObjDElementType("LAZY_MOD");
+  IElementType MOD = new ObjDElementType("MOD");
   IElementType MODS = new ObjDElementType("MODS");
+  IElementType OVERRIDE_MOD = new ObjDElementType("OVERRIDE_MOD");
   IElementType PACK_PART = new ObjDElementType("PACK_PART");
   IElementType PACK_STATEMENT = new ObjDElementType("PACK_STATEMENT");
   IElementType PAR_MODS = new ObjDElementType("PAR_MODS");
+  IElementType PRIVATE_MOD = new ObjDElementType("PRIVATE_MOD");
+  IElementType PROTECTED_MOD = new ObjDElementType("PROTECTED_MOD");
+  IElementType PURE_MOD = new ObjDElementType("PURE_MOD");
+  IElementType STATIC_MOD = new ObjDElementType("STATIC_MOD");
   IElementType STRING_TOKEN = new ObjDElementType("STRING_TOKEN");
   IElementType TERM = new ObjDElementType("TERM");
   IElementType TYPE_STATEMENT = new ObjDElementType("TYPE_STATEMENT");
+  IElementType WEAK_MOD = new ObjDElementType("WEAK_MOD");
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
@@ -415,6 +424,9 @@ public interface ObjDTypes {
       else if (type == FIELD_STATEMENT) {
         return new ObjDFieldStatementImpl(node);
       }
+      else if (type == FINAL_MOD) {
+        return new ObjDFinalModImpl(node);
+      }
       else if (type == IMPORT_PART) {
         return new ObjDImportPartImpl(node);
       }
@@ -427,8 +439,17 @@ public interface ObjDTypes {
       else if (type == LAMBDA_PAR) {
         return new ObjDLambdaParImpl(node);
       }
+      else if (type == LAZY_MOD) {
+        return new ObjDLazyModImpl(node);
+      }
+      else if (type == MOD) {
+        return new ObjDModImpl(node);
+      }
       else if (type == MODS) {
         return new ObjDModsImpl(node);
+      }
+      else if (type == OVERRIDE_MOD) {
+        return new ObjDOverrideModImpl(node);
       }
       else if (type == PACK_PART) {
         return new ObjDPackPartImpl(node);
@@ -439,6 +460,18 @@ public interface ObjDTypes {
       else if (type == PAR_MODS) {
         return new ObjDParModsImpl(node);
       }
+      else if (type == PRIVATE_MOD) {
+        return new ObjDPrivateModImpl(node);
+      }
+      else if (type == PROTECTED_MOD) {
+        return new ObjDProtectedModImpl(node);
+      }
+      else if (type == PURE_MOD) {
+        return new ObjDPureModImpl(node);
+      }
+      else if (type == STATIC_MOD) {
+        return new ObjDStaticModImpl(node);
+      }
       else if (type == STRING_TOKEN) {
         return new ObjDStringTokenImpl(node);
       }
@@ -447,6 +480,9 @@ public interface ObjDTypes {
       }
       else if (type == TYPE_STATEMENT) {
         return new ObjDTypeStatementImpl(node);
+      }
+      else if (type == WEAK_MOD) {
+        return new ObjDWeakModImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }
