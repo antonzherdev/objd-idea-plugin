@@ -284,7 +284,7 @@ public abstract class ObjDTp {
 
         @Override
         public IChain<PsiRef> getRefsChain() {
-            return optionClass.getRefsChain();
+            return optionClass.getRefsChain().append(tp.getRefsChain());
         }
 
         @Override
