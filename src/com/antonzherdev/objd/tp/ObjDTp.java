@@ -19,6 +19,7 @@ public abstract class ObjDTp {
         }
     };
     public static final Unknown NO_SELF = new Unknown("No self");
+    private static Class optionClass;
 
     public static ObjDTp getTpForExpression(ObjDExpr expr) {
         if(expr instanceof ObjDExprCall) {
@@ -141,7 +142,9 @@ public abstract class ObjDTp {
         } else if(dataType instanceof ObjDDataTypeOption) {
             ObjDTp tp = getTpForDataType(((ObjDDataTypeOption) dataType).getDataType());
             if(tp instanceof Unknown) return tp;
-            return new Opt(tp);
+
+            if(optionClass == null) optionClass = new Class(ObjDUtil.findKernelClass(dataType.getProject(), "Option").get());
+            return new Opt(optionClass, tp);
         } else if(dataType instanceof ObjDDataTypeCollection) {
             return getKernelClassTp(dataType, "ImArray");
         } else if(dataType instanceof ObjDDataTypeMap) {
@@ -271,15 +274,17 @@ public abstract class ObjDTp {
     }
 
     public static class Opt extends ObjDTp {
+        private Class optionClass;
         private final ObjDTp tp;
 
-        public Opt(ObjDTp tp) {
+        public Opt(Class optionClass, ObjDTp tp) {
+            this.optionClass = optionClass;
             this.tp = tp;
         }
 
         @Override
         public IChain<PsiRef> getRefsChain() {
-            return chain();
+            return optionClass.getRefsChain();
         }
 
         @Override

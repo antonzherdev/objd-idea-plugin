@@ -116,14 +116,8 @@ public class ObjDParser implements PsiParser {
     else if (root_ == DOT_PART) {
       result_ = dot_part(builder_, level_ + 1);
     }
-    else if (root_ == DOT_PART_ELVIS) {
-      result_ = dot_part_elvis(builder_, level_ + 1);
-    }
     else if (root_ == DOT_PART_SIMPLE) {
       result_ = dot_part_simple(builder_, level_ + 1);
-    }
-    else if (root_ == DOT_PART_WHAT) {
-      result_ = dot_part_what(builder_, level_ + 1);
     }
     else if (root_ == DOT_RIGHT) {
       result_ = dot_right(builder_, level_ + 1);
@@ -230,9 +224,6 @@ public class ObjDParser implements PsiParser {
     else if (root_ == EXPR_WEAK) {
       result_ = expr_weak(builder_, level_ + 1);
     }
-    else if (root_ == EXPR_WHAT) {
-      result_ = expr_what(builder_, level_ + 1);
-    }
     else if (root_ == EXPR_WHILE) {
       result_ = expr_while(builder_, level_ + 1);
     }
@@ -318,7 +309,7 @@ public class ObjDParser implements PsiParser {
       CASE_COND_VAL),
     TokenSet.create(DATA_TYPE, DATA_TYPE_COLLECTION, DATA_TYPE_LAMBDA, DATA_TYPE_MAP,
       DATA_TYPE_OPTION, DATA_TYPE_SIMPLE, DATA_TYPE_TUPLE),
-    TokenSet.create(DOT_PART, DOT_PART_ELVIS, DOT_PART_SIMPLE, DOT_PART_WHAT),
+    TokenSet.create(DOT_PART, DOT_PART_SIMPLE),
     TokenSet.create(DOT_LEFT, DOT_RIGHT, EXPR, EXPR_ARR,
       EXPR_BIND, EXPR_BOOL, EXPR_BRACES, EXPR_BRACKETS,
       EXPR_CALL, EXPR_CLUE, EXPR_COMP, EXPR_DO,
@@ -326,7 +317,7 @@ public class ObjDParser implements PsiParser {
       EXPR_MD, EXPR_MINUS, EXPR_NOT, EXPR_PM,
       EXPR_SELF, EXPR_SET, EXPR_STRING_CONST, EXPR_SUPER,
       EXPR_SYNC, EXPR_THROW, EXPR_TRY, EXPR_VAL,
-      EXPR_WHAT, EXPR_WHILE, TERM),
+      EXPR_WHILE, TERM),
     TokenSet.create(FINAL_MOD, LAZY_MOD, MOD, OVERRIDE_MOD,
       PRIVATE_MOD, PROTECTED_MOD, PURE_MOD, STATIC_MOD,
       WEAK_MOD),
@@ -1133,7 +1124,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LESS data_type (COMMA data_type)* (MORE | NULLMAP)
+  // LESS data_type (COMMA data_type)* MORE
   public static boolean data_type_generics(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_generics")) return false;
     if (!nextTokenIs(builder_, LESS)) return false;
@@ -1142,7 +1133,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, LESS);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && data_type_generics_2(builder_, level_ + 1);
-    result_ = result_ && data_type_generics_3(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, MORE);
     if (result_) {
       marker_.done(DATA_TYPE_GENERICS);
     }
@@ -1175,22 +1166,6 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
     result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // MORE | NULLMAP
-  private static boolean data_type_generics_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "data_type_generics_3")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, MORE);
-    if (!result_) result_ = consumeToken(builder_, NULLMAP);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -1759,16 +1734,16 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // dot_part_simple | dot_part_what | dot_part_elvis
+  // dot_part_simple
   public static boolean dot_part(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_part")) return false;
+    if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
+        && replaceVariants(builder_, 2, "<dot part>")) return false;
     boolean result_ = false;
     int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot part>");
     result_ = dot_part_simple(builder_, level_ + 1);
-    if (!result_) result_ = dot_part_what(builder_, level_ + 1);
-    if (!result_) result_ = dot_part_elvis(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), DOT_PART)) {
       marker_.drop();
@@ -1784,27 +1759,11 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ELVIS expr_
-  public static boolean dot_part_elvis(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "dot_part_elvis")) return false;
-    if (!nextTokenIs(builder_, ELVIS)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, ELVIS);
-    result_ = result_ && expr_(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(DOT_PART_ELVIS);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    return result_;
-  }
-
-  /* ********************************************************** */
   // dot_type dot_right
   public static boolean dot_part_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_part_simple")) return false;
+    if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
+        && replaceVariants(builder_, 2, "<dot part simple>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot part simple>");
@@ -1817,24 +1776,6 @@ public class ObjDParser implements PsiParser {
       marker_.rollbackTo();
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // NULLMAP expr_what
-  public static boolean dot_part_what(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "dot_part_what")) return false;
-    if (!nextTokenIs(builder_, NULLMAP)) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, NULLMAP);
-    result_ = result_ && expr_what(builder_, level_ + 1);
-    if (result_) {
-      marker_.done(DOT_PART_WHAT);
-    }
-    else {
-      marker_.rollbackTo();
-    }
     return result_;
   }
 
@@ -1862,15 +1803,16 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // DOT | NULLDOT | DANGERDOT
+  // DOT | NULLDOT
   public static boolean dot_type(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_type")) return false;
+    if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
+        && replaceVariants(builder_, 2, "<dot type>")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot type>");
     result_ = consumeToken(builder_, DOT);
     if (!result_) result_ = consumeToken(builder_, NULLDOT);
-    if (!result_) result_ = consumeToken(builder_, DANGERDOT);
     if (result_) {
       marker_.done(DOT_TYPE);
     }
@@ -2230,7 +2172,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LESS data_type (COMMA data_type)* (MORE | NULLMAP)
+  // LESS data_type (COMMA data_type)* MORE
   static boolean expr_call_generics(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call_generics")) return false;
     if (!nextTokenIs(builder_, LESS)) return false;
@@ -2239,7 +2181,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, LESS);
     result_ = result_ && data_type(builder_, level_ + 1);
     result_ = result_ && expr_call_generics_2(builder_, level_ + 1);
-    result_ = result_ && expr_call_generics_3(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, MORE);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -2272,22 +2214,6 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, COMMA);
     result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // MORE | NULLMAP
-  private static boolean expr_call_generics_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_call_generics_3")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, MORE);
-    if (!result_) result_ = consumeToken(builder_, NULLMAP);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -2839,7 +2765,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // term_ index_op? UNSAFE?
+  // term_ index_op?
   public static boolean expr_index(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_index")) return false;
     boolean result_ = false;
@@ -2848,7 +2774,6 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr index>");
     result_ = term_(builder_, level_ + 1);
     result_ = result_ && expr_index_1(builder_, level_ + 1);
-    result_ = result_ && expr_index_2(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), EXPR_INDEX)) {
       marker_.drop();
@@ -2867,13 +2792,6 @@ public class ObjDParser implements PsiParser {
   private static boolean expr_index_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_index_1")) return false;
     index_op(builder_, level_ + 1);
-    return true;
-  }
-
-  // UNSAFE?
-  private static boolean expr_index_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_index_2")) return false;
-    consumeToken(builder_, UNSAFE);
     return true;
   }
 
@@ -3410,49 +3328,6 @@ public class ObjDParser implements PsiParser {
     }
     else {
       marker_.rollbackTo();
-    }
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // expr_call_post_lambda | OPEN_BRACKET expr_ CLOSE_BRACKET
-  public static boolean expr_what(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_what")) return false;
-    if (!nextTokenIs(builder_, OPEN_BRACE) && !nextTokenIs(builder_, OPEN_BRACKET)
-        && replaceVariants(builder_, 2, "<expr what>")) return false;
-    boolean result_ = false;
-    int start_ = builder_.getCurrentOffset();
-    Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr what>");
-    result_ = expr_call_post_lambda(builder_, level_ + 1);
-    if (!result_) result_ = expr_what_1(builder_, level_ + 1);
-    LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
-    if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), EXPR_WHAT)) {
-      marker_.drop();
-    }
-    else if (result_) {
-      marker_.done(EXPR_WHAT);
-    }
-    else {
-      marker_.rollbackTo();
-    }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
-    return result_;
-  }
-
-  // OPEN_BRACKET expr_ CLOSE_BRACKET
-  private static boolean expr_what_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_what_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, OPEN_BRACKET);
-    result_ = result_ && expr_(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CLOSE_BRACKET);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
     }
     return result_;
   }

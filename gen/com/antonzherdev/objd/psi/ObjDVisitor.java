@@ -131,15 +131,7 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitDotPartElvis(@NotNull ObjDDotPartElvis o) {
-    visitDotPart(o);
-  }
-
   public void visitDotPartSimple(@NotNull ObjDDotPartSimple o) {
-    visitDotPart(o);
-  }
-
-  public void visitDotPartWhat(@NotNull ObjDDotPartWhat o) {
     visitDotPart(o);
   }
 
@@ -281,10 +273,6 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitExprWeak(@NotNull ObjDExprWeak o) {
     visitPsiElement(o);
-  }
-
-  public void visitExprWhat(@NotNull ObjDExprWhat o) {
-    visitExpr(o);
   }
 
   public void visitExprWhile(@NotNull ObjDExprWhile o) {

@@ -50,8 +50,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
             TP_BOOL, TP_FLOAT, TP_INT, TP_STRING, TP_UINT, TP_VOID, TP_BYTE, TP_UBYTE,
             TP_INT4, TP_UINT4, TP_INT8, TP_UINT8, TP_FLOAT4, TP_FLOAT8, TP_ANY, TP_CHAR);
     private static final List<IElementType> OPERATIONS = Arrays.asList(
-            DOT, NULLDOT, UNSAFE, ELVIS, SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS, NOT_EQ,
-            EXCLAMATION, CLONE, CLUE, EXACT_EQ, EXACT_NOT_EQ, NULLMAP, DANGERDOT);
+            DOT, NULLDOT, SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS, NOT_EQ,
+            EXCLAMATION, CLONE, CLUE, EXACT_EQ, EXACT_NOT_EQ);
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {

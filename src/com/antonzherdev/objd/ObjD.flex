@@ -178,7 +178,6 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "||" {return ObjDTypes.OR;}
 "&&" {return ObjDTypes.AND;}
 "?." {return ObjDTypes.NULLDOT;}
-"!." {return ObjDTypes.DANGERDOT;}
 "." {return ObjDTypes.DOT;}
 "++" {return ObjDTypes.PLUS_PLUS;}
 "+=" {return ObjDTypes.PLUS_SET;}
@@ -190,9 +189,6 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "*" {return ObjDTypes.MUL;}
 "/=" {return ObjDTypes.DIV_SET;}
 "/" {return ObjDTypes.DIV;}
-"?!" {return ObjDTypes.UNSAFE;}
-"?:" {return ObjDTypes.ELVIS;}
-"?>" {return ObjDTypes.NULLMAP;}
 "?" {return ObjDTypes.WHAT;}
 "!==" {return ObjDTypes.EXACT_NOT_EQ;}
 "!=" {return ObjDTypes.NOT_EQ;}
