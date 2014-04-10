@@ -242,6 +242,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == INDEX_OP) {
       result_ = index_op(builder_, level_ + 1);
     }
+    else if (root_ == INLINE_MOD) {
+      result_ = inline_mod(builder_, level_ + 1);
+    }
     else if (root_ == LAMBDA_PAR) {
       result_ = lambda_par(builder_, level_ + 1);
     }
@@ -318,9 +321,9 @@ public class ObjDParser implements PsiParser {
       EXPR_SELF, EXPR_SET, EXPR_STRING_CONST, EXPR_SUPER,
       EXPR_SYNC, EXPR_THROW, EXPR_TRY, EXPR_VAL,
       EXPR_WHILE, TERM),
-    TokenSet.create(FINAL_MOD, LAZY_MOD, MOD, OVERRIDE_MOD,
-      PRIVATE_MOD, PROTECTED_MOD, PURE_MOD, STATIC_MOD,
-      WEAK_MOD),
+    TokenSet.create(FINAL_MOD, INLINE_MOD, LAZY_MOD, MOD,
+      OVERRIDE_MOD, PRIVATE_MOD, PROTECTED_MOD, PURE_MOD,
+      STATIC_MOD, WEAK_MOD),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -3590,6 +3593,23 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // W_INLINE
+  public static boolean inline_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "inline_mod")) return false;
+    if (!nextTokenIs(builder_, W_INLINE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_INLINE);
+    if (result_) {
+      marker_.done(INLINE_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
+  }
+
+  /* ********************************************************** */
   // def_name (COLON data_type)?
   public static boolean lambda_par(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "lambda_par")) return false;
@@ -3708,7 +3728,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod
+  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod
   public static boolean mod(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mod")) return false;
     boolean result_ = false;
@@ -3723,6 +3743,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = pure_mod(builder_, level_ + 1);
     if (!result_) result_ = final_mod(builder_, level_ + 1);
     if (!result_) result_ = override_mod(builder_, level_ + 1);
+    if (!result_) result_ = inline_mod(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), MOD)) {
       marker_.drop();

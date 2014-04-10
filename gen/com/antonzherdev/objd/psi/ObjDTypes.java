@@ -81,6 +81,7 @@ public interface ObjDTypes {
   IElementType IMPORT_PART = new ObjDElementType("IMPORT_PART");
   IElementType IMPORT_STATEMENT = new ObjDElementType("IMPORT_STATEMENT");
   IElementType INDEX_OP = new ObjDElementType("INDEX_OP");
+  IElementType INLINE_MOD = new ObjDElementType("INLINE_MOD");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
   IElementType LAZY_MOD = new ObjDElementType("LAZY_MOD");
   IElementType MOD = new ObjDElementType("MOD");
@@ -171,6 +172,7 @@ public interface ObjDTypes {
   IElementType W_FINALLY = new ObjDTokenType("W_FINALLY");
   IElementType W_IF = new ObjDTokenType("W_IF");
   IElementType W_IMPORT = new ObjDTokenType("W_IMPORT");
+  IElementType W_INLINE = new ObjDTokenType("W_INLINE");
   IElementType W_LAZY = new ObjDTokenType("W_LAZY");
   IElementType W_NIL = new ObjDTokenType("W_NIL");
   IElementType W_OBJECT = new ObjDTokenType("W_OBJECT");
@@ -419,6 +421,9 @@ public interface ObjDTypes {
       }
       else if (type == INDEX_OP) {
         return new ObjDIndexOpImpl(node);
+      }
+      else if (type == INLINE_MOD) {
+        return new ObjDInlineModImpl(node);
       }
       else if (type == LAMBDA_PAR) {
         return new ObjDLambdaParImpl(node);

@@ -299,6 +299,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitInlineMod(@NotNull ObjDInlineMod o) {
+    visitMod(o);
+  }
+
   public void visitLambdaPar(@NotNull ObjDLambdaPar o) {
     visitPsiElement(o);
   }

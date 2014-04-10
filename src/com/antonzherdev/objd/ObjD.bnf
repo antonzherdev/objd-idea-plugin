@@ -59,7 +59,7 @@ enum_item ::= def_name expr_call_params?
 
 field_statement ::= (mods (W_VAR | W_VAL)? def_name (COLON data_type)? (SET expr_)?)  {methods = [isStatic]}
 mods ::= mod*
-mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod
+mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod
 lazy_mod ::= W_LAZY {extends = mod}
 protected_mod ::= W_PROTECTED {extends = mod}
 static_mod ::= W_STATIC {extends = mod}
@@ -67,6 +67,7 @@ weak_mod ::= W_WEAK {extends = mod}
 pure_mod ::= W_PURE {extends = mod}
 private_mod ::= W_PRIVATE {extends = mod}
 final_mod ::= W_FINAL {extends = mod}
+inline_mod ::= W_INLINE {extends = mod}
 override_mod ::= W_OVERRIDE {extends = mod}
 
 def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? (SET expr_ | expr_braces)?) {methods = [isStatic]}
