@@ -23,9 +23,9 @@ public class ObjDDotPartSimpleImpl extends ObjDDotPartImpl implements ObjDDotPar
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDExpr getExpr() {
-    return findNotNullChildByClass(ObjDExpr.class);
+    return findChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

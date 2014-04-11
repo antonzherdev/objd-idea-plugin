@@ -10,7 +10,7 @@ public interface ObjDCaseItem extends PsiElement {
   @NotNull
   ObjDCaseCond getCaseCond();
 
-  @NotNull
+  @Nullable
   ObjDExpr getExpr();
 
 }

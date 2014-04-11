@@ -30,9 +30,9 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDDefName getDefName() {
-    return findNotNullChildByClass(ObjDDefName.class);
+    return findChildByClass(ObjDDefName.class);
   }
 
   @Override

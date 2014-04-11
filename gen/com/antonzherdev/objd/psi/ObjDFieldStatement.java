@@ -10,7 +10,7 @@ public interface ObjDFieldStatement extends PsiElement {
   @Nullable
   ObjDDataType getDataType();
 
-  @NotNull
+  @Nullable
   ObjDDefName getDefName();
 
   @Nullable

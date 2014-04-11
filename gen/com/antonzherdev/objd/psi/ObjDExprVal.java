@@ -10,7 +10,7 @@ public interface ObjDExprVal extends ObjDExpr {
   @Nullable
   ObjDDataType getDataType();
 
-  @NotNull
+  @Nullable
   ObjDDefName getDefName();
 
   @Nullable

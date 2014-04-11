@@ -10,7 +10,7 @@ public interface ObjDDotPartSimple extends ObjDDotPart {
   @NotNull
   ObjDDotType getDotType();
 
-  @NotNull
+  @Nullable
   ObjDExpr getExpr();
 
 }

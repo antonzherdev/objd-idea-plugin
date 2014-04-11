@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDExprWeak extends PsiElement {
 
-  @NotNull
+  @Nullable
   ObjDExpr getExpr();
 
 }

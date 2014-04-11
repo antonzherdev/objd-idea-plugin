@@ -17,9 +17,9 @@ public class ObjDTypeStatementImpl extends ObjDClassImpl implements ObjDTypeStat
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDClassExtends getClassExtends() {
-    return findNotNullChildByClass(ObjDClassExtends.class);
+    return findChildByClass(ObjDClassExtends.class);
   }
 
   @Override
@@ -29,9 +29,9 @@ public class ObjDTypeStatementImpl extends ObjDClassImpl implements ObjDTypeStat
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDClassName getClassName() {
-    return findNotNullChildByClass(ObjDClassName.class);
+    return findChildByClass(ObjDClassName.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

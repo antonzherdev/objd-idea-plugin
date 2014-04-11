@@ -41,9 +41,9 @@ public class ObjDClassStatementImpl extends ObjDClassImpl implements ObjDClassSt
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDClassName getClassName() {
-    return findNotNullChildByClass(ObjDClassName.class);
+    return findChildByClass(ObjDClassName.class);
   }
 
   @Override

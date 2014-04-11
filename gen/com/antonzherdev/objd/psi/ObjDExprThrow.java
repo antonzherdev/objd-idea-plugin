@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDExprThrow extends ObjDExpr {
 
-  @NotNull
+  @Nullable
   ObjDExpr getExpr();
 
 }

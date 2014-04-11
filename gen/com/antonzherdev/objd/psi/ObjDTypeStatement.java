@@ -7,13 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDTypeStatement extends ObjDClass {
 
-  @NotNull
+  @Nullable
   ObjDClassExtends getClassExtends();
 
   @Nullable
   ObjDClassGenerics getClassGenerics();
 
-  @NotNull
+  @Nullable
   ObjDClassName getClassName();
 
   List<ObjDClassExtends> getClassExtendsList();

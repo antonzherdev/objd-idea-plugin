@@ -26,38 +26,42 @@ private statement_ ::= (class_mods class_statement | type_statement | import_sta
 
 class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL | W_CASE)*
 
-import_statement ::= W_IMPORT import_part (DOT import_part)*
+import_statement ::= W_IMPORT import_part (DOT import_part)* {pin=1}
 import_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                                                            methods=[getName setName getNameIdentifier] }
 type_statement ::= (W_TYPE class_name class_generics? SET class_extends) {
     methods = [getClassExtendsList]
     mixin="com.antonzherdev.objd.psi.impl.ObjDClassImpl"
     implements = "com.antonzherdev.objd.psi.ObjDClass"
+    pin=1
 }
 class_statement ::= W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)* )? class_body? {
     methods = [isEnum]
     mixin="com.antonzherdev.objd.psi.impl.ObjDClassImpl"
     implements = "com.antonzherdev.objd.psi.ObjDClass"
+    pin=2
 }
 class_type ::= (W_CLASS | W_OBJECT | W_TRAIT | W_STRUCT | W_ENUM)
-class_generics ::= LESS class_generic (COMMA class_generic)* MORE
+class_generics ::= LESS class_generic (COMMA class_generic)* MORE {pin=1}
 class_generic ::= class_name (W_EXTENDS data_type)?
 class_name ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                methods=[getName setName getNameIdentifier getPresentation]}
 
-private class_constructor_fields ::= (OPEN_BRACKET class_constructor_field (COMMA class_constructor_field)* CLOSE_BRACKET)
-class_constructor_field ::= (mods (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?)
+private class_constructor_fields ::= OPEN_BRACKET class_constructor_field (COMMA class_constructor_field)* CLOSE_BRACKET {pin=1}
+class_constructor_field ::= mods (W_VAR | W_VAL)? def_name COLON data_type (SET expr_)?
 def_name ::= (IDENT | W_CLASS | W_TYPE)
     {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getPresentation]}
 
 class_extends ::=  data_type_ref data_type_generics?
 
-class_body ::= (OPEN_BRACE enum_item* (def_statement | field_statement | import_statement)* CLOSE_BRACE)
+class_body ::= OPEN_BRACE enum_item* (def_statement | field_statement | import_statement)* CLOSE_BRACE {pin=1}
 
 enum_item ::= def_name expr_call_params?
 
-field_statement ::= (mods (W_VAR | W_VAL)? def_name (COLON data_type)? (SET expr_)?)  {methods = [isStatic]}
+field_statement ::= (mods (W_VAR | W_VAL) def_name val_tp? set_val?)  {methods = [isStatic] pin=2}
+private val_tp ::= COLON data_type {pin = 1}
+private set_val ::= SET expr_ {pin = 1}
 mods ::= mod*
 mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod
 lazy_mod ::= W_LAZY {extends = mod}
@@ -70,51 +74,52 @@ final_mod ::= W_FINAL {extends = mod}
 inline_mod ::= W_INLINE {extends = mod}
 override_mod ::= W_OVERRIDE {extends = mod}
 
-def_statement ::= (mods W_DEF def_name class_generics? def_parameters? (COLON data_type)? (SET expr_ | expr_braces)?) {methods = [isStatic]}
-private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET)
-def_parameter ::= (par_mods (def_name | W_SELF)? COLON data_type (SET expr_)?)
+def_statement ::= (mods W_DEF def_name class_generics? def_parameters? val_tp? (set_val| expr_braces)?) {methods = [isStatic] pin=2}
+private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET) {pin = 1}
+def_parameter ::= par_mods (def_name | W_SELF)? COLON data_type (SET expr_)?
 par_mods ::= (W_WEAK)*
 
 data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self)
 data_type_self ::= W_SELF
 data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_ANY| TP_CHAR|
-    TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr? {extends = data_type}
+    TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr? {extends = data_type pin=1}
 private data_type_post_arr ::= OPEN_SQUARE_BRACKET INT? CLOSE_SQUARE_BRACKET
 data_type_ref ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getPresentation]}
-data_type_lambda ::= (data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self) ARROW data_type {extends = data_type}
-data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET {extends = data_type}
-data_type_map ::= OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type}
-data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {extends = data_type}
-data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple | data_type_self) WHAT {extends = data_type}
-data_type_generics ::= LESS data_type (COMMA data_type)* MORE
+data_type_lambda ::= (data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self) ARROW data_type {extends = data_type pin=2}
+data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET {extends = data_type pin=1}
+data_type_map ::= OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type pin=1}
+data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {extends = data_type pin=1}
+data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple | data_type_self) WHAT {extends = data_type pin=2}
+data_type_generics ::= LESS data_type (COMMA data_type)* MORE {pin=1}
 
 expr_ ::= (expr_val | expr_clue) {extends = expr_ methods = [getTp]}
 term_ ::= expr_case | expr_throw | expr_not | expr_if | expr_lambda | expr_braces | expr_call | expr_arr | expr_brackets |
-    expr_minus | W_NIL | TP_VOID | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while | expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
+    expr_minus | W_NIL | TP_VOID | W_TRUE | W_FALSE | expr_string_const | INT | FLOAT | expr_self | expr_super | expr_while |
+    expr_sync | expr_try | expr_do | W_BREAK | expr_return | expr_weak
     {extends = expr_}
-expr_case ::= W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET ((OPEN_BRACE case_item+ CLOSE_BRACE) | case_item+)
-case_item ::= case_cond ARROW expr_
+expr_case ::= W_CASE OPEN_BRACKET expr_ CLOSE_BRACKET ((OPEN_BRACE case_item+ CLOSE_BRACE) | case_item+) {pin=1}
+case_item ::= case_cond ARROW expr_{pin=2}
 case_cond ::= (case_cond_unapply | case_cond_val | expr_string_const | case_cond_const) {extends = case_cond}
 case_cond_val ::= def_name case_cond_tp? {extends = case_cond}
 case_cond_unapply ::= data_type_ref? (OPEN_BRACKET case_cond (COMMA case_cond)* CLOSE_BRACKET) case_cond_tp?{extends = case_cond}
-case_cond_tp ::= COLON (data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self) {extends = case_cond}
+case_cond_tp ::= COLON (data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self) {extends = case_cond pin=1}
 case_cond_const ::= (INT | FLOAT | W_NIL | W_TRUE | W_FALSE) {extends = case_cond}
 
 expr_string_const ::= string_token+ {extends = expr_}
-expr_while ::= W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_}
-expr_sync ::= W_SYNC OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_}
-expr_try ::= W_TRY expr_ W_FINALLY expr_ {extends = expr_}
-expr_do ::= W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET {extends = expr_}
-expr_return ::= W_RETURN expr_
-expr_weak ::= W_WEAK expr_
-expr_self ::= W_SELF {extends = expr_}
-expr_super ::= W_SUPER {extends = expr_}
-expr_throw ::= W_THROW expr_  {extends = expr_}
-expr_not ::= EXCLAMATION expr_  {extends = expr_}
-expr_minus ::= MINUS expr_  {extends = expr_}
-expr_brackets ::= OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET  {extends = expr_}
-expr_if ::= (W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?)  {extends = expr_}
+expr_while ::= W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_ pin=1}
+expr_sync ::= W_SYNC OPEN_BRACKET expr_ CLOSE_BRACKET expr_ {extends = expr_ pin=1}
+expr_try ::= W_TRY expr_ W_FINALLY expr_ {extends = expr_ pin=1}
+expr_do ::= W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET {extends = expr_ pin=1}
+expr_return ::= W_RETURN expr_ {pin = 1}
+expr_weak ::= W_WEAK expr_ {pin = 1}
+expr_self ::= W_SELF {extends = expr_ pin = 1}
+expr_super ::= W_SUPER {extends = expr_ pin = 1}
+expr_throw ::= W_THROW expr_  {extends = expr_ pin = 1}
+expr_not ::= EXCLAMATION expr_  {extends = expr_ pin = 1}
+expr_minus ::= MINUS expr_  {extends = expr_ pin = 1}
+expr_brackets ::= OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET  {extends = expr_ pin = 1}
+expr_if ::= W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?  {extends = expr_ pin = 1}
 private post_op ::= PLUS_PLUS | MINUS_MINUS
 
 expr_clue ::= expr_bind ((CLUE | CLONE) expr_clue)? post_op? {extends = expr_}
@@ -130,25 +135,27 @@ expr_dot ::= dot_left dot_part* {extends = expr_}
 dot_left ::= expr_index {extends = expr_}
 dot_right ::= expr_index {extends = expr_}
 dot_part ::= dot_part_simple
-dot_part_simple ::= dot_type dot_right {extends = dot_part}
+dot_part_simple ::= dot_type dot_right {extends = dot_part pin=1}
 dot_type ::= DOT | NULLDOT {
  methods=[isNullSafe]
 }
 expr_index ::=term_ index_op? {extends = expr_}
-index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op?
+index_op ::= OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op? {pin=1}
 
 expr_call ::= call_name expr_call_generics? expr_call_params? expr_call_post_lambda? {extends = expr_}
-expr_call_post_lambda ::= OPEN_BRACE (lambda_par (COMMA lambda_par)* ARROW)? expr_* CLOSE_BRACE
+expr_call_post_lambda ::= OPEN_BRACE (lambda_par (COMMA lambda_par)* ARROW)? expr_* CLOSE_BRACE {pin=1}
 call_name ::= (IDENT | W_CLASS | W_TYPE) {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getPresentation]}
-private expr_call_generics ::= LESS data_type (COMMA data_type)* MORE
-expr_call_params ::= OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOSE_BRACKET
+private expr_call_generics ::= LESS data_type (COMMA data_type)* MORE{pin=1}
+expr_call_params ::= OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOSE_BRACKET{pin=1}
 expr_call_param ::= (def_name SET)? expr_
-expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE) {extends = expr_}
-expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET  {extends = expr_}
-expr_val ::= (W_WEAK)* (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)? {extends = expr_}
-expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_ {extends = expr_}
-private lambda_pars ::= OPEN_BRACKET lambda_par? (COMMA lambda_par)* CLOSE_BRACKET
+expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE) {extends = expr_ pin=1}
+expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET  {extends = expr_ pin=1}
+expr_val ::= (W_WEAK)* (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)? {extends = expr_ pin=2}
+expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_ {extends = expr_ pin=2}
+private lambda_pars ::= OPEN_BRACKET lambda_par? (COMMA lambda_par)* CLOSE_BRACKET {pin=1}
+
+private recover_expr ::= !(CLOSE_BRACE)
 
 lambda_par ::= def_name (COLON data_type)?
 

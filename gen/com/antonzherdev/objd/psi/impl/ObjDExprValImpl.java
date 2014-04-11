@@ -23,9 +23,9 @@ public class ObjDExprValImpl extends ObjDExprImpl implements ObjDExprVal {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDDefName getDefName() {
-    return findNotNullChildByClass(ObjDDefName.class);
+    return findChildByClass(ObjDDefName.class);
   }
 
   @Override

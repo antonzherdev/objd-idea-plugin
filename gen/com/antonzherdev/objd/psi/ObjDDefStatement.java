@@ -13,7 +13,7 @@ public interface ObjDDefStatement extends PsiElement {
   @Nullable
   ObjDDataType getDataType();
 
-  @NotNull
+  @Nullable
   ObjDDefName getDefName();
 
   @NotNull

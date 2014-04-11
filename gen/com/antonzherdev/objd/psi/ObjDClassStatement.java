@@ -19,7 +19,7 @@ public interface ObjDClassStatement extends ObjDClass {
   @Nullable
   ObjDClassGenerics getClassGenerics();
 
-  @NotNull
+  @Nullable
   ObjDClassName getClassName();
 
   @NotNull

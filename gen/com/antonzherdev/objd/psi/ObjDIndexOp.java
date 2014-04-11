@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDIndexOp extends PsiElement {
 
-  @NotNull
+  @Nullable
   ObjDExpr getExpr();
 
   @Nullable

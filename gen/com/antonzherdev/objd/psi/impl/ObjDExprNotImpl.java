@@ -17,9 +17,9 @@ public class ObjDExprNotImpl extends ObjDExprImpl implements ObjDExprNot {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDExpr getExpr() {
-    return findNotNullChildByClass(ObjDExpr.class);
+    return findChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

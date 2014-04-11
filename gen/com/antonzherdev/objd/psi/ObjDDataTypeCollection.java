@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ObjDDataTypeCollection extends ObjDDataType {
 
-  @NotNull
+  @Nullable
   ObjDDataType getDataType();
 
 }

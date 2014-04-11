@@ -18,9 +18,9 @@ public class ObjDIndexOpImpl extends ASTWrapperPsiElement implements ObjDIndexOp
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDExpr getExpr() {
-    return findNotNullChildByClass(ObjDExpr.class);
+    return findChildByClass(ObjDExpr.class);
   }
 
   @Override

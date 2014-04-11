@@ -24,9 +24,9 @@ public class ObjDFieldStatementImpl extends ASTWrapperPsiElement implements ObjD
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDDefName getDefName() {
-    return findNotNullChildByClass(ObjDDefName.class);
+    return findChildByClass(ObjDDefName.class);
   }
 
   @Override
