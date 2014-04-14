@@ -1,9 +1,9 @@
 package com.antonzherdev.objd.psi.impl;
 
+import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.reference.CallReference;
 import com.antonzherdev.objd.reference.DataTypeReference;
 import com.antonzherdev.objd.reference.ObjDImportReference;
-import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.tp.ObjDTp;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
@@ -12,8 +12,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
-import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -97,6 +95,16 @@ public class ObjDPsiImplUtil {
 
     public static boolean isNullSafe(final ObjDDotType dotType) {
         return dotType.getNode().findChildByType(ObjDTypes.DOT) == null;
+    }
+
+    public static PsiReference createReference(PsiElement element) {
+        if(element instanceof ObjDImportPart)
+            return new ObjDImportReference((ObjDImportPart) element, TextRange.from(0, element.getTextLength()));
+        if(element instanceof ObjDDataTypeRef)
+            return new DataTypeReference((ObjDDataTypeRef) element, TextRange.from(0, element.getTextLength()));
+        if(element instanceof ObjDCallName)
+            return new CallReference((ObjDCallName) element, TextRange.from(0, element.getTextLength()));
+        return  null;
     }
 }
 

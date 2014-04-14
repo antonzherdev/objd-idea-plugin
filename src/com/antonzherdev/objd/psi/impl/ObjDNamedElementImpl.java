@@ -13,7 +13,7 @@ public abstract class ObjDNamedElementImpl extends ASTWrapperPsiElement implemen
 
     public ObjDNamedElementImpl(@NotNull ASTNode node) {
         super(node);
-        reference = ArrayUtil.getFirstElement(ReferenceProvidersRegistry.getReferencesFromProviders(this));
+        reference = ObjDPsiImplUtil.createReference(this);
     }
 
 
