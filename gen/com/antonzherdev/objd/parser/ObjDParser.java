@@ -1099,6 +1099,80 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // COMMA expr_call_param
+  static boolean comma_and_par(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "comma_and_par")) return false;
+    if (!nextTokenIs(builder_, COMMA)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_call_param(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // COMMA expr_?
+  static boolean comma_exp(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "comma_exp")) return false;
+    if (!nextTokenIs(builder_, COMMA)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && comma_exp_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  // expr_?
+  private static boolean comma_exp_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "comma_exp_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // OPEN_BRACKET expr_ CLOSE_BRACKET
+  static boolean cond_(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "cond_")) return false;
+    if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, OPEN_BRACKET);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, CLOSE_BRACKET) && result_;
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
   // data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self
   public static boolean data_type(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type")) return false;
@@ -1211,21 +1285,19 @@ public class ObjDParser implements PsiParser {
   public static boolean data_type_lambda(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_lambda")) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type lambda>");
     result_ = data_type_lambda_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ARROW);
-    pinned_ = result_; // pin = 2
     result_ = result_ && data_type(builder_, level_ + 1);
-    if (result_ || pinned_) {
+    if (result_) {
       marker_.done(DATA_TYPE_LAMBDA);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
-    return result_ || pinned_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
   }
 
   // data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self
@@ -1317,17 +1389,21 @@ public class ObjDParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "data_type_post_arr")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
-    result_ = result_ && data_type_post_arr_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
-    if (!result_) {
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, data_type_post_arr_1(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET) && result_;
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // INT?
@@ -1338,19 +1414,32 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IDENT
+  // IDENT !DOT
   public static boolean data_type_ref(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_ref")) return false;
     if (!nextTokenIs(builder_, IDENT)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, IDENT);
+    result_ = result_ && data_type_ref_1(builder_, level_ + 1);
     if (result_) {
       marker_.done(DATA_TYPE_REF);
     }
     else {
       marker_.rollbackTo();
     }
+    return result_;
+  }
+
+  // !DOT
+  private static boolean data_type_ref_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "data_type_ref_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_NOT_, null);
+    result_ = !consumeToken(builder_, DOT);
+    marker_.rollbackTo();
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_NOT_, null);
     return result_;
   }
 
@@ -1377,26 +1466,24 @@ public class ObjDParser implements PsiParser {
   public static boolean data_type_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "data_type_simple")) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
     int start_ = builder_.getCurrentOffset();
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<data type simple>");
     result_ = data_type_simple_0(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, data_type_simple_1(builder_, level_ + 1));
-    result_ = pinned_ && data_type_simple_2(builder_, level_ + 1) && result_;
+    result_ = result_ && data_type_simple_1(builder_, level_ + 1);
+    result_ = result_ && data_type_simple_2(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), DATA_TYPE_SIMPLE)) {
       marker_.drop();
     }
-    else if (result_ || pinned_) {
+    else if (result_) {
       marker_.done(DATA_TYPE_SIMPLE);
     }
     else {
       marker_.rollbackTo();
     }
-    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
-    return result_ || pinned_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_GENERAL_, null);
+    return result_;
   }
 
   // data_type_ref | TP_BOOL | TP_STRING | TP_ANY| TP_CHAR|
@@ -1778,7 +1865,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // dot_type dot_right
+  // dot_type dot_right?
   public static boolean dot_part_simple(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dot_part_simple")) return false;
     if (!nextTokenIs(builder_, DOT) && !nextTokenIs(builder_, NULLDOT)
@@ -1789,7 +1876,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<dot part simple>");
     result_ = dot_type(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && dot_right(builder_, level_ + 1);
+    result_ = result_ && dot_part_simple_1(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(DOT_PART_SIMPLE);
     }
@@ -1798,6 +1885,13 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // dot_right?
+  private static boolean dot_part_simple_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "dot_part_simple_1")) return false;
+    dot_right(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1958,7 +2052,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_set (MORE MORE expr_bind)?
+  // expr_set expr_bind_r?
   public static boolean expr_bind(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bind")) return false;
     boolean result_ = false;
@@ -1981,31 +2075,44 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (MORE MORE expr_bind)?
+  // expr_bind_r?
   private static boolean expr_bind_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bind_1")) return false;
-    expr_bind_1_0(builder_, level_ + 1);
+    expr_bind_r(builder_, level_ + 1);
     return true;
   }
 
-  // MORE MORE expr_bind
-  private static boolean expr_bind_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_bind_1_0")) return false;
+  /* ********************************************************** */
+  // MORE MORE expr_bind?
+  static boolean expr_bind_r(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bind_r")) return false;
+    if (!nextTokenIs(builder_, MORE)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeTokens(builder_, 0, MORE, MORE);
-    result_ = result_ && expr_bind(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeTokens(builder_, 1, MORE, MORE);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_bind_r_2(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  // expr_bind?
+  private static boolean expr_bind_r_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bind_r_2")) return false;
+    expr_bind(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
-  // expr_comp ((AND | OR) expr_bool)?
+  // expr_comp expr_bool_r?
   public static boolean expr_bool(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bool")) return false;
     boolean result_ = false;
@@ -2028,32 +2135,38 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((AND | OR) expr_bool)?
+  // expr_bool_r?
   private static boolean expr_bool_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_bool_1")) return false;
-    expr_bool_1_0(builder_, level_ + 1);
+    expr_bool_r(builder_, level_ + 1);
     return true;
   }
 
-  // (AND | OR) expr_bool
-  private static boolean expr_bool_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_bool_1_0")) return false;
+  /* ********************************************************** */
+  // (AND | OR) expr_bool?
+  static boolean expr_bool_r(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bool_r")) return false;
+    if (!nextTokenIs(builder_, AND) && !nextTokenIs(builder_, OR)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_bool_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_bool(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = expr_bool_r_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_bool_r_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // AND | OR
-  private static boolean expr_bool_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_bool_1_0_0")) return false;
+  private static boolean expr_bool_r_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bool_r_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, AND);
@@ -2065,6 +2178,13 @@ public class ObjDParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  // expr_bool?
+  private static boolean expr_bool_r_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_bool_r_1")) return false;
+    expr_bool(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2107,7 +2227,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_BRACKET expr_ (COMMA expr_)* CLOSE_BRACKET
+  // OPEN_BRACKET expr_? (comma_exp)* CLOSE_BRACKET
   public static boolean expr_brackets(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_brackets")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
@@ -2117,7 +2237,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, OPEN_BRACKET);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, expr_brackets_1(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, expr_brackets_2(builder_, level_ + 1)) && result_;
     result_ = pinned_ && consumeToken(builder_, CLOSE_BRACKET) && result_;
     if (result_ || pinned_) {
@@ -2130,7 +2250,14 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (COMMA expr_)*
+  // expr_?
+  private static boolean expr_brackets_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_brackets_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
+  // (comma_exp)*
   private static boolean expr_brackets_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_brackets_2")) return false;
     int offset_ = builder_.getCurrentOffset();
@@ -2146,13 +2273,12 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // COMMA expr_
+  // (comma_exp)
   private static boolean expr_brackets_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_brackets_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = comma_exp(builder_, level_ + 1);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -2214,10 +2340,10 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, LESS);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, data_type(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, expr_call_generics_2(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && consumeToken(builder_, MORE) && result_;
+    result_ = result_ && data_type(builder_, level_ + 1);
+    result_ = result_ && expr_call_generics_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, MORE);
+    pinned_ = result_; // pin = 4
     if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
@@ -2261,14 +2387,14 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (def_name SET)? expr_
+  // (def_name SET)? expr_?
   public static boolean expr_call_param(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call_param")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<expr call param>");
     result_ = expr_call_param_0(builder_, level_ + 1);
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_call_param_1(builder_, level_ + 1);
     if (result_) {
       marker_.done(EXPR_CALL_PARAM);
     }
@@ -2302,8 +2428,15 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
+  // expr_?
+  private static boolean expr_call_param_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_call_param_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // OPEN_BRACKET expr_call_param? (COMMA expr_call_param)* CLOSE_BRACKET
+  // OPEN_BRACKET expr_call_param comma_and_par* CLOSE_BRACKET
   public static boolean expr_call_params(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call_params")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACKET)) return false;
@@ -2313,7 +2446,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, OPEN_BRACKET);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_call_params_1(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, expr_call_param(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, expr_call_params_2(builder_, level_ + 1)) && result_;
     result_ = pinned_ && consumeToken(builder_, CLOSE_BRACKET) && result_;
     if (result_ || pinned_) {
@@ -2326,19 +2459,12 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // expr_call_param?
-  private static boolean expr_call_params_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_call_params_1")) return false;
-    expr_call_param(builder_, level_ + 1);
-    return true;
-  }
-
-  // (COMMA expr_call_param)*
+  // comma_and_par*
   private static boolean expr_call_params_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_call_params_2")) return false;
     int offset_ = builder_.getCurrentOffset();
     while (true) {
-      if (!expr_call_params_2_0(builder_, level_ + 1)) break;
+      if (!comma_and_par(builder_, level_ + 1)) break;
       int next_offset_ = builder_.getCurrentOffset();
       if (offset_ == next_offset_) {
         empty_element_parsed_guard_(builder_, offset_, "expr_call_params_2");
@@ -2347,22 +2473,6 @@ public class ObjDParser implements PsiParser {
       offset_ = next_offset_;
     }
     return true;
-  }
-
-  // COMMA expr_call_param
-  private static boolean expr_call_params_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_call_params_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COMMA);
-    result_ = result_ && expr_call_param(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -2569,7 +2679,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_bind ((CLUE | CLONE) expr_clue)? post_op?
+  // expr_bind expr_clue_r? post_op?
   public static boolean expr_clue(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_clue")) return false;
     boolean result_ = false;
@@ -2593,32 +2703,45 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((CLUE | CLONE) expr_clue)?
+  // expr_clue_r?
   private static boolean expr_clue_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_clue_1")) return false;
-    expr_clue_1_0(builder_, level_ + 1);
+    expr_clue_r(builder_, level_ + 1);
     return true;
   }
 
-  // (CLUE | CLONE) expr_clue
-  private static boolean expr_clue_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_clue_1_0")) return false;
+  // post_op?
+  private static boolean expr_clue_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_2")) return false;
+    post_op(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // (CLUE | CLONE) expr_clue?
+  static boolean expr_clue_r(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_r")) return false;
+    if (!nextTokenIs(builder_, CLONE) && !nextTokenIs(builder_, CLUE)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_clue_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_clue(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = expr_clue_r_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_clue_r_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // CLUE | CLONE
-  private static boolean expr_clue_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_clue_1_0_0")) return false;
+  private static boolean expr_clue_r_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_r_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, CLUE);
@@ -2632,15 +2755,15 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // post_op?
-  private static boolean expr_clue_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_clue_2")) return false;
-    post_op(builder_, level_ + 1);
+  // expr_clue?
+  private static boolean expr_clue_r_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_clue_r_1")) return false;
+    expr_clue(builder_, level_ + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // expr_pm ((EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
+  // expr_pm expr_comp_r?
   public static boolean expr_comp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp")) return false;
     boolean result_ = false;
@@ -2663,32 +2786,37 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm)?
+  // expr_comp_r?
   private static boolean expr_comp_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_comp_1")) return false;
-    expr_comp_1_0(builder_, level_ + 1);
+    expr_comp_r(builder_, level_ + 1);
     return true;
   }
 
-  // (EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm
-  private static boolean expr_comp_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_comp_1_0")) return false;
+  /* ********************************************************** */
+  // (EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ) expr_pm?
+  static boolean expr_comp_r(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_comp_r")) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_comp_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_pm(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = expr_comp_r_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_comp_r_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // EXACT_EQ| EXACT_NOT_EQ | EQ| MORE | LESS| MOREEQ| LESSEQ | NOT_EQ
-  private static boolean expr_comp_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_comp_1_0_0")) return false;
+  private static boolean expr_comp_r_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_comp_r_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, EXACT_EQ);
@@ -2708,8 +2836,15 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
+  // expr_pm?
+  private static boolean expr_comp_r_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_comp_r_1")) return false;
+    expr_pm(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // W_DO expr_ W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET
+  // W_DO expr_? W_WHILE? cond_?
   public static boolean expr_do(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_do")) return false;
     if (!nextTokenIs(builder_, W_DO)) return false;
@@ -2719,10 +2854,9 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, W_DO);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeTokens(builder_, -1, W_WHILE, OPEN_BRACKET)) && result_;
-    result_ = pinned_ && report_error_(builder_, expr_(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && consumeToken(builder_, CLOSE_BRACKET) && result_;
+    result_ = result_ && report_error_(builder_, expr_do_1(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, expr_do_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && expr_do_3(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(EXPR_DO);
     }
@@ -2731,6 +2865,27 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // expr_?
+  private static boolean expr_do_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_do_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
+  // W_WHILE?
+  private static boolean expr_do_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_do_2")) return false;
+    consumeToken(builder_, W_WHILE);
+    return true;
+  }
+
+  // cond_?
+  private static boolean expr_do_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_do_3")) return false;
+    cond_(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2774,7 +2929,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_IF OPEN_BRACKET expr_ CLOSE_BRACKET expr_ (W_ELSE expr_)?
+  // W_IF cond_? expr_? (W_ELSE expr_)?
   public static boolean expr_if(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_if")) return false;
     if (!nextTokenIs(builder_, W_IF)) return false;
@@ -2782,12 +2937,11 @@ public class ObjDParser implements PsiParser {
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
-    result_ = consumeTokens(builder_, 1, W_IF, OPEN_BRACKET);
+    result_ = consumeToken(builder_, W_IF);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, CLOSE_BRACKET)) && result_;
-    result_ = pinned_ && report_error_(builder_, expr_(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && expr_if_5(builder_, level_ + 1) && result_;
+    result_ = result_ && report_error_(builder_, expr_if_1(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, expr_if_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && expr_if_3(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(EXPR_IF);
     }
@@ -2798,16 +2952,30 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // cond_?
+  private static boolean expr_if_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_if_1")) return false;
+    cond_(builder_, level_ + 1);
+    return true;
+  }
+
+  // expr_?
+  private static boolean expr_if_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_if_2")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   // (W_ELSE expr_)?
-  private static boolean expr_if_5(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_if_5")) return false;
-    expr_if_5_0(builder_, level_ + 1);
+  private static boolean expr_if_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_if_3")) return false;
+    expr_if_3_0(builder_, level_ + 1);
     return true;
   }
 
   // W_ELSE expr_
-  private static boolean expr_if_5_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_if_5_0")) return false;
+  private static boolean expr_if_3_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_if_3_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, W_ELSE);
@@ -2891,7 +3059,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_dot ((MUL | DIV) expr_md)?
+  // expr_dot expr_md_r?
   public static boolean expr_md(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_md")) return false;
     boolean result_ = false;
@@ -2914,32 +3082,38 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((MUL | DIV) expr_md)?
+  // expr_md_r?
   private static boolean expr_md_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_md_1")) return false;
-    expr_md_1_0(builder_, level_ + 1);
+    expr_md_r(builder_, level_ + 1);
     return true;
   }
 
-  // (MUL | DIV) expr_md
-  private static boolean expr_md_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_md_1_0")) return false;
+  /* ********************************************************** */
+  // (MUL | DIV) expr_md?
+  static boolean expr_md_r(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_md_r")) return false;
+    if (!nextTokenIs(builder_, DIV) && !nextTokenIs(builder_, MUL)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_md_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_md(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = expr_md_r_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_md_r_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // MUL | DIV
-  private static boolean expr_md_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_md_1_0_0")) return false;
+  private static boolean expr_md_r_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_md_r_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, MUL);
@@ -2953,8 +3127,15 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
+  // expr_md?
+  private static boolean expr_md_r_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_md_r_1")) return false;
+    expr_md(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // MINUS expr_
+  // MINUS expr_?
   public static boolean expr_minus(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_minus")) return false;
     if (!nextTokenIs(builder_, MINUS)) return false;
@@ -2964,7 +3145,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, MINUS);
     pinned_ = result_; // pin = 1
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_minus_1(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(EXPR_MINUS);
     }
@@ -2975,8 +3156,15 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // expr_?
+  private static boolean expr_minus_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_minus_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // EXCLAMATION expr_
+  // EXCLAMATION expr_?
   public static boolean expr_not(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_not")) return false;
     if (!nextTokenIs(builder_, EXCLAMATION)) return false;
@@ -2986,7 +3174,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, EXCLAMATION);
     pinned_ = result_; // pin = 1
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_not_1(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(EXPR_NOT);
     }
@@ -2997,8 +3185,15 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // expr_?
+  private static boolean expr_not_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_not_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // expr_md ((PLUS | MINUS) expr_pm)?
+  // expr_md expr_pr_r?
   public static boolean expr_pm(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_pm")) return false;
     boolean result_ = false;
@@ -3021,32 +3216,38 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((PLUS | MINUS) expr_pm)?
+  // expr_pr_r?
   private static boolean expr_pm_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_pm_1")) return false;
-    expr_pm_1_0(builder_, level_ + 1);
+    expr_pr_r(builder_, level_ + 1);
     return true;
   }
 
-  // (PLUS | MINUS) expr_pm
-  private static boolean expr_pm_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_pm_1_0")) return false;
+  /* ********************************************************** */
+  // (PLUS | MINUS) expr_pm?
+  static boolean expr_pr_r(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_pr_r")) return false;
+    if (!nextTokenIs(builder_, MINUS) && !nextTokenIs(builder_, PLUS)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_pm_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_pm(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = expr_pr_r_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_pr_r_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // PLUS | MINUS
-  private static boolean expr_pm_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_pm_1_0_0")) return false;
+  private static boolean expr_pr_r_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_pr_r_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, PLUS);
@@ -3060,8 +3261,15 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
+  // expr_pm?
+  private static boolean expr_pr_r_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_pr_r_1")) return false;
+    expr_pm(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // W_RETURN expr_
+  // W_RETURN expr_?
   public static boolean expr_return(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_return")) return false;
     if (!nextTokenIs(builder_, W_RETURN)) return false;
@@ -3071,7 +3279,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, W_RETURN);
     pinned_ = result_; // pin = 1
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_return_1(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(EXPR_RETURN);
     }
@@ -3080,6 +3288,13 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // expr_?
+  private static boolean expr_return_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_return_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3104,7 +3319,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // expr_bool ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)?
+  // expr_bool expr_set_right?
   public static boolean expr_set(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_set")) return false;
     boolean result_ = false;
@@ -3127,32 +3342,37 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // ((SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool)?
+  // expr_set_right?
   private static boolean expr_set_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_set_1")) return false;
-    expr_set_1_0(builder_, level_ + 1);
+    expr_set_right(builder_, level_ + 1);
     return true;
   }
 
-  // (SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool
-  private static boolean expr_set_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_set_1_0")) return false;
+  /* ********************************************************** */
+  // (SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET) expr_bool?
+  static boolean expr_set_right(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_set_right")) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = builder_.mark();
-    result_ = expr_set_1_0_0(builder_, level_ + 1);
-    result_ = result_ && expr_bool(builder_, level_ + 1);
-    if (!result_) {
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = expr_set_right_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_set_right_1(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
     else {
       marker_.drop();
     }
-    return result_;
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
   }
 
   // SET | PLUS_SET| MINUS_SET | MUL_SET | DIV_SET
-  private static boolean expr_set_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_set_1_0_0")) return false;
+  private static boolean expr_set_right_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_set_right_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, SET);
@@ -3167,6 +3387,13 @@ public class ObjDParser implements PsiParser {
       marker_.drop();
     }
     return result_;
+  }
+
+  // expr_bool?
+  private static boolean expr_set_right_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_set_right_1")) return false;
+    expr_bool(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3221,7 +3448,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // W_SYNC OPEN_BRACKET expr_ CLOSE_BRACKET expr_
+  // W_SYNC cond_? expr_?
   public static boolean expr_sync(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_sync")) return false;
     if (!nextTokenIs(builder_, W_SYNC)) return false;
@@ -3229,11 +3456,10 @@ public class ObjDParser implements PsiParser {
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
-    result_ = consumeTokens(builder_, 1, W_SYNC, OPEN_BRACKET);
+    result_ = consumeToken(builder_, W_SYNC);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, CLOSE_BRACKET)) && result_;
-    result_ = pinned_ && expr_(builder_, level_ + 1) && result_;
+    result_ = result_ && report_error_(builder_, expr_sync_1(builder_, level_ + 1));
+    result_ = pinned_ && expr_sync_2(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(EXPR_SYNC);
     }
@@ -3244,8 +3470,22 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // cond_?
+  private static boolean expr_sync_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_sync_1")) return false;
+    cond_(builder_, level_ + 1);
+    return true;
+  }
+
+  // expr_?
+  private static boolean expr_sync_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_sync_2")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // W_THROW expr_
+  // W_THROW expr_?
   public static boolean expr_throw(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_throw")) return false;
     if (!nextTokenIs(builder_, W_THROW)) return false;
@@ -3255,7 +3495,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, W_THROW);
     pinned_ = result_; // pin = 1
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_throw_1(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(EXPR_THROW);
     }
@@ -3266,8 +3506,15 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // expr_?
+  private static boolean expr_throw_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_throw_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // W_TRY expr_ W_FINALLY expr_
+  // W_TRY expr_? W_FINALLY? expr_?
   public static boolean expr_try(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_try")) return false;
     if (!nextTokenIs(builder_, W_TRY)) return false;
@@ -3277,9 +3524,9 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, W_TRY);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, W_FINALLY)) && result_;
-    result_ = pinned_ && expr_(builder_, level_ + 1) && result_;
+    result_ = result_ && report_error_(builder_, expr_try_1(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, expr_try_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && expr_try_3(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(EXPR_TRY);
     }
@@ -3290,8 +3537,29 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // expr_?
+  private static boolean expr_try_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_try_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
+  // W_FINALLY?
+  private static boolean expr_try_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_try_2")) return false;
+    consumeToken(builder_, W_FINALLY);
+    return true;
+  }
+
+  // expr_?
+  private static boolean expr_try_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_try_3")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // (W_WEAK)* (W_VAL | W_VAR) def_name (COLON data_type)? (SET expr_)?
+  // (W_WEAK)* (W_VAL | W_VAR) def_name val_tp? set_val?
   public static boolean expr_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val")) return false;
     boolean result_ = false;
@@ -3366,54 +3634,22 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (COLON data_type)?
+  // val_tp?
   private static boolean expr_val_3(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val_3")) return false;
-    expr_val_3_0(builder_, level_ + 1);
+    val_tp(builder_, level_ + 1);
     return true;
   }
 
-  // COLON data_type
-  private static boolean expr_val_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_val_3_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COLON);
-    result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  // (SET expr_)?
+  // set_val?
   private static boolean expr_val_4(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val_4")) return false;
-    expr_val_4_0(builder_, level_ + 1);
+    set_val(builder_, level_ + 1);
     return true;
-  }
-
-  // SET expr_
-  private static boolean expr_val_4_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "expr_val_4_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, SET);
-    result_ = result_ && expr_(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
-  // W_WEAK expr_
+  // W_WEAK expr_?
   public static boolean expr_weak(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_weak")) return false;
     if (!nextTokenIs(builder_, W_WEAK)) return false;
@@ -3423,7 +3659,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, W_WEAK);
     pinned_ = result_; // pin = 1
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && expr_weak_1(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(EXPR_WEAK);
     }
@@ -3434,8 +3670,15 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // expr_?
+  private static boolean expr_weak_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_weak_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // W_WHILE OPEN_BRACKET expr_ CLOSE_BRACKET expr_
+  // W_WHILE cond_? expr_?
   public static boolean expr_while(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_while")) return false;
     if (!nextTokenIs(builder_, W_WHILE)) return false;
@@ -3443,11 +3686,10 @@ public class ObjDParser implements PsiParser {
     boolean pinned_ = false;
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
-    result_ = consumeTokens(builder_, 1, W_WHILE, OPEN_BRACKET);
+    result_ = consumeToken(builder_, W_WHILE);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, CLOSE_BRACKET)) && result_;
-    result_ = pinned_ && expr_(builder_, level_ + 1) && result_;
+    result_ = result_ && report_error_(builder_, expr_while_1(builder_, level_ + 1));
+    result_ = pinned_ && expr_while_2(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
       marker_.done(EXPR_WHILE);
     }
@@ -3456,6 +3698,20 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // cond_?
+  private static boolean expr_while_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_while_1")) return false;
+    cond_(builder_, level_ + 1);
+    return true;
+  }
+
+  // expr_?
+  private static boolean expr_while_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "expr_while_2")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3636,7 +3892,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_SQUARE_BRACKET expr_ CLOSE_SQUARE_BRACKET index_op?
+  // OPEN_SQUARE_BRACKET expr_? CLOSE_SQUARE_BRACKET index_op?
   public static boolean index_op(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "index_op")) return false;
     if (!nextTokenIs(builder_, OPEN_SQUARE_BRACKET)) return false;
@@ -3646,7 +3902,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, expr_(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, index_op_1(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, CLOSE_SQUARE_BRACKET)) && result_;
     result_ = pinned_ && index_op_3(builder_, level_ + 1) && result_;
     if (result_ || pinned_) {
@@ -3657,6 +3913,13 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // expr_?
+  private static boolean index_op_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "index_op_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
   }
 
   // index_op?
@@ -3684,7 +3947,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // def_name (COLON data_type)?
+  // def_name val_tp?
   public static boolean lambda_par(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "lambda_par")) return false;
     boolean result_ = false;
@@ -3702,27 +3965,11 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // (COLON data_type)?
+  // val_tp?
   private static boolean lambda_par_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "lambda_par_1")) return false;
-    lambda_par_1_0(builder_, level_ + 1);
+    val_tp(builder_, level_ + 1);
     return true;
-  }
-
-  // COLON data_type
-  private static boolean lambda_par_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "lambda_par_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, COLON);
-    result_ = result_ && data_type(builder_, level_ + 1);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
   }
 
   /* ********************************************************** */
@@ -4048,35 +4295,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // !(CLOSE_BRACE)
-  static boolean recover_expr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "recover_expr")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    enterErrorRecordingSection(builder_, level_, _SECTION_NOT_, null);
-    result_ = !recover_expr_0(builder_, level_ + 1);
-    marker_.rollbackTo();
-    result_ = exitErrorRecordingSection(builder_, level_, result_, false, _SECTION_NOT_, null);
-    return result_;
-  }
-
-  // (CLOSE_BRACE)
-  private static boolean recover_expr_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "recover_expr_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = builder_.mark();
-    result_ = consumeToken(builder_, CLOSE_BRACE);
-    if (!result_) {
-      marker_.rollbackTo();
-    }
-    else {
-      marker_.drop();
-    }
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // SET expr_
+  // SET expr_?
   static boolean set_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "set_val")) return false;
     if (!nextTokenIs(builder_, SET)) return false;
@@ -4086,7 +4305,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, SET);
     pinned_ = result_; // pin = 1
-    result_ = result_ && expr_(builder_, level_ + 1);
+    result_ = result_ && set_val_1(builder_, level_ + 1);
     if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
@@ -4095,6 +4314,13 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // expr_?
+  private static boolean set_val_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "set_val_1")) return false;
+    expr_(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -4359,7 +4585,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // COLON data_type
+  // COLON data_type?
   static boolean val_tp(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "val_tp")) return false;
     if (!nextTokenIs(builder_, COLON)) return false;
@@ -4369,7 +4595,7 @@ public class ObjDParser implements PsiParser {
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, COLON);
     pinned_ = result_; // pin = 1
-    result_ = result_ && data_type(builder_, level_ + 1);
+    result_ = result_ && val_tp_1(builder_, level_ + 1);
     if (!result_ && !pinned_) {
       marker_.rollbackTo();
     }
@@ -4378,6 +4604,13 @@ public class ObjDParser implements PsiParser {
     }
     result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
     return result_ || pinned_;
+  }
+
+  // data_type?
+  private static boolean val_tp_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "val_tp_1")) return false;
+    data_type(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */

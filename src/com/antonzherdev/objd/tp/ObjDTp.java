@@ -55,7 +55,7 @@ public abstract class ObjDTp {
             }).getOrElse(NO_SELF);
         } else if(expr instanceof ObjDExprDot) {
             List<ObjDDotPart> exprList = ((ObjDExprDot) expr).getDotPartList();
-            if(exprList.isEmpty()) return ((ObjDExprDot) expr).getExpr().getTp();
+            if(exprList.isEmpty()) return getTp(((ObjDExprDot) expr).getExpr());
             ObjDDotPart part = exprList.get(exprList.size() - 1);
             return ObjDUtil.getTpForDotPart(part);
         } else if(expr instanceof ObjDExprBind) {
@@ -79,7 +79,8 @@ public abstract class ObjDTp {
             d = new F0<ObjDTp>() {
                 @Override
                 public ObjDTp f() {
-                    return ((ObjDDefStatement) def).getExpr().getTp();
+                    final ObjDExpr expr = ((ObjDDefStatement) def).getExpr();
+                    return getTp(expr);
                 }
             };
         } else if(def instanceof ObjDDefParameter) {
@@ -90,7 +91,8 @@ public abstract class ObjDTp {
             d = new F0<ObjDTp>() {
                 @Override
                 public ObjDTp f() {
-                    return ((ObjDExprVal) def).getExpr().getTp();
+                    final ObjDExpr expr = ((ObjDExprVal) def).getExpr();
+                    return getTp(expr);
                 }
             };
         } else if(def instanceof ObjDFieldStatement) {
@@ -98,7 +100,8 @@ public abstract class ObjDTp {
             d = new F0<ObjDTp>() {
                 @Override
                 public ObjDTp f() {
-                    return ((ObjDFieldStatement) def).getExpr().getTp();
+                    final ObjDExpr expr = ((ObjDFieldStatement) def).getExpr();
+                    return getTp(expr);
                 }
             };
         } else if(def instanceof ObjDClassConstructorField) {
@@ -106,19 +109,24 @@ public abstract class ObjDTp {
             d = new F0<ObjDTp>() {
                 @Override
                 public ObjDTp f() {
-                    return ((ObjDClassConstructorField) def).getExpr().getTp();
+                    final ObjDExpr expr = ((ObjDClassConstructorField) def).getExpr();
+                    return getTp(expr);
                 }
             };
         } else {
             return new Unknown("Unknown def class " + def.getClass().getName());
         }
 
-        return tp.map(new F<ObjDDataType,ObjDTp>() {
+        return tp.map(new F<ObjDDataType, ObjDTp>() {
             @Override
             public ObjDTp f(ObjDDataType x) {
                 return getTpForDataType(x);
             }
         }).getOrElse(d);
+    }
+
+    private static ObjDTp getTp(ObjDExpr expr) {
+        return expr == null ?  new Unknown("Empty def field and data type") :  expr.getTp();
     }
 
     private static ObjDTp getTpForDataType(ObjDDataType dataType) {

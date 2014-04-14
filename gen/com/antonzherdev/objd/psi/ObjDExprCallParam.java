@@ -10,7 +10,7 @@ public interface ObjDExprCallParam extends PsiElement {
   @Nullable
   ObjDDefName getDefName();
 
-  @NotNull
+  @Nullable
   ObjDExpr getExpr();
 
 }

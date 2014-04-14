@@ -24,9 +24,9 @@ public class ObjDExprCallParamImpl extends ASTWrapperPsiElement implements ObjDE
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ObjDExpr getExpr() {
-    return findNotNullChildByClass(ObjDExpr.class);
+    return findChildByClass(ObjDExpr.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
