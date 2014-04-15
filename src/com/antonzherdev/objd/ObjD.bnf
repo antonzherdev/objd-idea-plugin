@@ -79,7 +79,7 @@ private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* C
 def_parameter ::= par_mods (def_name | W_SELF)? COLON data_type (SET expr_)?
 par_mods ::= (W_WEAK)*
 
-data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self)
+data_type ::= (data_type_lambda | data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self)
 data_type_self ::= W_SELF
 data_type_simple ::= (data_type_ref | TP_BOOL | TP_STRING | TP_ANY| TP_CHAR|
     TP_INT4 | TP_UINT4 | TP_INT8 | TP_UINT8 | TP_INT | TP_UINT | TP_FLOAT | TP_FLOAT8 | TP_FLOAT4 | TP_BYTE | TP_UBYTE | TP_VOID) data_type_generics? data_type_post_arr? {extends = data_type}
@@ -87,8 +87,8 @@ private data_type_post_arr ::= OPEN_SQUARE_BRACKET INT? CLOSE_SQUARE_BRACKET {pi
 data_type_ref ::= IDENT !DOT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
     methods=[getName setName getNameIdentifier getPresentation]}
 data_type_lambda ::= (data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self) ARROW data_type {extends = data_type}
-data_type_collection ::= OPEN_SQUARE_BRACKET data_type CLOSE_SQUARE_BRACKET {extends = data_type pin=1}
-data_type_map ::= OPEN_SQUARE_BRACKET data_type COLON data_type CLOSE_SQUARE_BRACKET {extends = data_type pin=1}
+data_type_collection ::= OPEN_SQUARE_BRACKET data_type map_tp? CLOSE_SQUARE_BRACKET {extends = data_type pin=1}
+map_tp ::= COLON data_type {pin=1}
 data_type_tuple ::= OPEN_BRACKET data_type? (COMMA data_type)* CLOSE_BRACKET {extends = data_type pin=1}
 data_type_option ::= (data_type_simple| data_type_collection | data_type_tuple | data_type_self) WHAT {extends = data_type pin=2}
 data_type_generics ::= LESS data_type (COMMA data_type)* MORE {pin=1}
@@ -103,7 +103,7 @@ case_item ::= case_cond ARROW expr_{pin=2}
 case_cond ::= (case_cond_unapply | case_cond_val | expr_string_const | case_cond_const) {extends = case_cond}
 case_cond_val ::= def_name case_cond_tp? {extends = case_cond}
 case_cond_unapply ::= data_type_ref? (OPEN_BRACKET case_cond (COMMA case_cond)* CLOSE_BRACKET) case_cond_tp?{extends = case_cond}
-case_cond_tp ::= COLON (data_type_option | data_type_collection | data_type_map | data_type_tuple | data_type_simple | data_type_self) {extends = case_cond pin=1}
+case_cond_tp ::= COLON (data_type_option | data_type_collection | data_type_tuple | data_type_simple | data_type_self) {extends = case_cond pin=1}
 case_cond_const ::= (INT | FLOAT | W_NIL | W_TRUE | W_FALSE) {extends = case_cond}
 
 expr_string_const ::= string_token+ {extends = expr_}

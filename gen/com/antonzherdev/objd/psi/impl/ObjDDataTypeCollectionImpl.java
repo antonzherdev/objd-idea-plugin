@@ -22,6 +22,12 @@ public class ObjDDataTypeCollectionImpl extends ObjDDataTypeImpl implements ObjD
     return findChildByClass(ObjDDataType.class);
   }
 
+  @Override
+  @Nullable
+  public ObjDMapTp getMapTp() {
+    return findChildByClass(ObjDMapTp.class);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeCollection(this);
     else super.accept(visitor);

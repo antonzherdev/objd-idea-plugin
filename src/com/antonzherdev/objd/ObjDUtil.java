@@ -14,11 +14,13 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.util.CachedValue;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.indexing.FileBasedIndex;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.antonzherdev.chain.Chain.chain;
 import static com.antonzherdev.chain.Chain.empty;
@@ -65,13 +67,28 @@ public class ObjDUtil {
         });
     }
 
-    public static Option<ObjDClass> findKernelClass(Project project, final String name) {
-        return getClassesInFile(findFile(project, name).getOrNull()).find(new B<ObjDClass>() {
-            @Override
-            public Boolean f(ObjDClass x) {
-                return x.getClassName().getName().equals(name);
-            }
-        });
+    private static Map<String, CachedValue<ObjDClass>> kernelClasses = new HashMap<String, CachedValue<ObjDClass>>();
+    public static Option<ObjDClass> findKernelClass(final Project project, final String name) {
+        CachedValue<ObjDClass> val = kernelClasses.get(name);
+        if(val == null) {
+            val = CachedValuesManager.getManager(project).createCachedValue(new CachedValueProvider<ObjDClass>() {
+                @Nullable
+                @Override
+                public Result<ObjDClass> compute() {
+                    final Option<ObjDClass> objDClasses = getClassesInFile(findFile(project, name).getOrNull()).find(new B<ObjDClass>() {
+                        @Override
+                        public Boolean f(ObjDClass x) {
+                            return x.getClassName().getName().equals(name);
+                        }
+                    });
+                    if(objDClasses.isEmpty()) return Result.create(null);
+                    final ObjDClass cls = objDClasses.get();
+                    return Result.create(objDClasses.get(), cls);
+                }
+            });
+            kernelClasses.put(name, val);
+        }
+        return Option.fromNullable(val.getValue());
     }
 
     private static F<VirtualFile, ObjDFile> toObjDFileF(final Project project) {

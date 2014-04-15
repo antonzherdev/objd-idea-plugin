@@ -87,10 +87,6 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitDataType(o);
   }
 
-  public void visitDataTypeMap(@NotNull ObjDDataTypeMap o) {
-    visitDataType(o);
-  }
-
   public void visitDataTypeOption(@NotNull ObjDDataTypeOption o) {
     visitDataType(o);
   }
@@ -309,6 +305,10 @@ public class ObjDVisitor extends PsiElementVisitor {
 
   public void visitLazyMod(@NotNull ObjDLazyMod o) {
     visitMod(o);
+  }
+
+  public void visitMapTp(@NotNull ObjDMapTp o) {
+    visitPsiElement(o);
   }
 
   public void visitMod(@NotNull ObjDMod o) {

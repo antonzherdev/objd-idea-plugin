@@ -28,7 +28,6 @@ public interface ObjDTypes {
   IElementType DATA_TYPE_COLLECTION = new ObjDElementType("DATA_TYPE_COLLECTION");
   IElementType DATA_TYPE_GENERICS = new ObjDElementType("DATA_TYPE_GENERICS");
   IElementType DATA_TYPE_LAMBDA = new ObjDElementType("DATA_TYPE_LAMBDA");
-  IElementType DATA_TYPE_MAP = new ObjDElementType("DATA_TYPE_MAP");
   IElementType DATA_TYPE_OPTION = new ObjDElementType("DATA_TYPE_OPTION");
   IElementType DATA_TYPE_REF = new ObjDElementType("DATA_TYPE_REF");
   IElementType DATA_TYPE_SELF = new ObjDElementType("DATA_TYPE_SELF");
@@ -84,6 +83,7 @@ public interface ObjDTypes {
   IElementType INLINE_MOD = new ObjDElementType("INLINE_MOD");
   IElementType LAMBDA_PAR = new ObjDElementType("LAMBDA_PAR");
   IElementType LAZY_MOD = new ObjDElementType("LAZY_MOD");
+  IElementType MAP_TP = new ObjDElementType("MAP_TP");
   IElementType MOD = new ObjDElementType("MOD");
   IElementType MODS = new ObjDElementType("MODS");
   IElementType OVERRIDE_MOD = new ObjDElementType("OVERRIDE_MOD");
@@ -263,9 +263,6 @@ public interface ObjDTypes {
       else if (type == DATA_TYPE_LAMBDA) {
         return new ObjDDataTypeLambdaImpl(node);
       }
-      else if (type == DATA_TYPE_MAP) {
-        return new ObjDDataTypeMapImpl(node);
-      }
       else if (type == DATA_TYPE_OPTION) {
         return new ObjDDataTypeOptionImpl(node);
       }
@@ -430,6 +427,9 @@ public interface ObjDTypes {
       }
       else if (type == LAZY_MOD) {
         return new ObjDLazyModImpl(node);
+      }
+      else if (type == MAP_TP) {
+        return new ObjDMapTpImpl(node);
       }
       else if (type == MOD) {
         return new ObjDModImpl(node);

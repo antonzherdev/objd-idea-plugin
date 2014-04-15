@@ -8,22 +8,23 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDDataTypeMapImpl extends ObjDDataTypeImpl implements ObjDDataTypeMap {
+public class ObjDMapTpImpl extends ASTWrapperPsiElement implements ObjDMapTp {
 
-  public ObjDDataTypeMapImpl(ASTNode node) {
+  public ObjDMapTpImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  @NotNull
-  public List<ObjDDataType> getDataTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
+  @Nullable
+  public ObjDDataType getDataType() {
+    return findChildByClass(ObjDDataType.class);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeMap(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMapTp(this);
     else super.accept(visitor);
   }
 

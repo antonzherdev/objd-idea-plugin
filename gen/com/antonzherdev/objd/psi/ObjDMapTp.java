@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ObjDDataTypeCollection extends ObjDDataType {
+public interface ObjDMapTp extends PsiElement {
 
   @Nullable
   ObjDDataType getDataType();
-
-  @Nullable
-  ObjDMapTp getMapTp();
 
 }

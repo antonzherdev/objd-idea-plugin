@@ -5,6 +5,7 @@ import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.util.CachedValuesManager;
 
 import java.util.List;
 
@@ -138,6 +139,7 @@ public abstract class ObjDTp {
             if(ref instanceof ObjDClassName) {
                 PsiElement par = ref.getParent();
                 if(par instanceof ObjDClass) {
+                    if("Pointer".equals(((ObjDClassName) ref).getName())) return new Unknown("Pointer has not supported yet");
                     return new Class((ObjDClass) par);
                 } else if(par instanceof ObjDClassGeneric) {
                     return new Generic((ObjDClassGeneric) par);
@@ -154,9 +156,8 @@ public abstract class ObjDTp {
             if(optionClass == null) optionClass = new Class(ObjDUtil.findKernelClass(dataType.getProject(), "Option").get());
             return new Opt(optionClass, tp);
         } else if(dataType instanceof ObjDDataTypeCollection) {
-            return getKernelClassTp(dataType, "ImArray");
-        } else if(dataType instanceof ObjDDataTypeMap) {
-            return getKernelClassTp(dataType, "ImHashMap");
+            return ((ObjDDataTypeCollection) dataType).getMapTp() == null ?
+                    getKernelClassTp(dataType, "ImArray") : getKernelClassTp(dataType, "ImHashMap");
         } else if(dataType instanceof ObjDDataTypeTuple) {
             return getKernelClassTp(dataType, "Tuple" + ((ObjDDataTypeTuple) dataType).getDataTypeList().size());
         } else {
@@ -165,7 +166,7 @@ public abstract class ObjDTp {
     }
 
     private static ObjDTp getKernelClassTp(ObjDDataType dataType, String name) {
-        return ObjDUtil.findKernelClass(dataType.getProject(), name).map(new F<ObjDClass,ObjDTp>() {
+        return  ObjDUtil.findKernelClass(dataType.getProject(), name).map(new F<ObjDClass, ObjDTp>() {
             @Override
             public ObjDTp f(ObjDClass x) {
                 return new Class(x);
