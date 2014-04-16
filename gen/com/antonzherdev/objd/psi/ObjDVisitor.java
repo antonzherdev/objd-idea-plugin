@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class ObjDVisitor extends PsiElementVisitor {
 
+  public void visitAnnotations(@NotNull ObjDAnnotations o) {
+    visitPsiElement(o);
+  }
+
   public void visitCallName(@NotNull ObjDCallName o) {
     visitNamedElement(o);
   }

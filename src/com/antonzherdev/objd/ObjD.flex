@@ -158,6 +158,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 
 {IDENT_CHAR}+ {return ObjDTypes.IDENT; }
 
+"@" {return ObjDTypes.AT;}
 "**" {return ObjDTypes.CLUE;}
 "*|*" {return ObjDTypes.CLONE;}
 "->" {return ObjDTypes.ARROW;}

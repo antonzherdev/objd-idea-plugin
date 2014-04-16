@@ -23,7 +23,10 @@ public class ObjDParser implements PsiParser {
     int level_ = 0;
     boolean result_;
     builder_ = adapt_builder_(root_, builder_, this);
-    if (root_ == CALL_NAME) {
+    if (root_ == ANNOTATIONS) {
+      result_ = annotations_(builder_, level_ + 1);
+    }
+    else if (root_ == CALL_NAME) {
       result_ = call_name(builder_, level_ + 1);
     }
     else if (root_ == CASE_COND) {
@@ -331,6 +334,49 @@ public class ObjDParser implements PsiParser {
       if (set.contains(child_) && set.contains(parent_)) return true;
     }
     return false;
+  }
+
+  /* ********************************************************** */
+  // AT expr_call
+  static boolean annotation_(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "annotation_")) return false;
+    if (!nextTokenIs(builder_, AT)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
+    result_ = consumeToken(builder_, AT);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && expr_call(builder_, level_ + 1);
+    if (!result_ && !pinned_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    result_ = exitErrorRecordingSection(builder_, level_, result_, pinned_, _SECTION_GENERAL_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // annotation_*
+  public static boolean annotations_(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "annotations_")) return false;
+    Marker marker_ = builder_.mark();
+    enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, "<annotations>");
+    int offset_ = builder_.getCurrentOffset();
+    while (true) {
+      if (!annotation_(builder_, level_ + 1)) break;
+      int next_offset_ = builder_.getCurrentOffset();
+      if (offset_ == next_offset_) {
+        empty_element_parsed_guard_(builder_, offset_, "annotations_");
+        break;
+      }
+      offset_ = next_offset_;
+    }
+    marker_.done(ANNOTATIONS);
+    exitErrorRecordingSection(builder_, level_, true, false, _SECTION_GENERAL_, null);
+    return true;
   }
 
   /* ********************************************************** */
@@ -4327,13 +4373,12 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // class_mods class_statement | type_statement | import_statement |COMMENT
+  // (annotations_ (class_mods class_statement | type_statement)) | import_statement | COMMENT
   static boolean statement_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "statement_")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = statement__0(builder_, level_ + 1);
-    if (!result_) result_ = type_statement(builder_, level_ + 1);
     if (!result_) result_ = import_statement(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, COMMENT);
     if (!result_) {
@@ -4345,9 +4390,41 @@ public class ObjDParser implements PsiParser {
     return result_;
   }
 
-  // class_mods class_statement
+  // annotations_ (class_mods class_statement | type_statement)
   private static boolean statement__0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "statement__0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = annotations_(builder_, level_ + 1);
+    result_ = result_ && statement__0_1(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // class_mods class_statement | type_statement
+  private static boolean statement__0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "statement__0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = statement__0_1_0(builder_, level_ + 1);
+    if (!result_) result_ = type_statement(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // class_mods class_statement
+  private static boolean statement__0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "statement__0_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = class_mods(builder_, level_ + 1);

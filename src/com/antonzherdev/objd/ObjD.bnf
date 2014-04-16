@@ -22,7 +22,9 @@ pack_statement ::= W_PACKAGE pack_part (DOT pack_part)*
 pack_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                         methods=[getName setName getNameIdentifier getPresentation]}
 
-private statement_ ::= (class_mods class_statement | type_statement | import_statement |COMMENT)
+private statement_ ::= (annotations_ (class_mods class_statement | type_statement)) | import_statement | COMMENT
+annotations_ ::= annotation_*
+private annotation_ ::= AT expr_call {pin = 1}
 
 class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL | W_CASE)*
 

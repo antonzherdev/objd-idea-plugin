@@ -8,6 +8,7 @@ import com.antonzherdev.objd.psi.impl.*;
 
 public interface ObjDTypes {
 
+  IElementType ANNOTATIONS = new ObjDElementType("ANNOTATIONS");
   IElementType CALL_NAME = new ObjDElementType("CALL_NAME");
   IElementType CASE_COND = new ObjDElementType("CASE_COND");
   IElementType CASE_COND_CONST = new ObjDElementType("CASE_COND_CONST");
@@ -101,6 +102,7 @@ public interface ObjDTypes {
 
   IElementType AND = new ObjDTokenType("AND");
   IElementType ARROW = new ObjDTokenType("ARROW");
+  IElementType AT = new ObjDTokenType("AT");
   IElementType CLONE = new ObjDTokenType("CLONE");
   IElementType CLOSE_BRACE = new ObjDTokenType("CLOSE_BRACE");
   IElementType CLOSE_BRACKET = new ObjDTokenType("CLOSE_BRACKET");
@@ -203,7 +205,10 @@ public interface ObjDTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == CALL_NAME) {
+       if (type == ANNOTATIONS) {
+        return new ObjDAnnotationsImpl(node);
+      }
+      else if (type == CALL_NAME) {
         return new ObjDCallNameImpl(node);
       }
       else if (type == CASE_COND) {
