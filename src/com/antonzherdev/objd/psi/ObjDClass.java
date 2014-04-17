@@ -23,4 +23,6 @@ public interface ObjDClass extends PsiElement {
     ClassChildReference getChildReference();
 
     ClassParentReference getParentReference();
+
+    String getName();
 }

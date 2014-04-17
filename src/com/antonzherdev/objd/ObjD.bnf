@@ -26,22 +26,22 @@ private statement_ ::= (annotations_ (class_mods class_statement | type_statemen
 annotations_ ::= annotation_*
 private annotation_ ::= AT expr_call {pin = 1}
 
-class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL | W_CASE)*
+class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL | W_CASE | W_PRIVATE | W_PACKAGE)*
 
 import_statement ::= W_IMPORT import_part (DOT import_part)* {pin=1}
 import_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl" implements="com.antonzherdev.objd.psi.ObjDNamedElement"
                                                            methods=[getName setName getNameIdentifier] }
 type_statement ::= (W_TYPE class_name class_generics? SET class_extends) {
-    methods = [getClassExtendsList]
+    methods = [getClassExtendsList getName]
     mixin="com.antonzherdev.objd.psi.impl.ObjDClassImpl"
     implements = "com.antonzherdev.objd.psi.ObjDClass"
     pin=1
 }
-class_statement ::= W_PRIVATE? class_type class_name class_generics? class_constructor_fields? (W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)* )? class_body? {
-    methods = [isEnum]
+class_statement ::= class_type class_name? class_generics? class_constructor_fields? (W_EXTENDS class_extends expr_call_params? (W_WITH class_extends)* )? class_body? {
+    methods = [isEnum getName]
     mixin="com.antonzherdev.objd.psi.impl.ObjDClassImpl"
     implements = "com.antonzherdev.objd.psi.ObjDClass"
-    pin=2
+    pin=1
 }
 class_type ::= (W_CLASS | W_OBJECT | W_TRAIT | W_STRUCT | W_ENUM)
 class_generics ::= LESS class_generic (COMMA class_generic)* MORE {pin=1}

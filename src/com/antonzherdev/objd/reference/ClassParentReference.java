@@ -37,8 +37,9 @@ public class ClassParentReference extends PsiReferenceBase<ObjDClass> {
                     public Iterable<ObjDClass> f(ObjDClass objDClass) {
                         List<ObjDClassExtends> exts = objDClass.getClassExtendsList();
                         if(exts == null || exts.isEmpty()) {
-                            final String name = objDClass.getClassName().getName();
-                            if(name != null && name.equals("Object")) return Arrays.asList();
+                            final ObjDClassName className = objDClass.getClassName();
+                            final String name = className == null ? "" : className.getName();
+                            if(name != null && objDClass.getName().equals("Object")) return Arrays.asList();
                             else return Arrays.asList(ObjDUtil.getBaseObject(objDClass.getProject()));
                         }
                         return chain(exts).flatMap(new F<ObjDClassExtends, Option<ObjDClass>>() {

@@ -43,4 +43,8 @@ public class ObjDTypeStatementImpl extends ObjDClassImpl implements ObjDTypeStat
     return ObjDPsiImplUtil.getClassExtendsList(this);
   }
 
+  public String getName() {
+    return ObjDPsiImplUtil.getName(this);
+  }
+
 }

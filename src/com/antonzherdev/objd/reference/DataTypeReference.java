@@ -1,6 +1,7 @@
 package com.antonzherdev.objd.reference;
 
 import com.antonzherdev.chain.B;
+import com.antonzherdev.chain.Chain;
 import com.antonzherdev.chain.F;
 import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
@@ -32,7 +33,8 @@ public class DataTypeReference extends PsiReferenceBase<ObjDDataTypeRef> {
             public PsiElement resolve(@NotNull DataTypeReference dataTypeReference, boolean b) {
                 ObjDFile file = (ObjDFile) getElement().getContainingFile();
                 try {
-                    return ObjDUtil.availableClassesInFile(file)
+                    final List<ObjDClass> availableClasses = file.getAvailableClasses();
+                    return Chain.chain(availableClasses)
                             .map(new F<ObjDClass, ObjDClassName>() {
                                 @Override
                                 public ObjDClassName f(ObjDClass x) {

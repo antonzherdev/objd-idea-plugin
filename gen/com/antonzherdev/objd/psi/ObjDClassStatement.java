@@ -4,6 +4,7 @@ package com.antonzherdev.objd.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
 
 public interface ObjDClassStatement extends ObjDClass {
 
@@ -29,5 +30,7 @@ public interface ObjDClassStatement extends ObjDClass {
   ObjDExprCallParams getExprCallParams();
 
   boolean isEnum();
+
+  String getName();
 
 }

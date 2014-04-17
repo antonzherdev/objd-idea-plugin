@@ -1,5 +1,6 @@
 package com.antonzherdev.objd.reference;
 
+import com.antonzherdev.chain.Chain;
 import com.antonzherdev.chain.P;
 import com.antonzherdev.objd.ObjDLanguage;
 import com.antonzherdev.objd.ObjDUtil;
@@ -8,7 +9,6 @@ import com.antonzherdev.objd.tp.PsiRef;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                         {
                             resultSet.addElement(create("extends "));
                         } else if(parent instanceof ObjDDataTypeRef) {
-                            ObjDUtil.availableClassesInFile((ObjDFile) parent.getContainingFile()).foreach(new P<ObjDClass>() {
+                            Chain.chain(((ObjDFile) parent.getContainingFile()).getAvailableClasses()).foreach(new P<ObjDClass>() {
                                 @Override
                                 public void p(ObjDClass className) {
                                     resultSet.addElement(create(className.getClassName().getName()));

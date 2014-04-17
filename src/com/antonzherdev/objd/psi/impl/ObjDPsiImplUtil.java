@@ -106,5 +106,12 @@ public class ObjDPsiImplUtil {
             return new CallReference((ObjDCallName) element, TextRange.from(0, element.getTextLength()));
         return  null;
     }
+
+    public static String getName(ObjDClass classStatement) {
+        final ObjDClassName nm = classStatement.getClassName();
+        if(nm == null) return "";
+        final String nm2 = nm.getName();
+        return nm2 == null ? "" : nm2;
+    }
 }
 

@@ -19,7 +19,7 @@ public class GotoClass  implements ChooseByNameContributor {
                 .map(new F<ObjDClass, String>() {
                     @Override
                     public String f(ObjDClass x) {
-                        return x.getClassName().getName();
+                        return x.getName();
                     }
                 })
                 .list();
@@ -33,7 +33,7 @@ public class GotoClass  implements ChooseByNameContributor {
                 .filter(new B<ObjDClass>() {
                     @Override
                     public Boolean f(ObjDClass objDClass) {
-                        return objDClass.getClassName().getName().equals(name);
+                        return objDClass.getName().equals(name);
                     }
                 })
                 .map(new F<ObjDClass, NavigationItem>() {

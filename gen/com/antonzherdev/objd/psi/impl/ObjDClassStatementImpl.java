@@ -67,4 +67,8 @@ public class ObjDClassStatementImpl extends ObjDClassImpl implements ObjDClassSt
     return ObjDPsiImplUtil.isEnum(this);
   }
 
+  public String getName() {
+    return ObjDPsiImplUtil.getName(this);
+  }
+
 }

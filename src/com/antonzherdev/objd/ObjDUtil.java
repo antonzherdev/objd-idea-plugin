@@ -4,16 +4,12 @@ import com.antonzherdev.chain.*;
 import com.antonzherdev.objd.psi.*;
 import com.antonzherdev.objd.tp.ObjDTp;
 import com.antonzherdev.objd.tp.PsiRef;
-import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -43,7 +39,7 @@ public class ObjDUtil {
         return getAllFiles(project).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
             @Override
             public Iterable<ObjDClass> f(ObjDFile objDFile) {
-                return getClassesInFile(objDFile);
+                return Chain.chain(objDFile.getClasses());
             }
         });
     }
@@ -57,12 +53,14 @@ public class ObjDUtil {
         }).flatMap(new F<ObjDFile,IChain<ObjDClass>>() {
             @Override
             public IChain<ObjDClass> f(ObjDFile objDFile) {
-                return getClassesInFile(objDFile);
+                return Chain.chain(objDFile.getClasses());
             }
         }).find(new F<ObjDClass, Boolean>() {
             @Override
             public Boolean f(ObjDClass objDClass) {
-                return objDClass.getClassName().getName().equals(name);
+                final ObjDClassName className = objDClass.getClassName();
+                final String nm = className == null ? "" : className.getName();
+                return name.equals(nm);
             }
         });
     }
@@ -75,10 +73,16 @@ public class ObjDUtil {
                 @Nullable
                 @Override
                 public Result<ObjDClass> compute() {
-                    final Option<ObjDClass> objDClasses = getClassesInFile(findFile(project, name).getOrNull()).find(new B<ObjDClass>() {
+                    final Option<ObjDClass> objDClasses = findFile(project, name).map(new F<ObjDFile,IChain<ObjDClass>>() {
+                        @Override
+                        public IChain<ObjDClass> f(ObjDFile objDFile) {
+                            return Chain.chain(objDFile.getClasses());
+                        }
+                    }).getOrElse(Chain.<ObjDClass>empty()).find(new B<ObjDClass>() {
                         @Override
                         public Boolean f(ObjDClass x) {
-                            return x.getClassName().getName().equals(name);
+                            final ObjDClassName nm = x.getClassName();
+                            return name.equals(nm == null ? "" : nm.getName());
                         }
                     });
                     if(objDClasses.isEmpty()) return Result.create(null);
@@ -106,172 +110,21 @@ public class ObjDUtil {
     }
 
     @SuppressWarnings("unchecked")
-    private static Option<ObjDClassStatement> packageObject(Project project, List<String> pack) {
-        List<String> parPack = pack.subList(0, pack.size() - 1);
-        String name = pack.get(pack.size() - 1);
-        return (Option)findClass(project, parPack, name);
-    }
-
-    public static IChain<ObjDClass> availableClassesInFile(final ObjDFile file) {
-        final List<String> thisPack = file.getPackage().list();
-        return getAllImports(file)
-                .flatMap(new F<ObjDImportStatement, Iterable<ObjDClass>>() {
-                    @Override
-                    public Iterable<ObjDClass> f(ObjDImportStatement imp) {
-                        final List<String> parts = chain(imp.getImportPartList())
-                                .map(new F<ObjDImportPart, String>() {
-                                    @Override
-                                    public String f(ObjDImportPart objDImportPart) {
-                                        return objDImportPart.getName();
-                                    }
-                                }).list();
-                        if (parts.size() < 1) return empty();
-                        String lastPart = parts.get(parts.size() - 1);
-                        if ("_".equals(lastPart)) {
-                            final List<String> pack = parts.subList(0, parts.size() - 1);
-                            return getAllFiles(file.getProject())
-                                    .filter(new F<ObjDFile, Boolean>() {
-                                        @Override
-                                        public Boolean f(ObjDFile objDFile) {
-                                            return objDFile.getPackage().startsWith(pack);
-                                        }
-                                    })
-                                    .flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
-                                        @Override
-                                        public Iterable<ObjDClass> f(ObjDFile objDFile) {
-                                            return getClassesInFile(objDFile);
-                                        }
-                                    });
-                        } else {
-                            return findClass(file.getProject(), parts.subList(0, parts.size() - 1), lastPart);
-                        }
-                    }
-                })
-                .append(
-                        getAllFiles(file.getProject()).filter(new B<ObjDFile>() {
-                            @Override
-                            public Boolean f(ObjDFile objDFile) {
-                                return objDFile.getPackage().equals(thisPack);
-                            }
-                        }).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
-                            @Override
-                            public Iterable<ObjDClass> f(ObjDFile objDFile) {
-                                return getClassesInFile(objDFile);
-                            }
-                        }))
-                .prepend(getKernelFiles(file.getProject()).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
-                    @Override
-                    public Iterable<ObjDClass> f(ObjDFile objDFile) {
-                        return getClassesInFile(objDFile);
-                    }
-                }));
-    }
-
-    private static IChain<ObjDImportStatement> getAllImports(ObjDFile file) {
-        final List<String> thisPack = file.getPackage().list();
-        return chain(file.getNode().getChildren(TokenSet.create(ObjDTypes.IMPORT_STATEMENT)))
-                .map(new F<ASTNode, ObjDImportStatement>() {
-                    @Override
-                    public ObjDImportStatement f(ASTNode astNode) {
-                        return astNode.getPsi(ObjDImportStatement.class);
-                    }
-                })
-                .append(chain(packageObject(file.getProject(), thisPack)).flatMap(new F<ObjDClassStatement, Iterable<ObjDImportStatement>>() {
-                    @Override
-                    public Iterable<ObjDImportStatement> f(ObjDClassStatement objDClass) {
-                        if(objDClass.getClassBody() == null) return empty();
-                        return objDClass.getClassBody().getImportStatementList();
-                    }
-                }));
-    }
-
-    public static IChain<ObjDDefName> availableDefsInFile(final ObjDFile file) {
-        return getAllImports(file)
-                .flatMap(new F<ObjDImportStatement, Iterable<ObjDDefName>>() {
-                    @Override
-                    public Iterable<ObjDDefName> f(ObjDImportStatement imp) {
-                        final List<String> parts = chain(imp.getImportPartList())
-                                .map(new F<ObjDImportPart, String>() {
-                                    @Override
-                                    public String f(ObjDImportPart objDImportPart) {
-                                        return objDImportPart.getName();
-                                    }
-                                }).list();
-                        if(parts.size() < 2) return empty();
-                        String lastPart = parts.get(parts.size() - 1);
-                        if ("_".equals(lastPart)) {
-                            final String objName = parts.get(parts.size() - 2);
-                            final List<String> pack = parts.subList(0, parts.size() - 2);
-                            return getAllFiles(file.getProject())
-                                    .filter(new F<ObjDFile, Boolean>() {
-                                        @Override
-                                        public Boolean f(ObjDFile objDFile) {
-                                            return objDFile.getPackage().startsWith(pack);
-                                        }
-                                    })
-                                    .flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
-                                        @Override
-                                        public Iterable<ObjDClass> f(ObjDFile objDFile) {
-                                            return getClassesInFile(objDFile).filter(new B<ObjDClass>() {
-                                                @Override
-                                                public Boolean f(ObjDClass objDClass) {
-                                                    return objDClass.getClassName().getName().equals(objName);
-                                                }
-                                            });
-                                        }
-                                    })
-                                    .flatMap(new F<ObjDClass, Iterable<ObjDDefName>>() {
-                                        @Override
-                                        public Iterable<ObjDDefName> f(ObjDClass objDClass) {
-                                            return classFields(objDClass);
-                                        }
-                                    });
-                        } else {
-                            return empty();
-                        }
-                    }
-                });
+    public static Option<ObjDClassStatement> packageObject(Project project, List<String> pack) {
+        return (Option)findClass(project, pack, "");
     }
 
 
-    private static IChain<ObjDFile> getKernelFiles(Project project) {
+    public static IChain<ObjDFile> getKernelFiles(Project project) {
         return getAllFiles(project)
                 .filter(new B<ObjDFile>() {
                     @Override
                     public Boolean f(ObjDFile f) {
-                        return f.getPackage().head().getOrElse("").equals("core");
+                        return f.getPackage().get(0).equals("core");
                     }
                 });
     }
 
-
-    public static IChain<ObjDClass> getClassesInFile(ObjDFile objDFile) {
-        if(objDFile == null) return empty();
-        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.CLASS_STATEMENT, ObjDTypes.TYPE_STATEMENT))).map(new F<ASTNode, ObjDClass>() {
-            @Override
-            public ObjDClass f(ASTNode astNode) {
-                return astNode.getPsi(ObjDClass.class);
-            }
-        });
-    }
-
-    public static IChain<ObjDDefStatement> getDefsInFile(ObjDFile objDFile) {
-        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.DEF_STATEMENT))).map(new F<ASTNode,ObjDDefStatement>() {
-            @Override
-            public ObjDDefStatement f(ASTNode astNode) {
-                return astNode.getPsi(ObjDDefStatement.class);
-            }
-        });
-    }
-
-    public static IChain<ObjDFieldStatement> getValsInFile(ObjDFile objDFile) {
-        return Chain.chain(objDFile.getNode().getChildren(TokenSet.create(ObjDTypes.FIELD_STATEMENT))).map(new F<ASTNode,ObjDFieldStatement>() {
-            @Override
-            public ObjDFieldStatement f(ASTNode astNode) {
-                return astNode.getPsi(ObjDFieldStatement.class);
-            }
-        });
-    }
 
     public static Option<ObjDClassStatement> getClass(PsiElement element) {
         while(element != null) {
@@ -321,7 +174,7 @@ public class ObjDUtil {
     private static IChain<ObjDDefName> parentFields(ObjDClass stm) {
         List<ObjDClassExtends> classExtends = stm.getClassExtendsList();
         if(classExtends == null || classExtends.isEmpty()) {
-            if(stm.getClassName().getName().equals("Object")) return empty();
+            if(stm.getName().equals("Object")) return empty();
             else return classFields(getBaseObject(stm.getProject()));
         }
 

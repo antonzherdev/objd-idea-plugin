@@ -4,6 +4,7 @@ package com.antonzherdev.objd.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl;
 
 public interface ObjDTypeStatement extends ObjDClass {
 
@@ -17,5 +18,7 @@ public interface ObjDTypeStatement extends ObjDClass {
   ObjDClassName getClassName();
 
   List<ObjDClassExtends> getClassExtendsList();
+
+  String getName();
 
 }
