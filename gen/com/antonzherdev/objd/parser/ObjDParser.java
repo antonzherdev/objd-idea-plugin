@@ -3929,10 +3929,10 @@ public class ObjDParser implements PsiParser {
     Marker marker_ = builder_.mark();
     enterErrorRecordingSection(builder_, level_, _SECTION_GENERAL_, null);
     result_ = consumeToken(builder_, OPEN_SQUARE_BRACKET);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, index_op_1(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, CLOSE_SQUARE_BRACKET)) && result_;
-    result_ = pinned_ && index_op_3(builder_, level_ + 1) && result_;
+    result_ = result_ && index_op_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, CLOSE_SQUARE_BRACKET);
+    pinned_ = result_; // pin = 3
+    result_ = result_ && index_op_3(builder_, level_ + 1);
     if (result_ || pinned_) {
       marker_.done(INDEX_OP);
     }
