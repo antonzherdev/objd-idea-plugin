@@ -32,7 +32,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             Chain.chain(((ObjDFile) parent.getContainingFile()).getAvailableClasses()).foreach(new P<ObjDClass>() {
                                 @Override
                                 public void p(ObjDClass className) {
-                                    resultSet.addElement(create(className.getClassName().getName()));
+                                    resultSet.addElement(create(className.getName()));
                                 }
                             });
                             resultSet.addElement(create("byte"));
