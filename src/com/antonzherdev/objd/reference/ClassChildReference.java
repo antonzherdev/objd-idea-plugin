@@ -24,6 +24,7 @@ public class ClassChildReference extends PsiReferenceBase<ObjDClass> {
     }
 
     public List<ObjDClass> resolveClasses() {
+        if(myElement.getProject().isDisposed()) return null;
         return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<ClassChildReference, List<ObjDClass>>() {
             @Override
             public List<ObjDClass> resolve(@NotNull ClassChildReference classParentReference, boolean b) {

@@ -28,6 +28,7 @@ public class DataTypeReference extends PsiReferenceBase<ObjDDataTypeRef> {
     @Nullable
     @Override
     public PsiElement resolve() {
+        if(myElement.getProject().isDisposed()) return null;
         return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<DataTypeReference, PsiElement>() {
             @Override
             public PsiElement resolve(@NotNull DataTypeReference dataTypeReference, boolean b) {

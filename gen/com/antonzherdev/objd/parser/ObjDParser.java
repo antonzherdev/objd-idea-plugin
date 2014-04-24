@@ -628,7 +628,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // OPEN_BRACE enum_item* (def_statement | field_statement | import_statement)* CLOSE_BRACE
+  // OPEN_BRACE enum_item* (annotations_ (def_statement | field_statement | import_statement))* CLOSE_BRACE
   public static boolean class_body(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_body")) return false;
     if (!nextTokenIs(builder_, OPEN_BRACE)) return false;
@@ -667,7 +667,7 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // (def_statement | field_statement | import_statement)*
+  // (annotations_ (def_statement | field_statement | import_statement))*
   private static boolean class_body_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_body_2")) return false;
     int offset_ = builder_.getCurrentOffset();
@@ -683,9 +683,25 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // def_statement | field_statement | import_statement
+  // annotations_ (def_statement | field_statement | import_statement)
   private static boolean class_body_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "class_body_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = annotations_(builder_, level_ + 1);
+    result_ = result_ && class_body_2_0_1(builder_, level_ + 1);
+    if (!result_) {
+      marker_.rollbackTo();
+    }
+    else {
+      marker_.drop();
+    }
+    return result_;
+  }
+
+  // def_statement | field_statement | import_statement
+  private static boolean class_body_2_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "class_body_2_0_1")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = def_statement(builder_, level_ + 1);

@@ -25,6 +25,7 @@ public class ObjDImportReference extends PsiReferenceBase<ObjDImportPart> {
     @Nullable
     @Override
     public PsiElement resolve() {
+        if(myElement.getProject().isDisposed()) return null;
         return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<ObjDImportReference, PsiElement>() {
             @Override
             public PsiElement resolve(@NotNull ObjDImportReference objDImportReference, boolean b) {

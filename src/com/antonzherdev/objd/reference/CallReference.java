@@ -30,6 +30,7 @@ public class CallReference extends PsiReferenceBase<ObjDCallName> {
     @Nullable
     @Override
     public PsiElement resolve() {
+        if(myElement.getProject().isDisposed()) return null;
         try {
             return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, new ResolveCache.AbstractResolver<CallReference, PsiElement>() {
                 @Override

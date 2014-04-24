@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ObjDClassBody extends PsiElement {
 
   @NotNull
+  List<ObjDAnnotations> getAnnotationsList();
+
+  @NotNull
   List<ObjDDefStatement> getDefStatementList();
 
   @NotNull
