@@ -216,8 +216,13 @@ public class ObjDUtil {
                                 while (i.hasNext()) {
                                     ObjDDotPart n = i.next();
                                     ObjDExpr next = getExpForDotPart(n);
-                                    if(next == par) return new Tuple<ObjDTp, Boolean>(prev.getTp(),
-                                            n instanceof ObjDDotPartSimple && ((ObjDDotPartSimple) n).getDotType().isNullSafe());
+                                    if(next == par) {
+                                        if(prev == null) break;
+                                        final boolean b = n instanceof ObjDDotPartSimple
+                                                && ((ObjDDotPartSimple) n).getDotType() != null
+                                                && ((ObjDDotPartSimple) n).getDotType().isNullSafe();
+                                        return new Tuple<ObjDTp, Boolean>(prev.getTp(), b);
+                                    }
                                     prev = next;
                                 }
                                 return new Tuple<ObjDTp, Boolean>(new ObjDTp.Unknown("Error in dot"), false);
