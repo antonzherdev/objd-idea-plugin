@@ -65,7 +65,7 @@ field_statement ::= (mods (W_VAR | W_VAL) def_name val_tp? set_val?)  {methods =
 private val_tp ::= COLON data_type? {pin = 1}
 private set_val ::= SET expr_? {pin = 1}
 mods ::= mod*
-mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod
+mod ::= static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod| volatile_mod
 lazy_mod ::= W_LAZY {extends = mod}
 protected_mod ::= W_PROTECTED {extends = mod}
 static_mod ::= W_STATIC {extends = mod}
@@ -75,6 +75,7 @@ private_mod ::= W_PRIVATE {extends = mod}
 final_mod ::= W_FINAL {extends = mod}
 inline_mod ::= W_INLINE {extends = mod}
 override_mod ::= W_OVERRIDE {extends = mod}
+volatile_mod ::= W_VOLATILE {extends = mod}
 
 def_statement ::= (mods W_DEF def_name class_generics? def_parameters? val_tp? (set_val| expr_braces)?) {methods = [isStatic] pin=2}
 private def_parameters ::= (OPEN_BRACKET def_parameter? (COMMA def_parameter)* CLOSE_BRACKET) {pin = 1}
@@ -161,7 +162,7 @@ private comma_and_par ::= COMMA expr_call_param {pin = 1}
 expr_call_param ::= (def_name SET)? expr_?
 expr_braces ::= (OPEN_BRACE expr_* CLOSE_BRACE) {extends = expr_ pin=1}
 expr_arr ::= OPEN_SQUARE_BRACKET expr_? (COMMA expr_)* CLOSE_SQUARE_BRACKET  {extends = expr_ pin=1}
-expr_val ::= (W_WEAK)* (W_VAL | W_VAR) def_name val_tp? set_val? {extends = expr_ pin=2}
+expr_val ::= (W_WEAK | W_VOLATILE)* (W_VAL | W_VAR) def_name val_tp? set_val? {extends = expr_ pin=2}
 expr_lambda ::= (lambda_par | lambda_pars) ARROW expr_ {extends = expr_ pin=2}
 private lambda_pars ::= OPEN_BRACKET lambda_par? (COMMA lambda_par)* CLOSE_BRACKET {pin=1}
 

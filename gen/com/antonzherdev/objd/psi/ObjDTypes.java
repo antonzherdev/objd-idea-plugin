@@ -98,6 +98,7 @@ public interface ObjDTypes {
   IElementType STRING_TOKEN = new ObjDElementType("STRING_TOKEN");
   IElementType TERM = new ObjDElementType("TERM");
   IElementType TYPE_STATEMENT = new ObjDElementType("TYPE_STATEMENT");
+  IElementType VOLATILE_MOD = new ObjDElementType("VOLATILE_MOD");
   IElementType WEAK_MOD = new ObjDElementType("WEAK_MOD");
 
   IElementType AND = new ObjDTokenType("AND");
@@ -197,6 +198,7 @@ public interface ObjDTypes {
   IElementType W_TYPE = new ObjDTokenType("W_TYPE");
   IElementType W_VAL = new ObjDTokenType("W_VAL");
   IElementType W_VAR = new ObjDTokenType("W_VAR");
+  IElementType W_VOLATILE = new ObjDTokenType("W_VOLATILE");
   IElementType W_WEAK = new ObjDTokenType("W_WEAK");
   IElementType W_WHEN = new ObjDTokenType("W_WHEN");
   IElementType W_WHILE = new ObjDTokenType("W_WHILE");
@@ -474,6 +476,9 @@ public interface ObjDTypes {
       }
       else if (type == TYPE_STATEMENT) {
         return new ObjDTypeStatementImpl(node);
+      }
+      else if (type == VOLATILE_MOD) {
+        return new ObjDVolatileModImpl(node);
       }
       else if (type == WEAK_MOD) {
         return new ObjDWeakModImpl(node);

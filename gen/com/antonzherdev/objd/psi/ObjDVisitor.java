@@ -367,6 +367,10 @@ public class ObjDVisitor extends PsiElementVisitor {
     visitClass(o);
   }
 
+  public void visitVolatileMod(@NotNull ObjDVolatileMod o) {
+    visitMod(o);
+  }
+
   public void visitWeakMod(@NotNull ObjDWeakMod o) {
     visitMod(o);
   }

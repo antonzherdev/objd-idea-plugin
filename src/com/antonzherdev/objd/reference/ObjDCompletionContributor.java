@@ -93,6 +93,7 @@ public class ObjDCompletionContributor extends CompletionContributor {
                             resultSet.addElement(create("static "));
                             resultSet.addElement(create("weak "));
                             resultSet.addElement(create("lazy "));
+                            resultSet.addElement(create("volatile "));
                         }
                     }
                 }

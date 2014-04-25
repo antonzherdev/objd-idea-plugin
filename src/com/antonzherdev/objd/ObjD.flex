@@ -138,6 +138,7 @@ FLOAT_CONST = -?[0-9]+[.][0-9]+
 "finally" {return ObjDTypes.W_FINALLY; }
 "override" {return ObjDTypes.W_OVERRIDE; }
 "inline" {return ObjDTypes.W_INLINE; }
+"volatile" {return ObjDTypes.W_VOLATILE; }
 
 "bool" {return ObjDTypes.TP_BOOL; }
 "float" {return ObjDTypes.TP_FLOAT; }

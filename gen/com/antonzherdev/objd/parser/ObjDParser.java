@@ -293,6 +293,9 @@ public class ObjDParser implements PsiParser {
     else if (root_ == TYPE_STATEMENT) {
       result_ = type_statement(builder_, level_ + 1);
     }
+    else if (root_ == VOLATILE_MOD) {
+      result_ = volatile_mod(builder_, level_ + 1);
+    }
     else if (root_ == WEAK_MOD) {
       result_ = weak_mod(builder_, level_ + 1);
     }
@@ -326,7 +329,7 @@ public class ObjDParser implements PsiParser {
       EXPR_WHILE, TERM),
     TokenSet.create(FINAL_MOD, INLINE_MOD, LAZY_MOD, MOD,
       OVERRIDE_MOD, PRIVATE_MOD, PROTECTED_MOD, PURE_MOD,
-      STATIC_MOD, WEAK_MOD),
+      STATIC_MOD, VOLATILE_MOD, WEAK_MOD),
   };
 
   public static boolean type_extends_(IElementType child_, IElementType parent_) {
@@ -3603,7 +3606,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (W_WEAK)* (W_VAL | W_VAR) def_name val_tp? set_val?
+  // (W_WEAK | W_VOLATILE)* (W_VAL | W_VAR) def_name val_tp? set_val?
   public static boolean expr_val(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val")) return false;
     boolean result_ = false;
@@ -3631,7 +3634,7 @@ public class ObjDParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (W_WEAK)*
+  // (W_WEAK | W_VOLATILE)*
   private static boolean expr_val_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val_0")) return false;
     int offset_ = builder_.getCurrentOffset();
@@ -3647,12 +3650,13 @@ public class ObjDParser implements PsiParser {
     return true;
   }
 
-  // (W_WEAK)
+  // W_WEAK | W_VOLATILE
   private static boolean expr_val_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "expr_val_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = consumeToken(builder_, W_WEAK);
+    if (!result_) result_ = consumeToken(builder_, W_VOLATILE);
     if (!result_) {
       marker_.rollbackTo();
     }
@@ -4119,7 +4123,7 @@ public class ObjDParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod
+  // static_mod | weak_mod | private_mod | protected_mod | lazy_mod | pure_mod | final_mod | override_mod | inline_mod| volatile_mod
   public static boolean mod(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "mod")) return false;
     boolean result_ = false;
@@ -4135,6 +4139,7 @@ public class ObjDParser implements PsiParser {
     if (!result_) result_ = final_mod(builder_, level_ + 1);
     if (!result_) result_ = override_mod(builder_, level_ + 1);
     if (!result_) result_ = inline_mod(builder_, level_ + 1);
+    if (!result_) result_ = volatile_mod(builder_, level_ + 1);
     LighterASTNode last_ = result_? builder_.getLatestDoneMarker() : null;
     if (last_ != null && last_.getStartOffset() == start_ && type_extends_(last_.getTokenType(), MOD)) {
       marker_.drop();
@@ -4708,6 +4713,23 @@ public class ObjDParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "val_tp_1")) return false;
     data_type(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // W_VOLATILE
+  public static boolean volatile_mod(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "volatile_mod")) return false;
+    if (!nextTokenIs(builder_, W_VOLATILE)) return false;
+    boolean result_ = false;
+    Marker marker_ = builder_.mark();
+    result_ = consumeToken(builder_, W_VOLATILE);
+    if (result_) {
+      marker_.done(VOLATILE_MOD);
+    }
+    else {
+      marker_.rollbackTo();
+    }
+    return result_;
   }
 
   /* ********************************************************** */
