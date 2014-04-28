@@ -17,6 +17,11 @@ public class ObjDClassConstructorFieldImpl extends ASTWrapperPsiElement implemen
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassConstructorField(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public ObjDDataType getDataType() {
@@ -39,11 +44,6 @@ public class ObjDClassConstructorFieldImpl extends ASTWrapperPsiElement implemen
   @NotNull
   public ObjDMods getMods() {
     return findNotNullChildByClass(ObjDMods.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassConstructorField(this);
-    else super.accept(visitor);
   }
 
 }

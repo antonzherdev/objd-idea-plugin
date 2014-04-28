@@ -17,6 +17,11 @@ public class ObjDExprCallPostLambdaImpl extends ASTWrapperPsiElement implements 
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallPostLambda(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDExpr> getExprList() {
@@ -27,11 +32,6 @@ public class ObjDExprCallPostLambdaImpl extends ASTWrapperPsiElement implements 
   @NotNull
   public List<ObjDLambdaPar> getLambdaParList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDLambdaPar.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallPostLambda(this);
-    else super.accept(visitor);
   }
 
 }

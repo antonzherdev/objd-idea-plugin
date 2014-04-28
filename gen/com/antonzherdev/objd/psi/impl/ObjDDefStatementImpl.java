@@ -17,6 +17,11 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefStatement(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDClassGenerics getClassGenerics() {
@@ -51,11 +56,6 @@ public class ObjDDefStatementImpl extends ASTWrapperPsiElement implements ObjDDe
   @NotNull
   public ObjDMods getMods() {
     return findNotNullChildByClass(ObjDMods.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefStatement(this);
-    else super.accept(visitor);
   }
 
   public boolean isStatic() {

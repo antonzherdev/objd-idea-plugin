@@ -17,15 +17,15 @@ public class ObjDCaseCondImpl extends ASTWrapperPsiElement implements ObjDCaseCo
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCond(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDExprStringConst getExprStringConst() {
     return findChildByClass(ObjDExprStringConst.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCond(this);
-    else super.accept(visitor);
   }
 
 }

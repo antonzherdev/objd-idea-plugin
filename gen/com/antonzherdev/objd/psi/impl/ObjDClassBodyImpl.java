@@ -17,6 +17,11 @@ public class ObjDClassBodyImpl extends ASTWrapperPsiElement implements ObjDClass
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassBody(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDAnnotations> getAnnotationsList() {
@@ -45,11 +50,6 @@ public class ObjDClassBodyImpl extends ASTWrapperPsiElement implements ObjDClass
   @NotNull
   public List<ObjDImportStatement> getImportStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDImportStatement.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassBody(this);
-    else super.accept(visitor);
   }
 
 }

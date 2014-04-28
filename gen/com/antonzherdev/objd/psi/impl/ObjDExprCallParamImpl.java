@@ -17,6 +17,11 @@ public class ObjDExprCallParamImpl extends ASTWrapperPsiElement implements ObjDE
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallParam(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDefName getDefName() {
@@ -27,11 +32,6 @@ public class ObjDExprCallParamImpl extends ASTWrapperPsiElement implements ObjDE
   @Nullable
   public ObjDExpr getExpr() {
     return findChildByClass(ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallParam(this);
-    else super.accept(visitor);
   }
 
 }

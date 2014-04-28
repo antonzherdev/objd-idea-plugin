@@ -17,6 +17,11 @@ public class ObjDFieldStatementImpl extends ASTWrapperPsiElement implements ObjD
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitFieldStatement(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataType getDataType() {
@@ -39,11 +44,6 @@ public class ObjDFieldStatementImpl extends ASTWrapperPsiElement implements ObjD
   @NotNull
   public ObjDMods getMods() {
     return findNotNullChildByClass(ObjDMods.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitFieldStatement(this);
-    else super.accept(visitor);
   }
 
   public boolean isStatic() {

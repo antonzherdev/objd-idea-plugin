@@ -16,6 +16,11 @@ public class ObjDCaseCondUnapplyImpl extends ObjDCaseCondImpl implements ObjDCas
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondUnapply(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDCaseCond> getCaseCondList() {
@@ -26,11 +31,6 @@ public class ObjDCaseCondUnapplyImpl extends ObjDCaseCondImpl implements ObjDCas
   @Nullable
   public ObjDDataTypeRef getDataTypeRef() {
     return findChildByClass(ObjDDataTypeRef.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondUnapply(this);
-    else super.accept(visitor);
   }
 
 }

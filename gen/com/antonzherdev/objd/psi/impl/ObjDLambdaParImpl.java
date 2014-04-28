@@ -17,6 +17,11 @@ public class ObjDLambdaParImpl extends ASTWrapperPsiElement implements ObjDLambd
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitLambdaPar(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataType getDataType() {
@@ -27,11 +32,6 @@ public class ObjDLambdaParImpl extends ASTWrapperPsiElement implements ObjDLambd
   @NotNull
   public ObjDDefName getDefName() {
     return findNotNullChildByClass(ObjDDefName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitLambdaPar(this);
-    else super.accept(visitor);
   }
 
 }

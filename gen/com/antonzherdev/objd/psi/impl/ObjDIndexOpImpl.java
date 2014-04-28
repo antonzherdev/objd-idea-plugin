@@ -17,6 +17,11 @@ public class ObjDIndexOpImpl extends ASTWrapperPsiElement implements ObjDIndexOp
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitIndexOp(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDExpr getExpr() {
@@ -27,11 +32,6 @@ public class ObjDIndexOpImpl extends ASTWrapperPsiElement implements ObjDIndexOp
   @Nullable
   public ObjDIndexOp getIndexOp() {
     return findChildByClass(ObjDIndexOp.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitIndexOp(this);
-    else super.accept(visitor);
   }
 
 }

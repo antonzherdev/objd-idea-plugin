@@ -17,15 +17,15 @@ public class ObjDDataTypeGenericsImpl extends ASTWrapperPsiElement implements Ob
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeGenerics(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDDataType> getDataTypeList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDDataType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeGenerics(this);
-    else super.accept(visitor);
   }
 
 }

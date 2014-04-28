@@ -16,6 +16,11 @@ public class ObjDExprIndexImpl extends ObjDExprImpl implements ObjDExprIndex {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprIndex(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDIndexOp getIndexOp() {
@@ -26,11 +31,6 @@ public class ObjDExprIndexImpl extends ObjDExprImpl implements ObjDExprIndex {
   @NotNull
   public ObjDTerm getTerm() {
     return findNotNullChildByClass(ObjDTerm.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprIndex(this);
-    else super.accept(visitor);
   }
 
 }

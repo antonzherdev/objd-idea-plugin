@@ -16,15 +16,15 @@ public class ObjDExprStringConstImpl extends ObjDExprImpl implements ObjDExprStr
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprStringConst(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDStringToken> getStringTokenList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDStringToken.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprStringConst(this);
-    else super.accept(visitor);
   }
 
 }

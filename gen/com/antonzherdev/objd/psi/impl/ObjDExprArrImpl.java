@@ -16,15 +16,15 @@ public class ObjDExprArrImpl extends ObjDExprImpl implements ObjDExprArr {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprArr(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDExpr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprArr(this);
-    else super.accept(visitor);
   }
 
 }

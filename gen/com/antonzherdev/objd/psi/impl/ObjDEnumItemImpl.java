@@ -17,6 +17,11 @@ public class ObjDEnumItemImpl extends ASTWrapperPsiElement implements ObjDEnumIt
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitEnumItem(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public ObjDDefName getDefName() {
@@ -27,11 +32,6 @@ public class ObjDEnumItemImpl extends ASTWrapperPsiElement implements ObjDEnumIt
   @Nullable
   public ObjDExprCallParams getExprCallParams() {
     return findChildByClass(ObjDExprCallParams.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitEnumItem(this);
-    else super.accept(visitor);
   }
 
 }

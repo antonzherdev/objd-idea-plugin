@@ -17,6 +17,11 @@ public class ObjDDefParameterImpl extends ASTWrapperPsiElement implements ObjDDe
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefParameter(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public ObjDDataType getDataType() {
@@ -39,11 +44,6 @@ public class ObjDDefParameterImpl extends ASTWrapperPsiElement implements ObjDDe
   @NotNull
   public ObjDParMods getParMods() {
     return findNotNullChildByClass(ObjDParMods.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDefParameter(this);
-    else super.accept(visitor);
   }
 
 }

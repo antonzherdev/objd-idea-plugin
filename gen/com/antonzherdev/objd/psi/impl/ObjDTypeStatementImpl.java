@@ -16,6 +16,11 @@ public class ObjDTypeStatementImpl extends ObjDClassImpl implements ObjDTypeStat
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTypeStatement(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDClassExtends getClassExtends() {
@@ -32,11 +37,6 @@ public class ObjDTypeStatementImpl extends ObjDClassImpl implements ObjDTypeStat
   @Nullable
   public ObjDClassName getClassName() {
     return findChildByClass(ObjDClassName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTypeStatement(this);
-    else super.accept(visitor);
   }
 
   public List<ObjDClassExtends> getClassExtendsList() {

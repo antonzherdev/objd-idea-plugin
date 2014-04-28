@@ -17,6 +17,11 @@ public class ObjDClassExtendsImpl extends ASTWrapperPsiElement implements ObjDCl
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassExtends(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataTypeGenerics getDataTypeGenerics() {
@@ -27,11 +32,6 @@ public class ObjDClassExtendsImpl extends ASTWrapperPsiElement implements ObjDCl
   @NotNull
   public ObjDDataTypeRef getDataTypeRef() {
     return findNotNullChildByClass(ObjDDataTypeRef.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassExtends(this);
-    else super.accept(visitor);
   }
 
 }

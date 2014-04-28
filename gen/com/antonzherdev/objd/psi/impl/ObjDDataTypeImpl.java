@@ -17,15 +17,15 @@ public class ObjDDataTypeImpl extends ASTWrapperPsiElement implements ObjDDataTy
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataType(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataTypeSelf getDataTypeSelf() {
     return findChildByClass(ObjDDataTypeSelf.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataType(this);
-    else super.accept(visitor);
   }
 
 }

@@ -16,6 +16,11 @@ public class ObjDTermImpl extends ObjDExprImpl implements ObjDTerm {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTerm(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDExprCase getExprCase() {
@@ -32,11 +37,6 @@ public class ObjDTermImpl extends ObjDExprImpl implements ObjDTerm {
   @Nullable
   public ObjDExprWeak getExprWeak() {
     return findChildByClass(ObjDExprWeak.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitTerm(this);
-    else super.accept(visitor);
   }
 
 }

@@ -16,6 +16,11 @@ public class ObjDExprDotImpl extends ObjDExprImpl implements ObjDExprDot {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprDot(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDDotPart> getDotPartList() {
@@ -26,11 +31,6 @@ public class ObjDExprDotImpl extends ObjDExprImpl implements ObjDExprDot {
   @NotNull
   public ObjDExpr getExpr() {
     return findNotNullChildByClass(ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprDot(this);
-    else super.accept(visitor);
   }
 
 }

@@ -17,15 +17,15 @@ public class ObjDModsImpl extends ASTWrapperPsiElement implements ObjDMods {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMods(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDMod> getModList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDMod.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMods(this);
-    else super.accept(visitor);
   }
 
 }

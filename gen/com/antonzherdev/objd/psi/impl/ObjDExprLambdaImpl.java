@@ -16,6 +16,11 @@ public class ObjDExprLambdaImpl extends ObjDExprImpl implements ObjDExprLambda {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprLambda(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDExpr getExpr() {
@@ -26,11 +31,6 @@ public class ObjDExprLambdaImpl extends ObjDExprImpl implements ObjDExprLambda {
   @NotNull
   public List<ObjDLambdaPar> getLambdaParList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDLambdaPar.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprLambda(this);
-    else super.accept(visitor);
   }
 
 }

@@ -16,6 +16,11 @@ public class ObjDCaseCondValImpl extends ObjDCaseCondImpl implements ObjDCaseCon
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondVal(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDCaseCondTp getCaseCondTp() {
@@ -26,11 +31,6 @@ public class ObjDCaseCondValImpl extends ObjDCaseCondImpl implements ObjDCaseCon
   @NotNull
   public ObjDDefName getDefName() {
     return findNotNullChildByClass(ObjDDefName.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondVal(this);
-    else super.accept(visitor);
   }
 
 }

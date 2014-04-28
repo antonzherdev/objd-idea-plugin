@@ -16,15 +16,15 @@ public class ObjDExprNotImpl extends ObjDExprImpl implements ObjDExprNot {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprNot(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDExpr getExpr() {
     return findChildByClass(ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprNot(this);
-    else super.accept(visitor);
   }
 
 }

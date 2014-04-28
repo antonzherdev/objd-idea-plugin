@@ -17,15 +17,15 @@ public class ObjDExprCallParamsImpl extends ASTWrapperPsiElement implements ObjD
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallParams(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDExprCallParam> getExprCallParamList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDExprCallParam.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCallParams(this);
-    else super.accept(visitor);
   }
 
 }

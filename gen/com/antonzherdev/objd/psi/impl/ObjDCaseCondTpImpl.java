@@ -16,6 +16,11 @@ public class ObjDCaseCondTpImpl extends ObjDCaseCondImpl implements ObjDCaseCond
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondTp(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataType getDataType() {
@@ -26,11 +31,6 @@ public class ObjDCaseCondTpImpl extends ObjDCaseCondImpl implements ObjDCaseCond
   @Nullable
   public ObjDDataTypeSelf getDataTypeSelf() {
     return findChildByClass(ObjDDataTypeSelf.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitCaseCondTp(this);
-    else super.accept(visitor);
   }
 
 }

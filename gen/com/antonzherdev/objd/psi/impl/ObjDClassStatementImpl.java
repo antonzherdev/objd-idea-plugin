@@ -16,6 +16,11 @@ public class ObjDClassStatementImpl extends ObjDClassImpl implements ObjDClassSt
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassStatement(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDClassBody getClassBody() {
@@ -56,11 +61,6 @@ public class ObjDClassStatementImpl extends ObjDClassImpl implements ObjDClassSt
   @Nullable
   public ObjDExprCallParams getExprCallParams() {
     return findChildByClass(ObjDExprCallParams.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassStatement(this);
-    else super.accept(visitor);
   }
 
   public boolean isEnum() {

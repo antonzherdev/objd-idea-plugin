@@ -16,6 +16,11 @@ public class ObjDDataTypeSimpleImpl extends ObjDDataTypeImpl implements ObjDData
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeSimple(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataTypeGenerics getDataTypeGenerics() {
@@ -26,11 +31,6 @@ public class ObjDDataTypeSimpleImpl extends ObjDDataTypeImpl implements ObjDData
   @Nullable
   public ObjDDataTypeRef getDataTypeRef() {
     return findChildByClass(ObjDDataTypeRef.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeSimple(this);
-    else super.accept(visitor);
   }
 
 }

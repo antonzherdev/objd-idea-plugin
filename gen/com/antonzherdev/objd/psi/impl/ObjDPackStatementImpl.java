@@ -17,15 +17,15 @@ public class ObjDPackStatementImpl extends ASTWrapperPsiElement implements ObjDP
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitPackStatement(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDPackPart> getPackPartList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDPackPart.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitPackStatement(this);
-    else super.accept(visitor);
   }
 
 }

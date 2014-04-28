@@ -3,7 +3,7 @@ package com.antonzherdev.objd;
 import com.antonzherdev.objd.psi.ObjDTypes;
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.editor.SyntaxHighlighterColors;
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
@@ -21,13 +21,13 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
 public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
-    public static final TextAttributesKey KEYWORD = createTextAttributesKey("OBJD_KEYWORD", SyntaxHighlighterColors.KEYWORD);
-    public static final TextAttributesKey DATATYPE = createTextAttributesKey("OBJD_DATATYPE", SyntaxHighlighterColors.KEYWORD);
-    public static final TextAttributesKey COMMENT = createTextAttributesKey("OBJD_COMMENT", SyntaxHighlighterColors.LINE_COMMENT);
-    public static final TextAttributesKey STRING = createTextAttributesKey("OBJD_STRING", SyntaxHighlighterColors.STRING);
-    public static final TextAttributesKey OPERATION = createTextAttributesKey("OBJD_OPERATION", SyntaxHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey BRACE = createTextAttributesKey("OBJD_BRACE", SyntaxHighlighterColors.BRACES);
-    public static final TextAttributesKey NUMBER = createTextAttributesKey("OBJD_NUMBER", SyntaxHighlighterColors.NUMBER);
+    public static final TextAttributesKey KEYWORD = createTextAttributesKey("OBJD_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey DATATYPE = createTextAttributesKey("OBJD_DATATYPE", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey COMMENT = createTextAttributesKey("OBJD_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static final TextAttributesKey STRING = createTextAttributesKey("OBJD_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey OPERATION = createTextAttributesKey("OBJD_OPERATION", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey BRACE = createTextAttributesKey("OBJD_BRACE", DefaultLanguageHighlighterColors.BRACES);
+    public static final TextAttributesKey NUMBER = createTextAttributesKey("OBJD_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
 
     static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("OBJD_BAD_CHARACTER",
             new TextAttributes(JBColor.RED, null, null, null, Font.BOLD));

@@ -16,6 +16,11 @@ public class ObjDExprValImpl extends ObjDExprImpl implements ObjDExprVal {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprVal(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataType getDataType() {
@@ -32,11 +37,6 @@ public class ObjDExprValImpl extends ObjDExprImpl implements ObjDExprVal {
   @Nullable
   public ObjDExpr getExpr() {
     return findChildByClass(ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprVal(this);
-    else super.accept(visitor);
   }
 
 }

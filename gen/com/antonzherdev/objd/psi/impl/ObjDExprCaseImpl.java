@@ -17,6 +17,11 @@ public class ObjDExprCaseImpl extends ASTWrapperPsiElement implements ObjDExprCa
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCase(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDCaseItem> getCaseItemList() {
@@ -27,11 +32,6 @@ public class ObjDExprCaseImpl extends ASTWrapperPsiElement implements ObjDExprCa
   @Nullable
   public ObjDExpr getExpr() {
     return findChildByClass(ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCase(this);
-    else super.accept(visitor);
   }
 
 }

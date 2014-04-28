@@ -16,6 +16,11 @@ public class ObjDDataTypeCollectionImpl extends ObjDDataTypeImpl implements ObjD
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeCollection(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataType getDataType() {
@@ -26,11 +31,6 @@ public class ObjDDataTypeCollectionImpl extends ObjDDataTypeImpl implements ObjD
   @Nullable
   public ObjDMapTp getMapTp() {
     return findChildByClass(ObjDMapTp.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDataTypeCollection(this);
-    else super.accept(visitor);
   }
 
 }

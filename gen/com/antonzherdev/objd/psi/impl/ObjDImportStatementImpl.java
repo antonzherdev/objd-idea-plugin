@@ -17,15 +17,15 @@ public class ObjDImportStatementImpl extends ASTWrapperPsiElement implements Obj
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitImportStatement(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDImportPart> getImportPartList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDImportPart.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitImportStatement(this);
-    else super.accept(visitor);
   }
 
 }

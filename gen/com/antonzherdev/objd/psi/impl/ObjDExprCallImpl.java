@@ -16,6 +16,11 @@ public class ObjDExprCallImpl extends ObjDExprImpl implements ObjDExprCall {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCall(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public ObjDCallName getCallName() {
@@ -38,11 +43,6 @@ public class ObjDExprCallImpl extends ObjDExprImpl implements ObjDExprCall {
   @Nullable
   public ObjDExprCallPostLambda getExprCallPostLambda() {
     return findChildByClass(ObjDExprCallPostLambda.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitExprCall(this);
-    else super.accept(visitor);
   }
 
 }

@@ -16,6 +16,11 @@ public class ObjDDotPartSimpleImpl extends ObjDDotPartImpl implements ObjDDotPar
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDotPartSimple(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public ObjDDotType getDotType() {
@@ -26,11 +31,6 @@ public class ObjDDotPartSimpleImpl extends ObjDDotPartImpl implements ObjDDotPar
   @Nullable
   public ObjDExpr getExpr() {
     return findChildByClass(ObjDExpr.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitDotPartSimple(this);
-    else super.accept(visitor);
   }
 
 }

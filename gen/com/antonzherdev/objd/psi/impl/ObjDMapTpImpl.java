@@ -17,15 +17,15 @@ public class ObjDMapTpImpl extends ASTWrapperPsiElement implements ObjDMapTp {
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMapTp(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @Nullable
   public ObjDDataType getDataType() {
     return findChildByClass(ObjDDataType.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitMapTp(this);
-    else super.accept(visitor);
   }
 
 }

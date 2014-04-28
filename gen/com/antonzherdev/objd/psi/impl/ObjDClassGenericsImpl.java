@@ -17,15 +17,15 @@ public class ObjDClassGenericsImpl extends ASTWrapperPsiElement implements ObjDC
     super(node);
   }
 
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassGenerics(this);
+    else super.accept(visitor);
+  }
+
   @Override
   @NotNull
   public List<ObjDClassGeneric> getClassGenericList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDClassGeneric.class);
-  }
-
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitClassGenerics(this);
-    else super.accept(visitor);
   }
 
 }
