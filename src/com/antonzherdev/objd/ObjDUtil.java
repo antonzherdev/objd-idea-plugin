@@ -120,7 +120,7 @@ public class ObjDUtil {
                 .filter(new B<ObjDFile>() {
                     @Override
                     public Boolean f(ObjDFile f) {
-                        return f.getPackage().get(0).equals("core");
+                        return f.getPackage().get(0).equals("objd");
                     }
                 });
     }
