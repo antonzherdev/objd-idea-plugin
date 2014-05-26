@@ -18,6 +18,7 @@ public class ObjDColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Comments", ObjDSyntaxHighlighter.COMMENT),
             new AttributesDescriptor("Operations", ObjDSyntaxHighlighter.OPERATION),
             new AttributesDescriptor("Numbers", ObjDSyntaxHighlighter.NUMBER),
+            new AttributesDescriptor("Annotations", ObjDSyntaxHighlighter.METADATA)
     };
 
     @Nullable
@@ -39,6 +40,7 @@ public class ObjDColorSettingsPage implements ColorSettingsPage {
                 "    //Comment\n" +
                 "    val s : string = \"String\"\n" +
                 "    \n" +
+                "    @Test\n" +
                 "    def f(a : int) : int = a + 20\n" +
                 "}";
     }

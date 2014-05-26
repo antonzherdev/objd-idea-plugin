@@ -8,6 +8,7 @@ import com.antonzherdev.objd.psi.impl.*;
 
 public interface ObjDTypes {
 
+  IElementType ANNOTATION = new ObjDElementType("ANNOTATION");
   IElementType ANNOTATIONS = new ObjDElementType("ANNOTATIONS");
   IElementType CALL_NAME = new ObjDElementType("CALL_NAME");
   IElementType CASE_COND = new ObjDElementType("CASE_COND");
@@ -207,7 +208,10 @@ public interface ObjDTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ANNOTATIONS) {
+       if (type == ANNOTATION) {
+        return new ObjDAnnotationImpl(node);
+      }
+      else if (type == ANNOTATIONS) {
         return new ObjDAnnotationsImpl(node);
       }
       else if (type == CALL_NAME) {

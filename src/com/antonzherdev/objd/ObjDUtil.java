@@ -73,21 +73,23 @@ public class ObjDUtil {
                 @Nullable
                 @Override
                 public Result<ObjDClass> compute() {
-                    final Option<ObjDClass> objDClasses = findFile(project, name).map(new F<ObjDFile,IChain<ObjDClass>>() {
+                    final Option<ObjDClass> objDClasses = getKernelFiles(project).flatMap(new F<ObjDFile, Iterable<ObjDClass>>() {
                         @Override
-                        public IChain<ObjDClass> f(ObjDFile objDFile) {
-                            return Chain.chain(objDFile.getClasses());
+                        public Iterable<ObjDClass> f(ObjDFile objDFile) {
+                            return objDFile.getClasses();
                         }
-                    }).getOrElse(Chain.<ObjDClass>empty()).find(new B<ObjDClass>() {
+                    }).find(new B<ObjDClass>() {
                         @Override
                         public Boolean f(ObjDClass x) {
                             final ObjDClassName nm = x.getClassName();
                             return name.equals(nm == null ? "" : nm.getName());
                         }
                     });
-                    if(objDClasses.isEmpty()) return Result.create(null);
+                    if(objDClasses.isEmpty()) {
+                        throw new RuntimeException("Could not find kernel class " + name);
+                    }
                     final ObjDClass cls = objDClasses.get();
-                    return Result.create(objDClasses.get(), cls);
+                    return Result.create(cls, cls);
                 }
             });
             kernelClasses.put(name, val);

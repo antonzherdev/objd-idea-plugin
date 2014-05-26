@@ -1,16 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.antonzherdev.objd.parser;
 
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import com.intellij.lang.PsiParser;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-
-import static com.antonzherdev.objd.parser.GeneratedParserUtilBase.*;
 import static com.antonzherdev.objd.psi.ObjDTypes.*;
+import static com.antonzherdev.objd.parser.GeneratedParserUtilBase.*;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.tree.TokenSet;
+import com.intellij.lang.PsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class ObjDParser implements PsiParser {
@@ -21,7 +20,10 @@ public class ObjDParser implements PsiParser {
     boolean result_;
     builder_ = adapt_builder_(root_, builder_, this, EXTENDS_SETS_);
     Marker marker_ = enter_section_(builder_, 0, _COLLAPSE_, null);
-    if (root_ == ANNOTATIONS) {
+    if (root_ == ANNOTATION) {
+      result_ = annotation_(builder_, 0);
+    }
+    else if (root_ == ANNOTATIONS) {
       result_ = annotations_(builder_, 0);
     }
     else if (root_ == CALL_NAME) {
@@ -329,7 +331,7 @@ public class ObjDParser implements PsiParser {
 
   /* ********************************************************** */
   // AT expr_call
-  static boolean annotation_(PsiBuilder builder_, int level_) {
+  public static boolean annotation_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "annotation_")) return false;
     if (!nextTokenIs(builder_, AT)) return false;
     boolean result_ = false;
@@ -338,7 +340,7 @@ public class ObjDParser implements PsiParser {
     result_ = consumeToken(builder_, AT);
     pinned_ = result_; // pin = 1
     result_ = result_ && expr_call(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    exit_section_(builder_, level_, marker_, ANNOTATION, result_, pinned_, null);
     return result_ || pinned_;
   }
 

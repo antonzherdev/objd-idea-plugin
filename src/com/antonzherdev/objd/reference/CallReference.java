@@ -21,8 +21,8 @@ import java.util.List;
 
 import static com.antonzherdev.chain.Chain.chain;
 
-public class CallReference extends PsiReferenceBase<ObjDCallName> {
-    public CallReference(@NotNull ObjDCallName element, TextRange textRange) {
+public class CallReference extends PsiReferenceBase<ObjDNamedElement> {
+    public CallReference(@NotNull ObjDNamedElement element, TextRange textRange) {
         super(element, textRange);
     }
 

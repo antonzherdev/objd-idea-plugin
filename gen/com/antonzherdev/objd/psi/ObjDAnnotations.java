@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ObjDAnnotations extends PsiElement {
 
   @NotNull
-  List<ObjDExprCall> getExprCallList();
+  List<ObjDAnnotation> getAnnotationList();
 
 }

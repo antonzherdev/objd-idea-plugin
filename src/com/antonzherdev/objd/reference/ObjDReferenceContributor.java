@@ -1,8 +1,6 @@
 package com.antonzherdev.objd.reference;
 
-import com.antonzherdev.objd.psi.ObjDCallName;
-import com.antonzherdev.objd.psi.ObjDDataTypeRef;
-import com.antonzherdev.objd.psi.ObjDImportPart;
+import com.antonzherdev.objd.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
@@ -31,7 +29,7 @@ public class ObjDReferenceContributor extends PsiReferenceContributor {
             @NotNull
             @Override
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext processingContext) {
-                return new PsiReference[]{new CallReference((ObjDCallName)element, TextRange.from(0, element.getTextLength()))};
+                return new PsiReference[]{new CallReference((ObjDNamedElement)element, TextRange.from(0, element.getTextLength()))};
             }
         });
     }

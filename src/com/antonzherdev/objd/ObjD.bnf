@@ -24,7 +24,7 @@ pack_part ::= IDENT {mixin="com.antonzherdev.objd.psi.impl.ObjDNamedElementImpl"
 
 private statement_ ::= (annotations_ (class_mods class_statement | type_statement)) | import_statement | COMMENT
 annotations_ ::= annotation_*
-private annotation_ ::= AT expr_call {pin = 1}
+annotation_ ::= AT expr_call {pin = 1}
 
 class_mods ::= (W_STUB | W_ABSTRACT | W_FINAL | W_CASE | W_PRIVATE | W_PACKAGE)*
 

@@ -28,6 +28,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey OPERATION = createTextAttributesKey("OBJD_OPERATION", DefaultLanguageHighlighterColors.OPERATION_SIGN);
     public static final TextAttributesKey BRACE = createTextAttributesKey("OBJD_BRACE", DefaultLanguageHighlighterColors.BRACES);
     public static final TextAttributesKey NUMBER = createTextAttributesKey("OBJD_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
+    public static final TextAttributesKey ADOT = createTextAttributesKey("OBJD_DOT", DefaultLanguageHighlighterColors.DOT);
+    public static final TextAttributesKey METADATA = createTextAttributesKey("OBJD_METADATA", DefaultLanguageHighlighterColors.METADATA);
 
     static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("OBJD_BAD_CHARACTER",
             new TextAttributes(JBColor.RED, null, null, null, Font.BOLD));
@@ -40,6 +42,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
     private static final TextAttributesKey[] BRACE_KEYS = new TextAttributesKey[]{BRACE};
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
+    private static final TextAttributesKey[] DOT_KEYS = new TextAttributesKey[]{ADOT};
+    private static final TextAttributesKey[] METADATA_KEYS = new TextAttributesKey[]{METADATA};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
     private static final List<IElementType> KEYWORDS = Arrays.asList(
             W_CLASS, W_IMPORT, W_VAL, W_VAR, W_DEF, W_EXTENDS, W_IF, W_ELSE, W_SELF, W_WEAK,
@@ -50,8 +54,8 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
             TP_BOOL, TP_FLOAT, TP_INT, TP_STRING, TP_UINT, TP_VOID, TP_BYTE, TP_UBYTE,
             TP_INT4, TP_UINT4, TP_INT8, TP_UINT8, TP_FLOAT4, TP_FLOAT8, TP_ANY, TP_CHAR);
     private static final List<IElementType> OPERATIONS = Arrays.asList(
-            DOT, NULLDOT, SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS, NOT_EQ,
-            EXCLAMATION, CLONE, CLUE, EXACT_EQ, EXACT_NOT_EQ, AT);
+            SET, PLUS, MINUS, MUL, DIV, AND, OR, EQ, MORE, LESS, MOREEQ, LESSEQ, PLUS_PLUS, MINUS_MINUS, NOT_EQ,
+            EXCLAMATION, CLONE, CLUE, EXACT_EQ, EXACT_NOT_EQ);
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
@@ -77,6 +81,10 @@ public class ObjDSyntaxHighlighter extends SyntaxHighlighterBase {
             return NUMBER_KEYS;
         } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
             return BAD_CHAR_KEYS;
+        } else if (tokenType.equals(ObjDTypes.DOT) || tokenType.equals(ObjDTypes.NULLDOT) ) {
+            return DOT_KEYS;
+        } else if (tokenType.equals(ObjDTypes.AT)) {
+            return METADATA_KEYS;
         } else {
             return EMPTY_KEYS;
         }

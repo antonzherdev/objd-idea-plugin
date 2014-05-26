@@ -5,7 +5,6 @@ import com.antonzherdev.objd.ObjDUtil;
 import com.antonzherdev.objd.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.util.CachedValuesManager;
 
 import java.util.List;
 
@@ -159,7 +158,8 @@ public abstract class ObjDTp {
             return ((ObjDDataTypeCollection) dataType).getMapTp() == null ?
                     getKernelClassTp(dataType, "ImArray") : getKernelClassTp(dataType, "ImHashMap");
         } else if(dataType instanceof ObjDDataTypeTuple) {
-            return getKernelClassTp(dataType, "Tuple" + ((ObjDDataTypeTuple) dataType).getDataTypeList().size());
+            int size = ((ObjDDataTypeTuple) dataType).getDataTypeList().size();
+            return getKernelClassTp(dataType, "Tuple" + (size == 2 ? "" : size));
         } else {
             return new Unknown("Not simple type " + dataType.getClass());
         }

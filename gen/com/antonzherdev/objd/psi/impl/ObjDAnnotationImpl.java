@@ -11,21 +11,21 @@ import static com.antonzherdev.objd.psi.ObjDTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.antonzherdev.objd.psi.*;
 
-public class ObjDAnnotationsImpl extends ASTWrapperPsiElement implements ObjDAnnotations {
+public class ObjDAnnotationImpl extends ASTWrapperPsiElement implements ObjDAnnotation {
 
-  public ObjDAnnotationsImpl(ASTNode node) {
+  public ObjDAnnotationImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitAnnotations(this);
+    if (visitor instanceof ObjDVisitor) ((ObjDVisitor)visitor).visitAnnotation(this);
     else super.accept(visitor);
   }
 
   @Override
-  @NotNull
-  public List<ObjDAnnotation> getAnnotationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ObjDAnnotation.class);
+  @Nullable
+  public ObjDExprCall getExprCall() {
+    return findChildByClass(ObjDExprCall.class);
   }
 
 }

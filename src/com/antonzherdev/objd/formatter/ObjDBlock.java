@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class ObjDBlock extends AbstractBlock {
             if(childType == TokenType.WHITE_SPACE || child.getChars().length() == 0) continue;
             Indent indent  = Indent.getNoneIndent();
             Wrap wrap = null;
-            if (parentType == ObjDTypes.CLASS_BODY && (childType == ObjDTypes.DEF_STATEMENT || childType == ObjDTypes.FIELD_STATEMENT)) {
+            if (parentType == ObjDTypes.CLASS_BODY && (childType == ObjDTypes.DEF_STATEMENT || childType == ObjDTypes.FIELD_STATEMENT || childType == ObjDTypes.ANNOTATION || childType == ObjDTypes.ANNOTATIONS)) {
                 wrap = Wrap.createWrap(WrapType.ALWAYS, true);
                 indent = Indent.getNormalIndent();
             } else if (parentType == ObjDTypes.EXPR_BRACES && childType != ObjDTypes.OPEN_BRACE &&  childType != ObjDTypes.CLOSE_BRACE) {
