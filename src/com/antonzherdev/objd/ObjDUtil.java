@@ -122,7 +122,8 @@ public class ObjDUtil {
                 .filter(new B<ObjDFile>() {
                     @Override
                     public Boolean f(ObjDFile f) {
-                        return f.getPackage().get(0).equals("objd");
+                        List<String> p = f.getPackage();
+                        return p.size() >= 2 && p.get(0).equals("objd") && (p.get(1).equals("lang") || p.get(1).equals("collection"));
                     }
                 });
     }
