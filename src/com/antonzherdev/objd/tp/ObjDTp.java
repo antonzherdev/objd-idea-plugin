@@ -159,6 +159,7 @@ public abstract class ObjDTp {
                     getKernelClassTp(dataType, "ImArray") : getKernelClassTp(dataType, "ImHashMap");
         } else if(dataType instanceof ObjDDataTypeTuple) {
             int size = ((ObjDDataTypeTuple) dataType).getDataTypeList().size();
+            if(size == 1) return getTpForDataType(((ObjDDataTypeTuple) dataType).getDataTypeList().get(0));
             return getKernelClassTp(dataType, "Tuple" + (size == 2 ? "" : size));
         } else {
             return new Unknown("Not simple type " + dataType.getClass());
