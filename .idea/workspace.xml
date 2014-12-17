@@ -1,0 +1,1408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9f8aeba7-c419-4a94-8047-5b06685a6c2d" name="Default" comment="" />
+    <ignored path="ObjDPlugin.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="DebuggerManager">
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true" />
+    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
+      </breakpoint>
+    </breakpoint_any>
+    <ui_properties converted="true" />
+    <breakpoint_rules converted="true" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="ObjDPlugin" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="ObjDCompletionContributor.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDCompletionContributor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1620">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObjDUtil.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="4095">
+              <caret line="88" column="49" selection-start-line="88" selection-start-column="49" selection-end-line="88" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObjDTp.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/tp/ObjDTp.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5040">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CallReference.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/CallReference.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2265">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/DataTypeReference.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ClassChildReference.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ClassParentReference.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDImportReference.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/ObjD.flex" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/parser/GeneratedParserUtilBase.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/formatter/ObjDBlock.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDColorSettingsPage.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/CallReference.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/ObjD.bnf" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDSyntaxHighlighter.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDReferenceContributor.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDCompletionContributor.java" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDUtil.java" />
+        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
+        <option value="$PROJECT_DIR$/src/com/antonzherdev/objd/tp/ObjDTp.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Android</id>
+          </State>
+          <State>
+            <id>Android Lint</id>
+          </State>
+          <State>
+            <id>Assignment issues</id>
+          </State>
+          <State>
+            <id>Class structure</id>
+          </State>
+          <State>
+            <id>Code style issues</id>
+          </State>
+          <State>
+            <id>CoffeeScript</id>
+          </State>
+          <State>
+            <id>Control FlowGroovy</id>
+          </State>
+          <State>
+            <id>Control flow issues</id>
+          </State>
+          <State>
+            <id>Control flow issuesJavaScript</id>
+          </State>
+          <State>
+            <id>DOM issuesJavaScript</id>
+          </State>
+          <State>
+            <id>Data flow issues</id>
+          </State>
+          <State>
+            <id>Data flow issuesJavaScript</id>
+          </State>
+          <State>
+            <id>Encapsulation issues</id>
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+          <State>
+            <id>Groovy</id>
+          </State>
+          <State>
+            <id>HTML</id>
+          </State>
+          <State>
+            <id>Inheritance issues</id>
+          </State>
+          <State>
+            <id>Initialization issues</id>
+          </State>
+          <State>
+            <id>Internationalization issues</id>
+          </State>
+          <State>
+            <id>J2ME issues</id>
+          </State>
+          <State>
+            <id>JUnit issues</id>
+          </State>
+          <State>
+            <id>Java language level migration aids</id>
+          </State>
+          <State>
+            <id>JavaBeans issues</id>
+          </State>
+          <State>
+            <id>JavaScript</id>
+          </State>
+          <State>
+            <id>JavaScript validity issuesJavaScript</id>
+          </State>
+          <State>
+            <id>Memory issues</id>
+          </State>
+          <State>
+            <id>Numeric issues</id>
+          </State>
+          <State>
+            <id>Performance issues</id>
+          </State>
+          <State>
+            <id>Portability issues</id>
+          </State>
+          <State>
+            <id>Potentially confusing code constructsGroovy</id>
+          </State>
+          <State>
+            <id>Potentially confusing code constructsJavaScript</id>
+          </State>
+          <State>
+            <id>Probable bugs</id>
+          </State>
+          <State>
+            <id>Probable bugsCoffeeScript</id>
+          </State>
+          <State>
+            <id>Probable bugsGroovy</id>
+          </State>
+          <State>
+            <id>Probable bugsJavaScript</id>
+          </State>
+          <State>
+            <id>Properties Files</id>
+          </State>
+          <State>
+            <id>Resource management issues</id>
+          </State>
+          <State>
+            <id>Serialization issues</id>
+          </State>
+          <State>
+            <id>TestNG</id>
+          </State>
+          <State>
+            <id>Threading issues</id>
+          </State>
+          <State>
+            <id>Threading issuesGroovy</id>
+          </State>
+          <State>
+            <id>Visibility issues</id>
+          </State>
+          <State>
+            <id>XPath</id>
+          </State>
+        </expanded-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ObjDPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ObjDPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="objd-idea-plugin" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ObjDPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="objd-idea-plugin" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="antonzherdev" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="136" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="138" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="136" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="recentsLimit" value="5" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pigeon3d/Java" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="141" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="936" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="936" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="141" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="138" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FullScreen" value="true" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="restartRequiresConfirmation" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.antonzherdev.objd.reference" />
+    </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.antonzherdev.objd.ObjDUtil" />
+      <recent name="com.antonzherdev.objd.tp.PsiRef" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.antonzherdev.chain" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Plugin.Plugin">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="ObjDPlugin" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Plugin.Plugin" />
+    </list>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <recycled_changelist date="1392106419799">
+      <option name="PATH" value="$USER_HOME$/Library/Preferences/IntelliJIdea12/shelf/flex.patch" />
+      <option name="DESCRIPTION" value="flex" />
+    </recycled_changelist>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9f8aeba7-c419-4a94-8047-5b06685a6c2d" name="Default" comment="" />
+      <created>1375772758553</created>
+      <updated>1375772758553</updated>
+    </task>
+    <task id="LOCAL-00001" summary="#22">
+      <created>1375784484447</created>
+      <updated>1375784484447</updated>
+    </task>
+    <task id="LOCAL-00002" summary="new">
+      <created>1375789626426</created>
+      <updated>1375789626426</updated>
+    </task>
+    <task id="LOCAL-00003" summary="#24">
+      <created>1375790176973</created>
+      <updated>1375790176973</updated>
+    </task>
+    <task id="LOCAL-00004" summary="#25">
+      <created>1375790415913</created>
+      <updated>1375790415913</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix">
+      <created>1375791071946</created>
+      <updated>1375791071946</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix">
+      <created>1375791974955</created>
+      <updated>1375791974955</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix">
+      <created>1375792506552</created>
+      <updated>1375792506552</updated>
+    </task>
+    <task id="LOCAL-00008" summary="#26">
+      <created>1375864636657</created>
+      <updated>1375864636657</updated>
+    </task>
+    <task id="LOCAL-00009" summary="#27">
+      <created>1376207474650</created>
+      <updated>1376207474650</updated>
+    </task>
+    <task id="LOCAL-00010" summary="#29">
+      <created>1376209954625</created>
+      <updated>1376209954625</updated>
+    </task>
+    <task id="LOCAL-00011" summary="#30">
+      <created>1376210040554</created>
+      <updated>1376210040554</updated>
+    </task>
+    <task id="LOCAL-00012" summary="#31">
+      <created>1376210338820</created>
+      <updated>1376210338820</updated>
+    </task>
+    <task id="LOCAL-00013" summary="#32">
+      <created>1376210509771</created>
+      <updated>1376210509771</updated>
+    </task>
+    <task id="LOCAL-00014" summary="#33">
+      <created>1376210663265</created>
+      <updated>1376210663265</updated>
+    </task>
+    <task id="LOCAL-00015" summary="#34">
+      <created>1376210823719</created>
+      <updated>1376210823719</updated>
+    </task>
+    <task id="LOCAL-00016" summary="#37">
+      <created>1376299713100</created>
+      <updated>1376299713100</updated>
+    </task>
+    <task id="LOCAL-00017" summary="#43">
+      <created>1376649155694</created>
+      <updated>1376649155694</updated>
+    </task>
+    <task id="LOCAL-00018" summary="private class">
+      <created>1376649272805</created>
+      <updated>1376649272805</updated>
+    </task>
+    <task id="LOCAL-00019" summary="with">
+      <created>1376649724811</created>
+      <updated>1376649724811</updated>
+    </task>
+    <task id="LOCAL-00020" summary="0.7">
+      <created>1376649742350</created>
+      <updated>1376649742350</updated>
+    </task>
+    <task id="LOCAL-00021" summary="hot fix">
+      <created>1376650067576</created>
+      <updated>1376650067576</updated>
+    </task>
+    <task id="LOCAL-00022" summary="hot fix">
+      <created>1376650348841</created>
+      <updated>1376650348841</updated>
+    </task>
+    <task id="LOCAL-00023" summary="#46">
+      <created>1377251349321</created>
+      <updated>1377251349321</updated>
+    </task>
+    <task id="LOCAL-00024" summary="#45">
+      <created>1377251513762</created>
+      <updated>1377251513762</updated>
+    </task>
+    <task id="LOCAL-00025" summary="new types">
+      <created>1377251702709</created>
+      <updated>1377251702709</updated>
+    </task>
+    <task id="LOCAL-00026" summary="#44">
+      <created>1377251786774</created>
+      <updated>1377251786774</updated>
+    </task>
+    <task id="LOCAL-00027" summary="0.8">
+      <created>1377251838139</created>
+      <updated>1377251838139</updated>
+    </task>
+    <task id="LOCAL-00028" summary="super constructor fix">
+      <created>1377261560459</created>
+      <updated>1377261560459</updated>
+    </task>
+    <task id="LOCAL-00029" summary="multiline strings">
+      <created>1377586352958</created>
+      <updated>1377586352958</updated>
+    </task>
+    <task id="LOCAL-00030" summary="multiline strings">
+      <created>1377587069938</created>
+      <updated>1377587069938</updated>
+    </task>
+    <task id="LOCAL-00031" summary="fix multiline strings">
+      <created>1377684987021</created>
+      <updated>1377684987021</updated>
+    </task>
+    <task id="LOCAL-00032" summary="case">
+      <created>1377685704735</created>
+      <updated>1377685704735</updated>
+    </task>
+    <task id="LOCAL-00033" summary="fix string import">
+      <created>1377685908639</created>
+      <updated>1377685908639</updated>
+    </task>
+    <task id="LOCAL-00034" summary="0.8.5">
+      <created>1377685921682</created>
+      <updated>1377685921682</updated>
+    </task>
+    <task id="LOCAL-00035" summary="fix">
+      <created>1377686163807</created>
+      <updated>1377686163807</updated>
+    </task>
+    <task id="LOCAL-00036" summary="fix">
+      <created>1377687321249</created>
+      <updated>1377687321249</updated>
+    </task>
+    <task id="LOCAL-00037" summary="class def name">
+      <created>1377692058060</created>
+      <updated>1377692058060</updated>
+    </task>
+    <task id="LOCAL-00038" summary="post lambda">
+      <created>1377705051385</created>
+      <updated>1377705051385</updated>
+    </task>
+    <task id="LOCAL-00039" summary="type">
+      <created>1377711095347</created>
+      <updated>1377711095347</updated>
+    </task>
+    <task id="LOCAL-00040" summary="fix type error">
+      <created>1377761212509</created>
+      <updated>1377761212509</updated>
+    </task>
+    <task id="LOCAL-00041" summary="remove new">
+      <created>1378372820600</created>
+      <updated>1378372820600</updated>
+    </task>
+    <task id="LOCAL-00042" summary="lazy + protected">
+      <created>1378373031241</created>
+      <updated>1378373031241</updated>
+    </task>
+    <task id="LOCAL-00043" summary="export + other">
+      <created>1378375052949</created>
+      <updated>1378375052949</updated>
+    </task>
+    <task id="LOCAL-00044" summary="0.9">
+      <created>1378375271599</created>
+      <updated>1378375271599</updated>
+    </task>
+    <task id="LOCAL-00045" summary="fix float4[4]">
+      <created>1378403273655</created>
+      <updated>1378403273655</updated>
+    </task>
+    <task id="LOCAL-00046" summary="#47">
+      <created>1378729863597</created>
+      <updated>1378729863597</updated>
+    </task>
+    <task id="LOCAL-00047" summary="#49">
+      <created>1378729930247</created>
+      <updated>1378729930248</updated>
+    </task>
+    <task id="LOCAL-00048" summary="#48">
+      <created>1378730009162</created>
+      <updated>1378730009162</updated>
+    </task>
+    <task id="LOCAL-00049" summary="imports">
+      <created>1378734911579</created>
+      <updated>1378734911579</updated>
+    </task>
+    <task id="LOCAL-00050" summary="imports">
+      <created>1378735879910</created>
+      <updated>1378735879910</updated>
+    </task>
+    <task id="LOCAL-00051" summary="#35">
+      <created>1378735945235</created>
+      <updated>1378735945236</updated>
+    </task>
+    <task id="LOCAL-00052" summary="0.10">
+      <created>1378735973883</created>
+      <updated>1378735973884</updated>
+    </task>
+    <task id="LOCAL-00053" summary="fix pi error">
+      <created>1378745534070</created>
+      <updated>1378745534070</updated>
+    </task>
+    <task id="LOCAL-00054" summary="bind clone clue">
+      <created>1378814690457</created>
+      <updated>1378814690457</updated>
+    </task>
+    <task id="LOCAL-00055" summary="bind clone clue">
+      <created>1378815024763</created>
+      <updated>1378815024764</updated>
+    </task>
+    <task id="LOCAL-00056" summary="fix rename">
+      <created>1378816195538</created>
+      <updated>1378816195538</updated>
+    </task>
+    <task id="LOCAL-00057" summary="fix &gt;&gt; in generic">
+      <created>1378900199135</created>
+      <updated>1378900199135</updated>
+    </task>
+    <task id="LOCAL-00058" summary="import in class">
+      <created>1379161192218</created>
+      <updated>1379161192218</updated>
+    </task>
+    <task id="LOCAL-00059" summary="class object">
+      <created>1379161980328</created>
+      <updated>1379161980328</updated>
+    </task>
+    <task id="LOCAL-00060" summary="0.11.0">
+      <created>1379162242947</created>
+      <updated>1379162242947</updated>
+    </task>
+    <task id="LOCAL-00061" summary="fix ref order">
+      <created>1379317013644</created>
+      <updated>1379317013645</updated>
+    </task>
+    <task id="LOCAL-00062" summary="typedef">
+      <created>1379321627221</created>
+      <updated>1379321627221</updated>
+    </task>
+    <task id="LOCAL-00063" summary="remove OD">
+      <created>1379321666344</created>
+      <updated>1379321666344</updated>
+    </task>
+    <task id="LOCAL-00064" summary="#50">
+      <created>1379321786284</created>
+      <updated>1379321786285</updated>
+    </task>
+    <task id="LOCAL-00065" summary="0.11.2">
+      <created>1379321798991</created>
+      <updated>1379321798992</updated>
+    </task>
+    <task id="LOCAL-00066" summary="case cond">
+      <created>1379421129566</created>
+      <updated>1379421129567</updated>
+    </task>
+    <task id="LOCAL-00067" summary="class implementation">
+      <created>1379579193453</created>
+      <updated>1379579193454</updated>
+    </task>
+    <task id="LOCAL-00068" summary="#8">
+      <created>1379580181651</created>
+      <updated>1379580181652</updated>
+    </task>
+    <task id="LOCAL-00069" summary="fix">
+      <created>1379580398883</created>
+      <updated>1379580398884</updated>
+    </task>
+    <task id="LOCAL-00070" summary="char">
+      <created>1380095497090</created>
+      <updated>1380095497090</updated>
+    </task>
+    <task id="LOCAL-00071" summary="pure + weak">
+      <created>1382346522452</created>
+      <updated>1382346522452</updated>
+    </task>
+    <task id="LOCAL-00072" summary="readme">
+      <created>1390410010796</created>
+      <updated>1390410010796</updated>
+    </task>
+    <task id="LOCAL-00073" summary="flex">
+      <created>1392106420196</created>
+      <updated>1392106420196</updated>
+    </task>
+    <task id="LOCAL-00074" summary="#53">
+      <created>1392114131322</created>
+      <updated>1392114131322</updated>
+    </task>
+    <task id="LOCAL-00075" summary="super + synchronized">
+      <created>1394173270639</created>
+      <updated>1394173270640</updated>
+    </task>
+    <task id="LOCAL-00076" summary="indention">
+      <created>1394174489906</created>
+      <updated>1394174489907</updated>
+    </task>
+    <task id="LOCAL-00077" summary="improve type inference">
+      <created>1394180934807</created>
+      <updated>1394180934807</updated>
+    </task>
+    <task id="LOCAL-00078" summary="fix () -&gt; 0 lambda">
+      <created>1395051246408</created>
+      <updated>1395051246408</updated>
+    </task>
+    <task id="LOCAL-00079" summary="final, abstract">
+      <created>1395131175013</created>
+      <updated>1395131175013</updated>
+    </task>
+    <task id="LOCAL-00080" summary="weak">
+      <created>1395146496675</created>
+      <updated>1395146496676</updated>
+    </task>
+    <task id="LOCAL-00081" summary="weak">
+      <created>1395151004738</created>
+      <updated>1395151004740</updated>
+    </task>
+    <task id="LOCAL-00082" summary="=== !===">
+      <created>1395157015095</created>
+      <updated>1395157015095</updated>
+    </task>
+    <task id="LOCAL-00083" summary="case class">
+      <created>1395744780774</created>
+      <updated>1395744780774</updated>
+    </task>
+    <task id="LOCAL-00084" summary="nullsafe">
+      <created>1396437978416</created>
+      <updated>1396437978416</updated>
+    </task>
+    <task id="LOCAL-00085" summary="nullsafe">
+      <created>1396441674534</created>
+      <updated>1396441674534</updated>
+    </task>
+    <task id="LOCAL-00086" summary="nullsafe">
+      <created>1396441749297</created>
+      <updated>1396441749298</updated>
+    </task>
+    <task id="LOCAL-00087" summary="try / finally">
+      <created>1396441925499</created>
+      <updated>1396441925499</updated>
+    </task>
+    <task id="LOCAL-00088" summary="nullsafe">
+      <created>1396442767261</created>
+      <updated>1396442767261</updated>
+    </task>
+    <task id="LOCAL-00089" summary="void expression">
+      <created>1396444065368</created>
+      <updated>1396444065368</updated>
+    </task>
+    <task id="LOCAL-00090" summary="nullsafe">
+      <created>1396447269428</created>
+      <updated>1396447269428</updated>
+    </task>
+    <task id="LOCAL-00091" summary="fix dot problem">
+      <created>1396619101821</created>
+      <updated>1396619101821</updated>
+    </task>
+    <task id="LOCAL-00092" summary="override">
+      <created>1396859359063</created>
+      <updated>1396859359063</updated>
+    </task>
+    <task id="LOCAL-00093" summary="override navigation">
+      <created>1396861866662</created>
+      <updated>1396861866662</updated>
+    </task>
+    <task id="LOCAL-00094" summary="cache">
+      <created>1396865999466</created>
+      <updated>1396865999467</updated>
+    </task>
+    <task id="LOCAL-00095" summary="hierarchy cache">
+      <created>1396867510819</created>
+      <updated>1396867510819</updated>
+    </task>
+    <task id="LOCAL-00096" summary="fix override">
+      <created>1396870933628</created>
+      <updated>1396870933628</updated>
+    </task>
+    <task id="LOCAL-00097" summary="override fields">
+      <created>1396882109213</created>
+      <updated>1396882109213</updated>
+    </task>
+    <task id="LOCAL-00098" summary="fix override">
+      <created>1396883426586</created>
+      <updated>1396883426586</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Option class coming back">
+      <created>1396950251622</created>
+      <updated>1396950251623</updated>
+    </task>
+    <task id="LOCAL-00100" summary="unoption">
+      <created>1396964035913</created>
+      <updated>1396964035913</updated>
+    </task>
+    <task id="LOCAL-00101" summary="inline functions">
+      <created>1397125644033</created>
+      <updated>1397125644035</updated>
+    </task>
+    <task id="LOCAL-00102" summary="pins">
+      <created>1397202577483</created>
+      <updated>1397202577483</updated>
+    </task>
+    <task id="LOCAL-00103" summary="fix parsing">
+      <created>1397485510724</created>
+      <updated>1397485510724</updated>
+    </task>
+    <task id="LOCAL-00104" summary="fix renaming">
+      <created>1397487955096</created>
+      <updated>1397487955096</updated>
+    </task>
+    <task id="LOCAL-00105" summary="fixed the error">
+      <created>1397545268013</created>
+      <updated>1397545268013</updated>
+    </task>
+    <task id="LOCAL-00106" summary="annotations">
+      <created>1397659981114</created>
+      <updated>1397659981114</updated>
+    </task>
+    <task id="LOCAL-00107" summary="fix package object + optimization">
+      <created>1397727006942</created>
+      <updated>1397727006942</updated>
+    </task>
+    <task id="LOCAL-00108" summary="fix">
+      <created>1398071834897</created>
+      <updated>1398071834897</updated>
+    </task>
+    <task id="LOCAL-00109" summary="fix">
+      <created>1398072740109</created>
+      <updated>1398072740109</updated>
+    </task>
+    <task id="LOCAL-00110" summary="def annotations">
+      <created>1398320016015</created>
+      <updated>1398320016015</updated>
+    </task>
+    <task id="LOCAL-00111" summary="fix">
+      <created>1398416802670</created>
+      <updated>1398416802671</updated>
+    </task>
+    <task id="LOCAL-00112" summary="volatile">
+      <created>1398421543472</created>
+      <updated>1398421543472</updated>
+    </task>
+    <task id="LOCAL-00113" summary="idea 13">
+      <created>1398673297733</created>
+      <updated>1398673297734</updated>
+    </task>
+    <task id="LOCAL-00114" summary="idea 13">
+      <created>1398673800432</created>
+      <updated>1398673800432</updated>
+    </task>
+    <task id="LOCAL-00115" summary="idea 13">
+      <created>1398673835346</created>
+      <updated>1398673835346</updated>
+    </task>
+    <task id="LOCAL-00116" summary="fix">
+      <created>1401101509174</created>
+      <updated>1401101509175</updated>
+    </task>
+    <task id="LOCAL-00117" summary="fix annotations">
+      <created>1401108675163</created>
+      <updated>1401108675163</updated>
+    </task>
+    <task id="LOCAL-00118" summary="packages">
+      <created>1401190498839</created>
+      <updated>1401190498839</updated>
+    </task>
+    <task id="LOCAL-00119" summary="fix tuple1">
+      <created>1401271149568</created>
+      <updated>1401271149568</updated>
+    </task>
+    <option name="localTasksCounter" value="120" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30148885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34079602" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3042394" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32917705" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26323318" sideWeight="0.6965174" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3042394" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998565" sideWeight="0.6902985" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32754344" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20024876" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24964131" sideWeight="0.6733167" order="2" side_tool="false" content_ui="combo" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+    <MESSAGE value="void expression" />
+    <MESSAGE value="nullsafe" />
+    <MESSAGE value="fix dot problem" />
+    <MESSAGE value="override" />
+    <MESSAGE value="override navigation" />
+    <MESSAGE value="cache" />
+    <MESSAGE value="hierarchy cache" />
+    <MESSAGE value="override fields" />
+    <MESSAGE value="fix override" />
+    <MESSAGE value="Option class coming back" />
+    <MESSAGE value="unoption" />
+    <MESSAGE value="inline functions" />
+    <MESSAGE value="pins" />
+    <MESSAGE value="fix parsing" />
+    <MESSAGE value="fix renaming" />
+    <MESSAGE value="fixed the error" />
+    <MESSAGE value="annotations" />
+    <MESSAGE value="fix package object + optimization" />
+    <MESSAGE value="def annotations" />
+    <MESSAGE value="volatile" />
+    <MESSAGE value="idea 13" />
+    <MESSAGE value="fix" />
+    <MESSAGE value="fix annotations" />
+    <MESSAGE value="packages" />
+    <MESSAGE value="fix tuple1" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix tuple1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="5" />
+    </breakpoint-manager>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDCompletionContributor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1620">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4095">
+          <caret line="88" column="49" selection-start-line="88" selection-start-column="49" selection-end-line="88" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/tp/ObjDTp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5040">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/CallReference.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2265">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDCompletionContributor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1410">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4740">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/tp/ObjDTp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5040">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/CallReference.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2265">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDFileType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDCommenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjD.flex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gen/com/antonzherdev/objd/psi/ObjDCallName.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjD.bnf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Applications/AppCode.app/lib/openapi.jar!/com/intellij/psi/tree/IElementType.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Applications/AppCode.app/lib/openapi.jar!/com/intellij/openapi/fileTypes/SyntaxHighlighterBase.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Applications/AppCode.app/lib/openapi.jar!/com/intellij/openapi/fileTypes/SyntaxHighlighter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Applications/AppCode.app/lib/openapi.jar!/com/intellij/lexer/FlexAdapter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDSyntaxHighlighter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDReferenceContributor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/CallReference.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/tp/ObjDTp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/reference/ObjDCompletionContributor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/antonzherdev/objd/ObjDUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="4095">
+          <caret line="88" column="49" selection-start-line="88" selection-start-column="49" selection-end-line="88" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>scala-compiler</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>AppCode OC-137.67</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>ObjDPlugin</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>AppCode OC-131.842</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>idea-src</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
+
